@@ -24,34 +24,40 @@ $sbvi_contact       = sbvi_contact_info();
 					<p><?php echo esc_html( get_theme_mod( 'sbvi_footer_blurb', 'Clear, practical and commercially focused legal services in the British Virgin Islands.' ) ); ?></p>
 				</div>
 
-				<div class="sbvi-footer__col">
-					<h6><?php esc_html_e( 'Services', 'sinclairs-bvi' ); ?></h6>
-					<?php foreach ( $sbvi_footer_top as $service ) : ?>
-						<a href="<?php echo esc_url( get_permalink( $service ) ); ?>"><?php echo esc_html( get_the_title( $service ) ); ?></a>
-					<?php endforeach; ?>
-				</div>
+				<details class="sbvi-footer__col">
+					<summary><h6><?php esc_html_e( 'Services', 'sinclairs-bvi' ); ?></h6></summary>
+					<div class="sbvi-footer__col-body">
+						<?php foreach ( $sbvi_footer_top as $service ) : ?>
+							<a href="<?php echo esc_url( get_permalink( $service ) ); ?>"><?php echo esc_html( get_the_title( $service ) ); ?></a>
+						<?php endforeach; ?>
+					</div>
+				</details>
 
-				<div class="sbvi-footer__col">
-					<h6><?php esc_html_e( 'More', 'sinclairs-bvi' ); ?></h6>
-					<?php foreach ( $sbvi_footer_rest as $service ) : ?>
-						<a href="<?php echo esc_url( get_permalink( $service ) ); ?>"><?php echo esc_html( get_the_title( $service ) ); ?></a>
-					<?php endforeach; ?>
-					<a href="<?php echo esc_url( sbvi_about_url() ); ?>"><?php esc_html_e( 'About', 'sinclairs-bvi' ); ?></a>
-					<a href="<?php echo esc_url( sbvi_articles_url() ); ?>"><?php esc_html_e( 'Our Articles', 'sinclairs-bvi' ); ?></a>
-				</div>
+				<details class="sbvi-footer__col">
+					<summary><h6><?php esc_html_e( 'More', 'sinclairs-bvi' ); ?></h6></summary>
+					<div class="sbvi-footer__col-body">
+						<?php foreach ( $sbvi_footer_rest as $service ) : ?>
+							<a href="<?php echo esc_url( get_permalink( $service ) ); ?>"><?php echo esc_html( get_the_title( $service ) ); ?></a>
+						<?php endforeach; ?>
+						<a href="<?php echo esc_url( sbvi_about_url() ); ?>"><?php esc_html_e( 'About', 'sinclairs-bvi' ); ?></a>
+						<a href="<?php echo esc_url( sbvi_articles_url() ); ?>"><?php esc_html_e( 'Our Articles', 'sinclairs-bvi' ); ?></a>
+					</div>
+				</details>
 
-				<div class="sbvi-footer__col">
-					<h6><?php esc_html_e( 'Contact', 'sinclairs-bvi' ); ?></h6>
-					<p class="sbvi-footer__contact">
-						<?php echo nl2br( esc_html( $sbvi_contact['address_lines'] ) ); ?><br>
-						<?php if ( $sbvi_contact['phone_1'] ) : ?>
-							<a href="<?php echo esc_attr( sbvi_tel_href( $sbvi_contact['phone_1'] ) ); ?>"><?php echo esc_html( $sbvi_contact['phone_1'] ); ?></a><br>
-						<?php endif; ?>
-						<?php if ( $sbvi_contact['email'] ) : ?>
-							<a href="mailto:<?php echo esc_attr( $sbvi_contact['email'] ); ?>"><?php echo esc_html( $sbvi_contact['email'] ); ?></a>
-						<?php endif; ?>
-					</p>
-				</div>
+				<details class="sbvi-footer__col">
+					<summary><h6><?php esc_html_e( 'Contact', 'sinclairs-bvi' ); ?></h6></summary>
+					<div class="sbvi-footer__col-body">
+						<p class="sbvi-footer__contact">
+							<?php echo nl2br( esc_html( $sbvi_contact['address_lines'] ) ); ?><br>
+							<?php if ( $sbvi_contact['phone_1'] ) : ?>
+								<a href="<?php echo esc_attr( sbvi_tel_href( $sbvi_contact['phone_1'] ) ); ?>"><?php echo esc_html( $sbvi_contact['phone_1'] ); ?></a><br>
+							<?php endif; ?>
+							<?php if ( $sbvi_contact['email'] ) : ?>
+								<a href="mailto:<?php echo esc_attr( $sbvi_contact['email'] ); ?>"><?php echo esc_html( $sbvi_contact['email'] ); ?></a>
+							<?php endif; ?>
+						</p>
+					</div>
+				</details>
 			</div>
 
 			<div class="sbvi-footer__rule"></div>

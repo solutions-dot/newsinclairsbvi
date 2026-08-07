@@ -123,7 +123,7 @@ button { font: inherit; color: inherit; }
 .entry-content blockquote p, .entry-content .wp-block-quote p { margin: 0; }
 .entry-content .sbvi-coverage-grid {
 	list-style: none; margin: 0 0 var(--space-4); padding: 0;
-	display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+	display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
 	gap: var(--space-2) var(--space-6);
 }
 .entry-content .sbvi-coverage-grid li {
@@ -288,7 +288,7 @@ textarea.input { resize: vertical; }
 /* -------------------------------------------------------------------- */
 
 .sbvi-intro { padding-top: calc(var(--space-8) * 2.2); padding-bottom: calc(var(--space-8) * 1.6); }
-.sbvi-intro__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: calc(var(--space-8) * 1.4); }
+.sbvi-intro__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: calc(var(--space-8) * 1.4); }
 .sbvi-intro__statement {
 	font-size: clamp(21px, 2.2vw, 29px); line-height: 1.3; letter-spacing: -.015em;
 	font-family: var(--font-heading); margin: 0;
@@ -346,7 +346,7 @@ textarea.input { resize: vertical; }
 .sbvi-articles-teaser { background: var(--color-surface); }
 .sbvi-articles-teaser__grid {
 	padding-top: calc(var(--space-8) * 1.8); padding-bottom: calc(var(--space-8) * 1.8);
-	display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+	display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
 	gap: calc(var(--space-8) * 1.2); align-items: center;
 }
 .sbvi-articles-teaser__figure { aspect-ratio: 5 / 4; position: relative; overflow: hidden; }
@@ -366,8 +366,13 @@ textarea.input { resize: vertical; }
 .js .sbvi-testimonials__quote.is-active { opacity: 1; }
 .sbvi-testimonials__quote p, .sbvi-testimonials__quote .wp-block-paragraph {
 	font-family: var(--font-heading); font-style: italic;
-	font-size: clamp(22px, 3.4vw, 40px); line-height: 1.26; letter-spacing: -.02em;
-	max-width: 26ch; margin: 0 0 var(--space-4);
+	/* Sized for a real multi-sentence client endorsement, not just the
+	   design's short placeholder line — a full paragraph at the
+	   placeholder's original 40px/26ch pull-quote size would set as a
+	   wall of giant italic type. */
+	font-size: clamp(18px, 1.8vw, 26px);
+	line-height: 1.45; letter-spacing: -.01em;
+	max-width: 62ch; margin: 0 0 var(--space-4);
 }
 .sbvi-testimonials__quote footer {
 	font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--color-text-faint);
@@ -383,7 +388,7 @@ textarea.input { resize: vertical; }
 
 .sbvi-cta-band { padding-bottom: calc(var(--space-8) * 2); }
 .sbvi-cta-band > .sbvi-rule { margin-bottom: var(--space-6); }
-.sbvi-cta-band__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: calc(var(--space-8) * 1.2); align-items: end; }
+.sbvi-cta-band__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: calc(var(--space-8) * 1.2); align-items: end; }
 .sbvi-cta-band__grid h2 { font-size: clamp(30px, 4.4vw, 60px); letter-spacing: -.03em; margin: 0; text-wrap: balance; }
 .sbvi-cta-band__grid h2 em { font-style: italic; color: var(--color-accent-ink); }
 .sbvi-cta-band__grid p { max-width: 44ch; }
@@ -414,13 +419,18 @@ textarea.input { resize: vertical; }
 /* -------------------------------------------------------------------- */
 
 .sbvi-about { padding-bottom: calc(var(--space-8) * 1.6); }
-.sbvi-about__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: calc(var(--space-8) * 1.5); }
+.sbvi-about__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: calc(var(--space-8) * 1.5); }
 .sbvi-about__body > p:first-child {
 	font-size: clamp(19px, 1.8vw, 23px); line-height: 1.5; font-family: var(--font-heading);
 }
 .sbvi-about__portrait { aspect-ratio: 3 / 4; align-self: start; position: sticky; top: 120px; overflow: hidden; }
 .sbvi-about__portrait img, .sbvi-about__portrait .sbvi-image-placeholder { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.sbvi-about__portrait { position: sticky; }
+
+@media (max-width: 699.98px) {
+	/* Below the grid's single-column breakpoint, the photo stacks under
+	   the text — sticky has nothing meaningful left to stick within. */
+	.sbvi-about__portrait, .sbvi-single-service__photo { position: static; top: auto; }
+}
 
 /* -------------------------------------------------------------------- */
 /* Services hub                                                          */
@@ -428,12 +438,23 @@ textarea.input { resize: vertical; }
 
 .sbvi-services-hub { padding-bottom: calc(var(--space-8) * 1.6); }
 .sbvi-service-group {
-	display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), .4fr) minmax(min(100%, 420px), 1.6fr));
-	gap: var(--space-6) calc(var(--space-8) * 1.2); align-items: start;
+	display: grid; grid-template-columns: 1fr;
+	gap: var(--space-2) calc(var(--space-8) * 1.2); align-items: start;
 	padding: calc(var(--space-8) * .9) 0;
 }
-.sbvi-service-group__heading { font-size: clamp(24px, 2.6vw, 32px); letter-spacing: -.02em; margin: 0; position: sticky; top: 120px; }
+.sbvi-service-group__heading { font-size: clamp(24px, 2.6vw, 32px); letter-spacing: -.02em; margin: 0 0 var(--space-2); }
 .sbvi-service-group__rows { display: flex; flex-direction: column; }
+/* Two fixed-width tracks (260px + 420px) can't both fit — and can't wrap
+   independently — inside a single repeat(auto-fit, …) repetition, so this
+   needs an explicit breakpoint rather than relying on auto-fit alone
+   (which caused real horizontal overflow at phone widths). */
+@media (min-width: 700px) {
+	.sbvi-service-group {
+		grid-template-columns: minmax(0, .4fr) minmax(0, 1.6fr);
+		gap: var(--space-6) calc(var(--space-8) * 1.2);
+	}
+	.sbvi-service-group__heading { margin: 0; position: sticky; top: 120px; }
+}
 .sbvi-service-row { text-decoration: none; color: inherit; border-top: 1px solid var(--color-divider); padding: var(--space-3) 0; display: block; }
 .sbvi-service-group__rows a:last-child { border-bottom: 1px solid var(--color-divider); }
 .sbvi-service-row:hover { color: var(--color-accent); }
@@ -445,7 +466,7 @@ textarea.input { resize: vertical; }
 /* -------------------------------------------------------------------- */
 
 .sbvi-single-service { padding-bottom: calc(var(--space-8) * 1.6); }
-.sbvi-single-service__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: calc(var(--space-8) * 1.5); align-items: start; }
+.sbvi-single-service__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: calc(var(--space-8) * 1.5); align-items: start; }
 .sbvi-single-service__grid .entry-content { max-width: 70ch; }
 .sbvi-single-service__photo { aspect-ratio: 4 / 5; position: sticky; top: 120px; overflow: hidden; }
 .sbvi-single-service__photo img, .sbvi-single-service__photo .sbvi-image-placeholder { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
@@ -492,10 +513,13 @@ textarea.input { resize: vertical; }
 .sbvi-articles-list { padding-bottom: calc(var(--space-8) * 2); }
 .sbvi-article-row {
 	text-decoration: none; color: inherit;
-	display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), .5fr) minmax(min(100%, 380px), 1.5fr));
+	display: grid; grid-template-columns: 1fr;
 	gap: var(--space-2) calc(var(--space-8) * 1.2);
 	border-top: 1px solid var(--color-divider);
 	padding: calc(var(--space-6) * 1.1) 0;
+}
+@media (min-width: 700px) {
+	.sbvi-article-row { grid-template-columns: minmax(0, .5fr) minmax(0, 1.5fr); }
 }
 .sbvi-articles-list > div > a:last-child, .sbvi-articles-list > a:last-child { border-bottom: 1px solid var(--color-divider); }
 .sbvi-article-row:hover { color: var(--color-accent); }
@@ -511,14 +535,14 @@ textarea.input { resize: vertical; }
 /* -------------------------------------------------------------------- */
 
 .sbvi-contact { padding-bottom: calc(var(--space-8) * 2); }
-.sbvi-contact__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: calc(var(--space-8) * 1.4); align-items: start; }
+.sbvi-contact__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: calc(var(--space-8) * 1.4); align-items: start; }
 .sbvi-contact__intro p { font-size: clamp(19px, 1.8vw, 23px); line-height: 1.5; font-family: var(--font-heading); max-width: 34ch; }
 .sbvi-contact__details { display: grid; gap: var(--space-4); margin-top: var(--space-6); }
 .sbvi-contact__details dt { margin: 0 0 4px; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--color-text-faint); }
 .sbvi-contact__details dd { margin: 0; }
 
 .sbvi-contact-form { display: grid; gap: var(--space-4); max-width: 560px; }
-.sbvi-form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-4); }
+.sbvi-form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: var(--space-4); }
 .sbvi-contact-form__submit { justify-self: start; }
 .sbvi-form-disclaimer { font-size: 12.5px; color: var(--color-text-faint); margin: 0; }
 .sbvi-honeypot { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
@@ -534,14 +558,47 @@ textarea.input { resize: vertical; }
 
 .sbvi-footer { background: var(--color-neutral-900); color: var(--color-neutral-200); margin-top: auto; }
 .sbvi-footer__inner { padding-top: calc(var(--space-8) * 1.6); padding-bottom: var(--space-8); }
-.sbvi-footer__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: calc(var(--space-8) * 1.1); }
+.sbvi-footer__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: calc(var(--space-8) * 1.1); }
 .sbvi-footer__brand img { height: 62px; width: auto; margin-bottom: var(--space-3); background: var(--color-bg); padding: 10px 14px; border-radius: var(--radius-sm); }
 .sbvi-footer__brand .sbvi-logo__text { display: inline-block; margin-bottom: var(--space-3); }
 .sbvi-footer__brand p { font-size: 14px; line-height: 1.6; color: var(--color-neutral-400); max-width: 34ch; }
-.sbvi-footer__col h6 { color: var(--color-neutral-500); margin-bottom: var(--space-3); }
-.sbvi-footer__col { display: flex; flex-direction: column; }
+.sbvi-footer__col h6 { color: var(--color-neutral-500); margin: 0; }
+.sbvi-footer__col-body { display: flex; flex-direction: column; padding-top: var(--space-3); }
 .sbvi-footer__col a { color: var(--color-neutral-200); text-decoration: none; font-size: 14px; margin-bottom: 9px; }
 .sbvi-footer__col a:hover { color: var(--color-accent-on-dark); }
+
+/* Footer accordion: a real collapsed-by-default <details> on mobile (no
+   JS needed — it's a native browser behaviour), forced back to a plain
+   always-expanded column on desktop regardless of its open/closed state. */
+.sbvi-footer__col summary {
+	cursor: pointer; list-style: none;
+	display: flex; align-items: center; justify-content: space-between;
+	padding: var(--space-2) 0;
+}
+.sbvi-footer__col summary::-webkit-details-marker { display: none; }
+.sbvi-footer__col summary::marker { content: ""; }
+.sbvi-footer__col summary::after {
+	content: ""; width: 9px; height: 9px; flex: none; margin-left: var(--space-3);
+	border-right: 1.5px solid var(--color-neutral-400); border-bottom: 1.5px solid var(--color-neutral-400);
+	transform: rotate(45deg); transition: transform .2s ease;
+}
+.sbvi-footer__col[open] summary::after { transform: rotate(225deg); }
+.sbvi-footer__col:not(:last-of-type) { border-bottom: 1px solid color-mix(in srgb, var(--color-neutral-200) 14%, transparent); }
+.sbvi-footer__col:last-of-type { border-bottom: none; }
+
+@media (min-width: 900px) {
+	/* A closed <details>'s content is suppressed below the normal CSS
+	   cascade (its computed display can say "flex" while nothing paints),
+	   so "always expanded on desktop" can't be done with CSS alone here —
+	   main.js sets the `open` attribute itself at this breakpoint. This
+	   only styles the chrome around it; .js-gated visibility isn't
+	   needed since a closed-but-clickable footer is a fine no-JS fallback.
+	*/
+	.sbvi-footer__col summary { pointer-events: none; padding: 0 0 var(--space-3); }
+	.sbvi-footer__col summary::after { display: none; }
+	.sbvi-footer__col:not(:last-of-type) { border-bottom: none; }
+	.sbvi-footer__col-body { padding-top: 0; }
+}
 .sbvi-footer__contact { font-size: 14px; line-height: 1.7; color: var(--color-neutral-300); margin: 0; }
 .sbvi-footer__contact a { color: var(--color-accent-on-dark); text-decoration: none; }
 .sbvi-footer__rule { height: 1px; background: color-mix(in srgb, var(--color-neutral-200) 22%, transparent); margin: calc(var(--space-8) * 1.1) 0 var(--space-4); }

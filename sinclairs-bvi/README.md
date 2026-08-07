@@ -18,8 +18,9 @@ run the site is in this theme.
      Funds, Banking & Corporate Finance, AML/CFT & Compliance, Virtual
      Assets & FinTech, Economic Substance, Property & Private Client,
      Liquidations/Trade Marks/Notarial) with the client's copy and FAQs,
-   - adds 3 placeholder testimonials and 3 placeholder articles (clearly
-     labelled "sample — replace me").
+   - adds the firm's 3 real client testimonials and the 6 real articles
+     from the "Legal Insights" section of the live sinclairsbvi.com
+     (pulled 2026-08; see "Content sourced from the live site" below).
    This only ever *creates* missing content — reactivating the theme later
    won't overwrite anything that's since been edited.
 3. Go to **Settings → Permalinks** and click **Save** once, so the
@@ -73,16 +74,52 @@ run the site is in this theme.
   content is shown immediately rather than staying hidden — see the
   `.js`-gated rules at the top of `assets/css/style.css`.
 
-## Before this goes live — flagged by the design handoff, still true
+## Content sourced from the live site
+
+The design handoff's testimonial section literally said "paste from the
+current site," and asked for the real "Legal Insights" articles, so
+`inc/seed-content.php` seeds real content pulled from sinclairsbvi.com
+(2026-08) rather than placeholders:
+
+- **3 testimonials** — Benoit Quertemont, Michael Fitzhugh (Attorney-At-Law)
+  and Matt Freeman (In-House Counsel). The live site's first testimonial has
+  its name/role fields entered inconsistently (no role given); reproduced
+  as-is rather than guessed at.
+- **6 articles**, with categories assigned by topic since the live posts
+  are all uncategorized: *What You Need Know About Registering Trade Marks
+  In The BVI*, *What are trusts?*, *Trustee (Amendment) Act, 2015*,
+  *Incubator Funds and Approved Funds*, *How does the Economic Substance
+  (Companies and Limited Partnership) Act, 2018 Affect You?*, *Estate
+  Planning and Cryptocurrencies*. None have a featured image on the live
+  site (the "related articles" cards are text-only) — they use the same
+  fallback photo as everything else pending real photography.
+- One sentence in the live "Economic Substance" article's body is
+  genuinely truncated mid-sentence on the source site ("…adequacy of
+  expenditure, staff and premises in the" — nothing follows). Reproduced
+  as published; worth flagging to the client rather than inventing an
+  ending.
+- The testimonial rotator's type size/column width and the crossfade
+  stage's height were tuned in the approved design for a short 1–2 line
+  placeholder quote. Both were reworked here (`assets/css/style.css`,
+  `assets/js/main.js`) to fit a full multi-sentence endorsement, and the
+  stage height is now measured from actual content via JS rather than a
+  fixed guess, so it won't overflow into the section below regardless of
+  how long a future testimonial is.
+
+## Before this goes live — still open
 
 - **Photography.** Only one client photo was supplied and is currently
-  reused across every hero/banner/portrait/panel slot. Replace each via
-  its Featured Image / Secondary Image field.
-- **Testimonials and articles are placeholders.** Replace the 3 sample
-  testimonials and 3 sample articles with real content (or delete them).
+  reused across every hero/banner/portrait/panel/article slot. Replace
+  each via its Featured Image / Secondary Image field.
 - **Contact details need client confirmation.** The address/phone numbers
-  in Customizer → Theme Options → Contact Info were pulled from public
-  BVI FSC records in the design handoff, not confirmed by the client.
+  in Customizer → Theme Options → Contact Info come from the design
+  handoff (sourced from public BVI FSC records) and read "Mill Mall, 2nd
+  Floor, Unit 20." A web search while building this surfaced a business
+  directory listing a different address ("2nd Floor, O'Neal Marketing
+  Associates Building, Wickham's Cay II") for the same firm — directory
+  listings are often stale, so this isn't necessarily more current, but
+  it's a reason to confirm the address with the client rather than trust
+  either source blindly.
 - **One service group's copy was assembled as a stand-in.** Per the
   handoff notes, "Economic Substance" and "Liquidations, Trade Marks &
   Notarial" didn't have a dedicated source document; their copy was

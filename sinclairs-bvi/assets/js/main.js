@@ -156,7 +156,30 @@
 
 		var current = 0;
 		var timer = null;
+		var resizeTimer = null;
 		var DURATION = 7000;
+
+		// Real testimonials vary a lot in length — the CSS min-height is
+		// just a safe initial guess before this runs. Measure each quote's
+		// natural height (briefly taking it out of absolute positioning,
+		// since inset:0 would otherwise report the stage's own height back)
+		// and size the stage to the tallest one, so a long quote can never
+		// overflow into the section below it.
+		function resizeStage() {
+			var max = 0;
+			quotes.forEach( function ( quote ) {
+				var prevPosition = quote.style.position;
+				var prevVisibility = quote.style.visibility;
+				quote.style.position = 'static';
+				quote.style.visibility = 'hidden';
+				max = Math.max( max, quote.offsetHeight );
+				quote.style.position = prevPosition;
+				quote.style.visibility = prevVisibility;
+			} );
+			if ( max > 0 ) {
+				stage.style.minHeight = max + 'px';
+			}
+		}
 
 		function show( index ) {
 			current = index;
@@ -194,7 +217,44 @@
 			} );
 		} );
 
+		resizeStage();
+		window.addEventListener( 'resize', function () {
+			clearTimeout( resizeTimer );
+			resizeTimer = setTimeout( resizeStage, 150 );
+		} );
+
 		start();
+	}
+
+	/* ------------------------------------------------------------------ */
+	/* Footer accordion                                                    */
+	/* ------------------------------------------------------------------ */
+
+	function initFooterAccordion() {
+		var cols = document.querySelectorAll( '.sbvi-footer__col' );
+		if ( ! cols.length ) {
+			return;
+		}
+
+		var MOBILE_BREAKPOINT = 900;
+		var resizeTimer = null;
+
+		function sync() {
+			var isDesktop = window.innerWidth >= MOBILE_BREAKPOINT;
+			cols.forEach( function ( col ) {
+				if ( isDesktop ) {
+					col.setAttribute( 'open', '' );
+				} else {
+					col.removeAttribute( 'open' );
+				}
+			} );
+		}
+
+		sync();
+		window.addEventListener( 'resize', function () {
+			clearTimeout( resizeTimer );
+			resizeTimer = setTimeout( sync, 150 );
+		} );
 	}
 
 	/* ------------------------------------------------------------------ */
@@ -229,6 +289,7 @@
 		initMobileDrawer();
 		initPracticePicker();
 		initTestimonials();
+		initFooterAccordion();
 		initScrollReveal();
 	}
 
