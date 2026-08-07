@@ -1,0 +1,50 @@
+/* Admin styling for the repeater fields (FAQs, nutshell rows) and the
+   media-library image picker used on the Home / About page meta boxes. */
+
+.sbvi-repeater-row {
+	border: 1px solid #dcdcde;
+	background: #fff;
+	border-radius: 4px;
+	padding: 12px 14px;
+	margin-bottom: 10px;
+}
+.sbvi-repeater-row-head {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 8px;
+}
+.sbvi-repeater-row-title {
+	font-weight: 600;
+}
+.sbvi-repeater-row-actions .button {
+	margin-left: 4px;
+	line-height: 2;
+}
+.sbvi-repeater-field {
+	margin-bottom: 8px;
+}
+.sbvi-repeater-field label {
+	display: block;
+	font-size: 12px;
+	font-weight: 600;
+	margin-bottom: 3px;
+	color: #50575e;
+}
+.sbvi-repeater-field input[type="text"],
+.sbvi-repeater-field select,
+.sbvi-repeater-field textarea {
+	width: 100%;
+	max-width: 700px;
+}
+.sbvi-repeater-template {
+	display: none;
+}
+
+.sbvi-image-picker-preview img {
+	max-width: 100%;
+	height: auto;
+	border: 1px solid #dcdcde;
+	margin-bottom: 8px;
+	display: block;
+}
