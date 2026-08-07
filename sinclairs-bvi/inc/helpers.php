@@ -224,12 +224,3 @@ function sbvi_contact_info() {
 function sbvi_tel_href( $display_number ) {
 	return 'tel:' . preg_replace( '/[^\d+]/', '', $display_number );
 }
-
-/**
- * Split a "Firm · Role · Location" style kicker string into its pieces for
- * separate styling, without hard-coding the copy itself.
- */
-function sbvi_split_kicker( $text ) {
-	$parts = array_filter( array_map( 'trim', explode( '·', $text ) ) );
-	return $parts ? $parts : array( $text );
-}

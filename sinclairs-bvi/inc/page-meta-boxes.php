@@ -15,7 +15,6 @@ function sbvi_home_fields() {
 		'hero'     => array(
 			'label'  => __( 'Hero', 'sinclairs-bvi' ),
 			'fields' => array(
-				'sbvi_hero_kicker'     => array( 'label' => __( 'Kicker line', 'sinclairs-bvi' ), 'type' => 'text', 'default' => 'Sinclairs (BVI) · Attorneys-at-Law · Road Town · Tortola' ),
 				'sbvi_hero_heading'    => array( 'label' => __( 'Headline (basic HTML like <em> allowed)', 'sinclairs-bvi' ), 'type' => 'text', 'default' => 'Your trusted legal partner in the <em>British Virgin Islands</em>' ),
 				'sbvi_hero_subheading' => array( 'label' => __( 'Sub-headline', 'sinclairs-bvi' ), 'type' => 'textarea', 'default' => 'Clear, practical and commercially focused advice for BVI legal entities, financial institutions, trust and corporate services providers, and individuals — in the BVI and internationally.' ),
 				'sbvi_hero_cta1'       => array( 'label' => __( 'Button 1 label (links to Our Services)', 'sinclairs-bvi' ), 'type' => 'text', 'default' => 'Our services' ),

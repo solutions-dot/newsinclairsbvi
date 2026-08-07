@@ -275,7 +275,7 @@ textarea.input { resize: vertical; }
 .sbvi-hero__content { position: relative; width: 100%; padding-top: calc(var(--space-8) * 2.4); padding-bottom: calc(var(--space-8) * 1.4); }
 .sbvi-hero__inner { max-width: 940px; }
 .sbvi-hero__inner .sbvi-rule { margin-bottom: var(--space-2); }
-.sbvi-hero__inner .sbvi-rule:nth-of-type(2) { margin-bottom: calc(var(--space-6) * 1.2); }
+.sbvi-hero__inner .sbvi-hero__rule-gap { margin-top: var(--space-2); margin-bottom: var(--space-6); }
 .sbvi-hero__kicker {
 	display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4);
 	font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase;
@@ -359,7 +359,17 @@ textarea.input { resize: vertical; }
 	display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
 	gap: calc(var(--space-8) * 1.2); align-items: center;
 }
-.sbvi-articles-teaser__figure { aspect-ratio: 5 / 4; position: relative; overflow: hidden; border-radius: var(--radius-photo); }
+@media (min-width: 700px) {
+	.sbvi-articles-teaser__grid { grid-template-columns: 1.5fr 1fr; }
+}
+.sbvi-articles-teaser__figure {
+	aspect-ratio: 5 / 4; position: relative; overflow: hidden; border-radius: var(--radius-photo);
+	/* width:100% is load-bearing here: this element's only child is
+	   position:absolute (see below), so it has no in-flow content to
+	   size around — without an explicit width, max-width alone collapses
+	   it to 0x0 instead of just capping it. */
+	width: 100%; max-width: 380px;
+}
 .sbvi-articles-teaser__figure img, .sbvi-articles-teaser__figure .sbvi-image-placeholder { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 
 /* -------------------------------------------------------------------- */
@@ -425,7 +435,11 @@ textarea.input { resize: vertical; }
 .sbvi-banner img, .sbvi-banner .sbvi-image-placeholder { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .sbvi-banner__scrim {
 	position: absolute; inset: 0; pointer-events: none;
-	background: linear-gradient(to top, var(--color-bg) 1%, color-mix(in srgb, var(--color-bg) 34%, transparent) 44%, transparent 80%);
+	/* Just enough of a dissolve at the very bottom edge to blend into the
+	   page-header section below, rather than a hard photo/color seam —
+	   no overlaid text here to protect, so the rest of the photo stays
+	   fully clear. */
+	background: linear-gradient(to top, var(--color-bg) 1%, color-mix(in srgb, var(--color-bg) 18%, transparent) 20%, transparent 42%);
 }
 
 .sbvi-page-header { padding-top: calc(var(--space-8) * 1.6); padding-bottom: var(--space-8); }

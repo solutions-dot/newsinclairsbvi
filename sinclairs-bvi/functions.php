@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SBVI_VERSION', '1.0.0' );
+define( 'SBVI_VERSION', '1.1.0' );
 define( 'SBVI_DIR', get_template_directory() );
 define( 'SBVI_URI', get_template_directory_uri() );
 
@@ -60,12 +60,24 @@ require SBVI_DIR . '/inc/admin-assets.php';
 require SBVI_DIR . '/inc/seed-content.php';
 
 /**
+ * File's last-modified time as its cache-busting version, so an edit to
+ * style.css or main.js is never masked by a browser serving a stale
+ * cached copy from a previous ?ver= — which is exactly what happened
+ * during development (theme-file edits with no version bump, so the
+ * <link>/<script> URL never changed and browsers kept the old file).
+ */
+function sbvi_asset_version( $relative_path ) {
+	$file = SBVI_DIR . '/' . ltrim( $relative_path, '/' );
+	return file_exists( $file ) ? (string) filemtime( $file ) : SBVI_VERSION;
+}
+
+/**
  * Front-end asset enqueue.
  */
 function sbvi_assets() {
 	wp_enqueue_style( 'sbvi-fonts', 'https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400;1,600&display=swap', array(), null );
-	wp_enqueue_style( 'sbvi-style', SBVI_URI . '/assets/css/style.css', array(), SBVI_VERSION );
-	wp_enqueue_script( 'sbvi-main', SBVI_URI . '/assets/js/main.js', array(), SBVI_VERSION, true );
+	wp_enqueue_style( 'sbvi-style', SBVI_URI . '/assets/css/style.css', array(), sbvi_asset_version( 'assets/css/style.css' ) );
+	wp_enqueue_script( 'sbvi-main', SBVI_URI . '/assets/js/main.js', array(), sbvi_asset_version( 'assets/js/main.js' ), true );
 
 	if ( is_singular( 'service' ) ) {
 		wp_enqueue_script( 'sbvi-main' );

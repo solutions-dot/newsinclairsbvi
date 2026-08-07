@@ -37,12 +37,7 @@ if ( have_posts() ) :
 			<div class="sbvi-hero__content sbvi-container">
 				<div class="sbvi-hero__inner">
 					<div class="sbvi-rule sbvi-rule--thick" data-reveal></div>
-					<p class="sbvi-hero__kicker">
-						<?php foreach ( sbvi_split_kicker( sbvi_home_field( $home_id, 'sbvi_hero_kicker' ) ) as $i => $part ) : ?>
-							<span<?php echo 1 === $i ? ' class="is-accent"' : ''; ?>><?php echo esc_html( $part ); ?></span>
-						<?php endforeach; ?>
-					</p>
-					<div class="sbvi-rule" data-reveal></div>
+					<div class="sbvi-rule sbvi-hero__rule-gap" data-reveal></div>
 					<h1 class="sbvi-hero__heading"><?php echo wp_kses_post( sbvi_home_field( $home_id, 'sbvi_hero_heading' ) ); ?></h1>
 					<p class="sbvi-hero__sub"><?php echo esc_html( sbvi_home_field( $home_id, 'sbvi_hero_subheading' ) ); ?></p>
 					<div class="sbvi-hero__ctas">
