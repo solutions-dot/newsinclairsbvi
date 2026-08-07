@@ -1,0 +1,16 @@
+/*
+Theme Name: Sinclairs (BVI)
+Theme URI: https://sinclairsbvi.com
+Author: Sinclairs (BVI)
+Description: Custom theme for Sinclairs (BVI), a British Virgin Islands law firm. Built from the approved design handoff (Home, About, Our Services hub, 8 practice-area pages, Our Articles, Contact). All services, articles, testimonials and page copy are editable from wp-admin.
+Version: 1.0.0
+Requires at least: 6.4
+Requires PHP: 7.4
+Text Domain: sinclairs-bvi
+License: GNU General Public License v2 or later
+License URI: LICENSE
+
+This stylesheet intentionally contains only the theme header required by
+WordPress. The compiled stylesheet lives in assets/css/style.css and is
+enqueued from functions.php so it can be split/cached independently.
+*/
