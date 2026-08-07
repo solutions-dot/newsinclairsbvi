@@ -25,13 +25,13 @@ $sbvi_nutshell_in_menu = get_theme_mod( 'sbvi_nutshell_in_menu', true );
 
 	<header class="sbvi-header">
 		<div class="sbvi-header__bar sbvi-container">
-			<a href="<?php echo esc_url( sbvi_home_url() ); ?>" class="sbvi-logo">
-				<?php if ( has_custom_logo() ) : ?>
-					<?php the_custom_logo(); ?>
-				<?php else : ?>
+			<?php if ( has_custom_logo() ) : ?>
+				<div class="sbvi-logo"><?php the_custom_logo(); ?></div>
+			<?php else : ?>
+				<a href="<?php echo esc_url( sbvi_home_url() ); ?>" class="sbvi-logo">
 					<span class="sbvi-logo__text"><?php bloginfo( 'name' ); ?></span>
-				<?php endif; ?>
-			</a>
+				</a>
+			<?php endif; ?>
 
 			<nav class="sbvi-nav" aria-label="<?php esc_attr_e( 'Primary', 'sinclairs-bvi' ); ?>">
 				<a href="<?php echo esc_url( sbvi_home_url() ); ?>" class="sbvi-nav__link"><?php esc_html_e( 'Home', 'sinclairs-bvi' ); ?></a>

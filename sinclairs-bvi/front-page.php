@@ -130,6 +130,15 @@ if ( have_posts() ) :
 					?>
 					<blockquote class="sbvi-testimonials__quote<?php echo 0 === $t_index ? ' is-active' : ''; ?>" data-testimonial-index="<?php echo esc_attr( $t_index ); ?>">
 						<?php the_content(); ?>
+						<button
+							type="button"
+							class="sbvi-testimonials__toggle"
+							data-testimonial-toggle
+							data-label-more="<?php esc_attr_e( 'Read more', 'sinclairs-bvi' ); ?>"
+							data-label-less="<?php esc_attr_e( 'Read less', 'sinclairs-bvi' ); ?>"
+							aria-expanded="false"
+							hidden
+						><?php esc_html_e( 'Read more', 'sinclairs-bvi' ); ?></button>
 						<footer><?php echo esc_html( get_the_title() ); ?><?php echo $matter ? ' · ' . esc_html( $matter ) : ''; ?></footer>
 					</blockquote>
 					<?php
