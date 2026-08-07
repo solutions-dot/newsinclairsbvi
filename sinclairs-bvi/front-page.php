@@ -36,9 +36,7 @@ if ( have_posts() ) :
 			<div class="sbvi-hero__scrim" aria-hidden="true"></div>
 			<div class="sbvi-hero__content sbvi-container">
 				<div class="sbvi-hero__inner">
-					<div class="sbvi-rule sbvi-rule--thick" data-reveal></div>
-					<div class="sbvi-rule sbvi-hero__rule-gap" data-reveal></div>
-					<h1 class="sbvi-hero__heading"><?php echo wp_kses_post( sbvi_home_field( $home_id, 'sbvi_hero_heading' ) ); ?></h1>
+					<h1 class="sbvi-hero__heading" data-reveal><?php echo wp_kses_post( sbvi_home_field( $home_id, 'sbvi_hero_heading' ) ); ?></h1>
 					<p class="sbvi-hero__sub"><?php echo esc_html( sbvi_home_field( $home_id, 'sbvi_hero_subheading' ) ); ?></p>
 					<div class="sbvi-hero__ctas">
 						<a href="<?php echo esc_url( sbvi_services_url() ); ?>" class="btn btn-primary"><?php echo esc_html( sbvi_home_field( $home_id, 'sbvi_hero_cta1' ) ); ?></a>
