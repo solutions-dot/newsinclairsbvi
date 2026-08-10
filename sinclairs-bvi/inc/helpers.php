@@ -198,9 +198,8 @@ function sbvi_image_url( $attachment_id, $size ) {
 }
 
 /**
- * Secondary image slot (Home: articles-teaser photo; About: sticky
- * portrait) — one reusable meta field, label changes per template in the
- * admin UI. See inc/page-meta-boxes.php.
+ * About page's sticky portrait photo, set via its "Secondary image" meta
+ * box. See inc/page-meta-boxes.php.
  */
 function sbvi_secondary_image_id( $post_id ) {
 	$id = get_post_meta( $post_id, '_sbvi_secondary_image', true );

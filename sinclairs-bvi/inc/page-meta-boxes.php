@@ -1,9 +1,8 @@
 <?php
 /**
  * Meta boxes for ordinary Pages: the Home page's structured text blocks
- * (only shown once a page is set as the site's front page) and the
- * reusable "secondary image" slot (About's sticky portrait / Home's
- * articles-teaser photo).
+ * (only shown once a page is set as the site's front page), the Home
+ * practice-area photo, and the About page's sticky portrait photo.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -28,14 +27,6 @@ function sbvi_home_fields() {
 				'sbvi_intro_heading' => array( 'label' => __( 'Statement', 'sinclairs-bvi' ), 'type' => 'textarea', 'default' => "We take the time to understand our clients' objectives and give advice that answers their particular circumstances." ),
 			),
 		),
-		'articles' => array(
-			'label'  => __( 'Our Articles teaser', 'sinclairs-bvi' ),
-			'fields' => array(
-				'sbvi_articles_kicker'  => array( 'label' => __( 'Kicker line', 'sinclairs-bvi' ), 'type' => 'text', 'default' => 'Our Articles' ),
-				'sbvi_articles_heading' => array( 'label' => __( 'Heading', 'sinclairs-bvi' ), 'type' => 'text', 'default' => 'Notes on BVI law, written plainly' ),
-				'sbvi_articles_body'    => array( 'label' => __( 'Body', 'sinclairs-bvi' ), 'type' => 'textarea', 'default' => 'Our own posts on legislative change, regulatory practice and what it means for entities doing business through the British Virgin Islands.' ),
-			),
-		),
 		'closing'  => array(
 			'label'  => __( 'Closing call to action', 'sinclairs-bvi' ),
 			'fields' => array(
@@ -53,7 +44,6 @@ function sbvi_add_page_meta_boxes( $post ) {
 
 	if ( $is_front_page ) {
 		add_meta_box( 'sbvi-home-content', __( 'Home Page Content', 'sinclairs-bvi' ), 'sbvi_render_home_meta_box', 'page', 'normal', 'high' );
-		add_meta_box( 'sbvi-secondary-image', __( 'Articles Teaser Photo', 'sinclairs-bvi' ), 'sbvi_render_secondary_image_box', 'page', 'side', 'default' );
 		add_meta_box( 'sbvi-practice-image', __( 'Practice Area Photo', 'sinclairs-bvi' ), 'sbvi_render_practice_image_box', 'page', 'side', 'default' );
 	} elseif ( 'page-about.php' === $template ) {
 		add_meta_box( 'sbvi-secondary-image', __( 'Portrait Photo (sticky, beside the body text)', 'sinclairs-bvi' ), 'sbvi_render_secondary_image_box', 'page', 'side', 'default' );

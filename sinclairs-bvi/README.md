@@ -37,10 +37,11 @@ run the site is in this theme.
 | Its "Information & FAQs" questions | **Information & FAQs** box (add/remove/reorder rows) |
 | Its rows on the Services hub | **Services Hub — Sub-service Rows** box. Each row picks which of the 3 hub groups it appears under — this is per-row, not per-page, because in the approved design one practice area (Property & Private Client) contributes rows to two different hub groups |
 | Its FAQ heading ("Information & FAQs" vs "Frequently Asked Questions") | Per-post override in the same Settings box, or the site-wide default in Customizer |
-| Home page hero / intro / articles-teaser / closing-CTA text | Edit the **Home** page → **Home Page Content** box |
+| Home page hero / intro / closing-CTA text | Edit the **Home** page → **Home Page Content** box |
 | Home intro paragraphs | The Home page's main content editor |
 | About page body | The **About** page's main content editor (first paragraph is auto-styled larger; add a Quote block for a pull-quote) |
-| About portrait photo / Home articles-teaser photo | The **Secondary image** box on that page |
+| About portrait photo | The **Secondary image** box on that page |
+| Home "Choose a practice area" photo | The **Practice Area Photo** box on the Home page (falls back to the first practice area's featured image if left blank) |
 | Testimonials | **Testimonials** in the admin menu — title = client name, content = quote, "Matter" field |
 | Articles | **Our Articles** in the admin menu — Excerpt = standfirst, Category = taxonomy |
 | Site accent color, default/fallback photo, contact details, footer blurb, copyright + disclaimer text, default FAQ heading | **Appearance → Customize → Theme Options** |
