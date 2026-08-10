@@ -87,11 +87,7 @@ if ( have_posts() ) :
 
 				<div class="sbvi-practice__panel">
 					<div class="sbvi-practice__photo">
-						<?php foreach ( $services as $index => $service ) : ?>
-							<div class="sbvi-practice__photo-layer<?php echo 0 === $index ? ' is-active' : ''; ?>" data-practice-panel="<?php echo esc_attr( $index ); ?>">
-								<?php sbvi_image( get_post_thumbnail_id( $service ), 'sbvi-panel', get_the_title( $service ), 'sbvi-practice__img', true ); ?>
-							</div>
-						<?php endforeach; ?>
+						<?php sbvi_image( get_post_thumbnail_id( $services[0] ), 'sbvi-panel', get_the_title( $services[0] ), 'sbvi-practice__img', true ); ?>
 					</div>
 					<div class="sbvi-practice__text">
 						<?php foreach ( $services as $index => $service ) : $nutshell = get_post_meta( $service->ID, '_sbvi_nutshell', true ); ?>

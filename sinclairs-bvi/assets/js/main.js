@@ -114,15 +114,11 @@
 		}
 
 		var rows = picker.querySelectorAll( '[data-practice-index]' );
-		var panels = picker.querySelectorAll( '[data-practice-panel]' );
 		var descs = picker.querySelectorAll( '[data-practice-desc]' );
 
 		function activate( index ) {
 			rows.forEach( function ( row ) {
 				row.classList.toggle( 'is-active', row.getAttribute( 'data-practice-index' ) === String( index ) );
-			} );
-			panels.forEach( function ( panel ) {
-				panel.classList.toggle( 'is-active', panel.getAttribute( 'data-practice-panel' ) === String( index ) );
 			} );
 			descs.forEach( function ( desc ) {
 				desc.classList.toggle( 'is-active', desc.getAttribute( 'data-practice-desc' ) === String( index ) );

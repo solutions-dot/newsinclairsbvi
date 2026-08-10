@@ -175,9 +175,8 @@ function sbvi_image( $attachment_id, $size, $alt, $class = '', $eager = false ) 
 			'class' => esc_attr( $class ),
 		);
 		// Above-the-fold images (hero, banners, the practice-area preview
-		// stack) should never carry loading="lazy" — deferring them hurts
-		// LCP, and the practice-panel photos in particular can be swapped
-		// into view by a hover at any time, not by scrolling.
+		// photo) should never carry loading="lazy" — deferring them hurts
+		// LCP since they're visible without scrolling.
 		if ( $eager ) {
 			$attrs['loading']  = false;
 			$attrs['fetchpriority'] = 'high';
