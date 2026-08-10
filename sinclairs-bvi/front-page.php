@@ -98,62 +98,48 @@ if ( have_posts() ) :
 		</section>
 		<?php endif; ?>
 
-		<section class="sbvi-articles-teaser">
-			<div class="sbvi-container sbvi-articles-teaser__grid">
-				<div data-reveal>
-					<h6 class="sbvi-kicker"><?php echo esc_html( sbvi_home_field( $home_id, 'sbvi_articles_kicker' ) ); ?></h6>
-					<h2><?php echo esc_html( sbvi_home_field( $home_id, 'sbvi_articles_heading' ) ); ?></h2>
-					<p><?php echo esc_html( sbvi_home_field( $home_id, 'sbvi_articles_body' ) ); ?></p>
-					<a href="<?php echo esc_url( sbvi_articles_url() ); ?>" class="sbvi-link-arrow"><?php esc_html_e( 'Read our articles →', 'sinclairs-bvi' ); ?></a>
-				</div>
-				<figure data-reveal class="sbvi-articles-teaser__figure">
-					<?php sbvi_image( sbvi_secondary_image_id( $home_id ), 'sbvi-card', esc_attr__( 'Our Articles', 'sinclairs-bvi' ), 'sbvi-articles-teaser__img' ); ?>
-				</figure>
-			</div>
-		</section>
-
 		<?php if ( $testimonials->have_posts() ) : ?>
-		<section class="sbvi-testimonials sbvi-container" data-reveal>
-			<div class="sbvi-rule sbvi-rule--thick"></div>
-			<h6 class="sbvi-kicker"><?php esc_html_e( 'In our clients’ words', 'sinclairs-bvi' ); ?></h6>
-			<div class="sbvi-testimonials__stage" data-testimonial-stage>
-				<?php
-				$t_index = 0;
-				while ( $testimonials->have_posts() ) :
-					$testimonials->the_post();
-					$matter = get_post_meta( get_the_ID(), '_sbvi_matter', true );
-					?>
-					<blockquote class="sbvi-testimonials__quote<?php echo 0 === $t_index ? ' is-active' : ''; ?>" data-testimonial-index="<?php echo esc_attr( $t_index ); ?>">
-						<?php the_content(); ?>
-						<button
-							type="button"
-							class="sbvi-testimonials__toggle"
-							data-testimonial-toggle
-							data-label-more="<?php esc_attr_e( 'Read more', 'sinclairs-bvi' ); ?>"
-							data-label-less="<?php esc_attr_e( 'Read less', 'sinclairs-bvi' ); ?>"
-							aria-expanded="false"
-							hidden
-						><?php esc_html_e( 'Read more', 'sinclairs-bvi' ); ?></button>
-						<footer><?php echo esc_html( get_the_title() ); ?><?php echo $matter ? ' · ' . esc_html( $matter ) : ''; ?></footer>
-					</blockquote>
+		<section class="sbvi-testimonials" data-reveal>
+			<div class="sbvi-container">
+				<h6 class="sbvi-kicker"><?php esc_html_e( 'In our clients’ words', 'sinclairs-bvi' ); ?></h6>
+				<div class="sbvi-testimonials__stage" data-testimonial-stage>
 					<?php
-					$t_index++;
-				endwhile;
-				wp_reset_postdata();
-				?>
-			</div>
-			<?php if ( $t_index > 1 ) : ?>
-				<div class="sbvi-testimonials__dots" data-testimonial-dots>
-					<?php for ( $i = 0; $i < $t_index; $i++ ) : ?>
-						<button type="button" class="sbvi-testimonials__dot<?php echo 0 === $i ? ' is-active' : ''; ?>" data-testimonial-goto="<?php echo esc_attr( $i ); ?>" aria-label="<?php echo esc_attr( sprintf( __( 'Testimonial %d', 'sinclairs-bvi' ), $i + 1 ) ); ?>"><span></span></button>
-					<?php endfor; ?>
+					$t_index = 0;
+					while ( $testimonials->have_posts() ) :
+						$testimonials->the_post();
+						$matter = get_post_meta( get_the_ID(), '_sbvi_matter', true );
+						?>
+						<blockquote class="sbvi-testimonials__quote<?php echo 0 === $t_index ? ' is-active' : ''; ?>" data-testimonial-index="<?php echo esc_attr( $t_index ); ?>">
+							<?php the_content(); ?>
+							<button
+								type="button"
+								class="sbvi-testimonials__toggle"
+								data-testimonial-toggle
+								data-label-more="<?php esc_attr_e( 'Read more', 'sinclairs-bvi' ); ?>"
+								data-label-less="<?php esc_attr_e( 'Read less', 'sinclairs-bvi' ); ?>"
+								aria-expanded="false"
+								hidden
+							><?php esc_html_e( 'Read more', 'sinclairs-bvi' ); ?></button>
+							<footer><?php echo esc_html( get_the_title() ); ?><?php echo $matter ? ' · ' . esc_html( $matter ) : ''; ?></footer>
+						</blockquote>
+						<?php
+						$t_index++;
+					endwhile;
+					wp_reset_postdata();
+					?>
 				</div>
-			<?php endif; ?>
+				<?php if ( $t_index > 1 ) : ?>
+					<div class="sbvi-testimonials__dots" data-testimonial-dots>
+						<?php for ( $i = 0; $i < $t_index; $i++ ) : ?>
+							<button type="button" class="sbvi-testimonials__dot<?php echo 0 === $i ? ' is-active' : ''; ?>" data-testimonial-goto="<?php echo esc_attr( $i ); ?>" aria-label="<?php echo esc_attr( sprintf( __( 'Testimonial %d', 'sinclairs-bvi' ), $i + 1 ) ); ?>"><span></span></button>
+						<?php endfor; ?>
+					</div>
+				<?php endif; ?>
+			</div>
 		</section>
 		<?php endif; ?>
 
 		<section class="sbvi-cta-band sbvi-container">
-			<div class="sbvi-rule sbvi-rule--thick"></div>
 			<div class="sbvi-cta-band__grid">
 				<h2><?php echo wp_kses_post( sbvi_home_field( $home_id, 'sbvi_closing_heading' ) ); ?></h2>
 				<div>
