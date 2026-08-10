@@ -208,6 +208,16 @@ function sbvi_secondary_image_id( $post_id ) {
 }
 
 /**
+ * "Choose a practice area" photo (Home only), set via the admin's
+ * "Practice Area Photo" meta box. Returns 0 when unset — callers fall
+ * back to the first practice area's featured image. See inc/page-meta-boxes.php.
+ */
+function sbvi_practice_image_id( $post_id ) {
+	$id = get_post_meta( $post_id, '_sbvi_practice_image', true );
+	return $id ? (int) $id : 0;
+}
+
+/**
  * Site-wide contact details, editable from Customizer > Theme Options.
  * Reused on the Contact page and in the footer.
  */

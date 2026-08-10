@@ -87,7 +87,13 @@ if ( have_posts() ) :
 
 				<div class="sbvi-practice__panel">
 					<div class="sbvi-practice__photo">
-						<?php sbvi_image( get_post_thumbnail_id( $services[0] ), 'sbvi-panel', get_the_title( $services[0] ), 'sbvi-practice__img', true ); ?>
+						<?php
+						$practice_image_id = sbvi_practice_image_id( $home_id );
+						if ( ! $practice_image_id ) {
+							$practice_image_id = get_post_thumbnail_id( $services[0] );
+						}
+						sbvi_image( $practice_image_id, 'sbvi-panel', esc_attr__( 'Choose a practice area', 'sinclairs-bvi' ), 'sbvi-practice__img', true );
+						?>
 					</div>
 					<div class="sbvi-practice__text">
 						<?php foreach ( $services as $index => $service ) : $nutshell = get_post_meta( $service->ID, '_sbvi_nutshell', true ); ?>
