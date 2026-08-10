@@ -251,13 +251,13 @@
 		} );
 
 		initToggles();
-		resizeStage();
 		checkTruncation();
+		resizeStage();
 		window.addEventListener( 'resize', function () {
 			clearTimeout( resizeTimer );
 			resizeTimer = setTimeout( function () {
-				resizeStage();
 				checkTruncation();
+				resizeStage();
 			}, 150 );
 		} );
 

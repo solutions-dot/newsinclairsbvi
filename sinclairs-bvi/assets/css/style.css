@@ -278,7 +278,7 @@ textarea.input { resize: vertical; }
 	font-size: clamp(38px, 6.6vw, 86px); line-height: 1.02; letter-spacing: -.03em;
 	margin: 0 0 var(--space-4); text-wrap: balance;
 }
-.sbvi-hero__heading em { font-style: italic; color: #4169e1; }
+.sbvi-hero__heading em { font-style: italic; color: var(--color-brand-navy); }
 .sbvi-hero__sub {
 	font-size: clamp(17px, 1.5vw, 21px); line-height: 1.55; max-width: 62ch;
 	margin: 0 0 var(--space-6); color: var(--color-text-muted);
