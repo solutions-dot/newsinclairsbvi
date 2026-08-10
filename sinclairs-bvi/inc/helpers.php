@@ -175,9 +175,8 @@ function sbvi_image( $attachment_id, $size, $alt, $class = '', $eager = false ) 
 			'class' => esc_attr( $class ),
 		);
 		// Above-the-fold images (hero, banners, the practice-area preview
-		// stack) should never carry loading="lazy" — deferring them hurts
-		// LCP, and the practice-panel photos in particular can be swapped
-		// into view by a hover at any time, not by scrolling.
+		// photo) should never carry loading="lazy" — deferring them hurts
+		// LCP since they're visible without scrolling.
 		if ( $eager ) {
 			$attrs['loading']  = false;
 			$attrs['fetchpriority'] = 'high';
@@ -205,6 +204,16 @@ function sbvi_image_url( $attachment_id, $size ) {
  */
 function sbvi_secondary_image_id( $post_id ) {
 	$id = get_post_meta( $post_id, '_sbvi_secondary_image', true );
+	return $id ? (int) $id : 0;
+}
+
+/**
+ * "Choose a practice area" photo (Home only), set via the admin's
+ * "Practice Area Photo" meta box. Returns 0 when unset — callers fall
+ * back to the first practice area's featured image. See inc/page-meta-boxes.php.
+ */
+function sbvi_practice_image_id( $post_id ) {
+	$id = get_post_meta( $post_id, '_sbvi_practice_image', true );
 	return $id ? (int) $id : 0;
 }
 

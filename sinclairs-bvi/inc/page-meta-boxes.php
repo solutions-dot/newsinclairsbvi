@@ -54,6 +54,7 @@ function sbvi_add_page_meta_boxes( $post ) {
 	if ( $is_front_page ) {
 		add_meta_box( 'sbvi-home-content', __( 'Home Page Content', 'sinclairs-bvi' ), 'sbvi_render_home_meta_box', 'page', 'normal', 'high' );
 		add_meta_box( 'sbvi-secondary-image', __( 'Articles Teaser Photo', 'sinclairs-bvi' ), 'sbvi_render_secondary_image_box', 'page', 'side', 'default' );
+		add_meta_box( 'sbvi-practice-image', __( 'Practice Area Photo', 'sinclairs-bvi' ), 'sbvi_render_practice_image_box', 'page', 'side', 'default' );
 	} elseif ( 'page-about.php' === $template ) {
 		add_meta_box( 'sbvi-secondary-image', __( 'Portrait Photo (sticky, beside the body text)', 'sinclairs-bvi' ), 'sbvi_render_secondary_image_box', 'page', 'side', 'default' );
 	}
@@ -199,6 +200,34 @@ function sbvi_save_secondary_image( $post_id ) {
 	}
 }
 add_action( 'save_post_page', 'sbvi_save_secondary_image' );
+
+/**
+ * "Choose a practice area" photo (Home only) — the single static image
+ * shown beside the practice-area list. Falls back to the first practice
+ * area's featured image until an admin picks one. See sbvi_practice_image_id().
+ */
+function sbvi_render_practice_image_box( $post ) {
+	wp_nonce_field( 'sbvi_practice_image', 'sbvi_practice_image_nonce' );
+	$id = get_post_meta( $post->ID, '_sbvi_practice_image', true );
+	sbvi_render_image_picker( '_sbvi_practice_image', $id );
+	echo '<p class="description">' . esc_html__( 'Leave blank to use the first practice area\'s photo.', 'sinclairs-bvi' ) . '</p>';
+}
+
+function sbvi_save_practice_image( $post_id ) {
+	if ( ! isset( $_POST['sbvi_practice_image_nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['sbvi_practice_image_nonce'] ), 'sbvi_practice_image' ) ) {
+		return;
+	}
+	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+		return;
+	}
+	if ( ! current_user_can( 'edit_post', $post_id ) ) {
+		return;
+	}
+	if ( isset( $_POST['_sbvi_practice_image'] ) ) {
+		update_post_meta( $post_id, '_sbvi_practice_image', absint( $_POST['_sbvi_practice_image'] ) );
+	}
+}
+add_action( 'save_post_page', 'sbvi_save_practice_image' );
 
 /**
  * Generic media-library image picker: a hidden input holding the
