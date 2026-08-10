@@ -18,13 +18,13 @@
 	   + one ring vs. the second ring), not guessed — see the header nav. */
 	--color-brand-navy: #015697;
 	--color-brand-teal: #68c8d0;
+	--color-brand-navy-on-dark: color-mix(in srgb, var(--color-brand-navy) 55%, white);
 
 	--color-accent: #0e7c93;
 	--color-accent-hover: color-mix(in srgb, var(--color-accent) 85%, black);
 	--color-accent-active: color-mix(in srgb, var(--color-accent) 70%, black);
 	--color-accent-ink: color-mix(in srgb, var(--color-accent) 60%, black);
 	--color-accent-soft: color-mix(in srgb, var(--color-accent) 8%, transparent);
-	--color-accent-on-dark: color-mix(in srgb, var(--color-accent) 55%, white);
 
 	--color-neutral-900: #2d2b2b;
 	--color-neutral-800: #444141;
@@ -205,7 +205,7 @@ textarea.input { resize: vertical; }
 .sbvi-nav { display: none; align-items: center; gap: clamp(18px, 2.4vw, 34px); font-size: 14.5px; color: var(--color-brand-navy); }
 .sbvi-nav__link {
 	text-decoration: none; color: inherit;
-	text-transform: uppercase; font-weight: 700; font-size: 12px; letter-spacing: .07em;
+	text-transform: uppercase; font-weight: 700; font-size: 13px; letter-spacing: .07em;
 }
 .sbvi-nav__link:hover { color: var(--color-accent); }
 .sbvi-nav__services .sbvi-nav__link { font-weight: 700; }
@@ -579,23 +579,24 @@ textarea.input { resize: vertical; }
 .sbvi-generic-page { padding-bottom: calc(var(--space-8) * 1.6); }
 
 .sbvi-footer {
-	background: color-mix(in srgb, var(--color-accent) 18%, var(--color-neutral-900));
+	background: color-mix(in srgb, var(--color-brand-navy) 18%, var(--color-neutral-900));
 	color: var(--color-neutral-200); margin-top: auto;
 }
 .sbvi-footer__inner { padding-top: calc(var(--space-8) * 1.6); padding-bottom: var(--space-8); }
 .sbvi-footer__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: calc(var(--space-8) * 1.1); }
-/* The client supplied one logo file, drawn for light backgrounds — on
-   the dark footer it's rendered as a flat white mark via filter rather
-   than boxed on a white plaque, so it sits directly on the brand color. */
-.sbvi-footer__brand img { height: 62px; width: auto; margin-bottom: var(--space-3); filter: brightness(0) invert(1); }
+/* The client supplied one logo file, drawn for light backgrounds (navy
+   wordmark/rings on white) — flattening it to white on the dark footer
+   loses the brand color, so it sits on a light plaque instead, same as
+   everywhere else the logo appears. */
+.sbvi-footer__brand img { height: 62px; width: auto; margin-bottom: var(--space-3); background: var(--color-bg); padding: 10px 14px; border-radius: var(--radius-sm); }
 .sbvi-footer__brand .sbvi-logo__text { display: inline-block; margin-bottom: var(--space-3); }
 .sbvi-footer__brand p { font-size: 14px; line-height: 1.6; color: var(--color-neutral-300); max-width: 34ch; }
 .sbvi-footer__col h6 {
-	color: var(--color-accent-on-dark); margin: 0;
+	color: var(--color-brand-navy-on-dark); margin: 0;
 	text-transform: uppercase; font-size: 12px; letter-spacing: .08em;
 }
 .sbvi-footer__col-body { display: flex; flex-direction: column; padding-top: var(--space-3); }
-.sbvi-footer__col a { color: var(--color-accent-on-dark); text-decoration: none; font-size: 14px; margin-bottom: 9px; }
+.sbvi-footer__col a { color: var(--color-brand-navy-on-dark); text-decoration: none; font-size: 14px; margin-bottom: 9px; }
 .sbvi-footer__col a:hover { color: #fff; }
 
 /* Footer accordion: a real collapsed-by-default <details> on mobile (no
@@ -610,11 +611,11 @@ textarea.input { resize: vertical; }
 .sbvi-footer__col summary::marker { content: ""; }
 .sbvi-footer__col summary::after {
 	content: ""; width: 9px; height: 9px; flex: none; margin-left: var(--space-3);
-	border-right: 1.5px solid var(--color-accent-on-dark); border-bottom: 1.5px solid var(--color-accent-on-dark);
+	border-right: 1.5px solid var(--color-brand-navy-on-dark); border-bottom: 1.5px solid var(--color-brand-navy-on-dark);
 	transform: rotate(45deg); transition: transform .2s ease;
 }
 .sbvi-footer__col[open] summary::after { transform: rotate(225deg); }
-.sbvi-footer__col:not(:last-of-type) { border-bottom: 1px solid color-mix(in srgb, var(--color-accent-on-dark) 20%, transparent); }
+.sbvi-footer__col:not(:last-of-type) { border-bottom: 1px solid color-mix(in srgb, var(--color-brand-navy-on-dark) 20%, transparent); }
 .sbvi-footer__col:last-of-type { border-bottom: none; }
 
 @media (min-width: 900px) {
@@ -631,9 +632,9 @@ textarea.input { resize: vertical; }
 	.sbvi-footer__col-body { padding-top: 0; }
 }
 .sbvi-footer__contact { font-size: 14px; line-height: 1.7; color: var(--color-neutral-300); margin: 0; }
-.sbvi-footer__contact a { color: var(--color-accent-on-dark); text-decoration: none; }
+.sbvi-footer__contact a { color: var(--color-brand-navy-on-dark); text-decoration: none; }
 .sbvi-footer__contact a:hover { color: #fff; }
-.sbvi-footer__rule { height: 1px; background: color-mix(in srgb, var(--color-accent-on-dark) 30%, transparent); margin: calc(var(--space-8) * 1.1) 0 var(--space-4); }
+.sbvi-footer__rule { height: 1px; background: color-mix(in srgb, var(--color-brand-navy-on-dark) 30%, transparent); margin: calc(var(--space-8) * 1.1) 0 var(--space-4); }
 .sbvi-footer__bottom { display: flex; flex-wrap: wrap; gap: var(--space-3) var(--space-6); font-size: 12px; color: var(--color-neutral-400); }
 
 /* -------------------------------------------------------------------- */
