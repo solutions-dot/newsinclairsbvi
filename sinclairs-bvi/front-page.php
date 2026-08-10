@@ -36,14 +36,7 @@ if ( have_posts() ) :
 			<div class="sbvi-hero__scrim" aria-hidden="true"></div>
 			<div class="sbvi-hero__content sbvi-container">
 				<div class="sbvi-hero__inner">
-					<div class="sbvi-rule sbvi-rule--thick" data-reveal></div>
-					<p class="sbvi-hero__kicker">
-						<?php foreach ( sbvi_split_kicker( sbvi_home_field( $home_id, 'sbvi_hero_kicker' ) ) as $i => $part ) : ?>
-							<span<?php echo 1 === $i ? ' class="is-accent"' : ''; ?>><?php echo esc_html( $part ); ?></span>
-						<?php endforeach; ?>
-					</p>
-					<div class="sbvi-rule" data-reveal></div>
-					<h1 class="sbvi-hero__heading"><?php echo wp_kses_post( sbvi_home_field( $home_id, 'sbvi_hero_heading' ) ); ?></h1>
+					<h1 class="sbvi-hero__heading" data-reveal><?php echo wp_kses_post( sbvi_home_field( $home_id, 'sbvi_hero_heading' ) ); ?></h1>
 					<p class="sbvi-hero__sub"><?php echo esc_html( sbvi_home_field( $home_id, 'sbvi_hero_subheading' ) ); ?></p>
 					<div class="sbvi-hero__ctas">
 						<a href="<?php echo esc_url( sbvi_services_url() ); ?>" class="btn btn-primary"><?php echo esc_html( sbvi_home_field( $home_id, 'sbvi_hero_cta1' ) ); ?></a>
@@ -130,6 +123,15 @@ if ( have_posts() ) :
 					?>
 					<blockquote class="sbvi-testimonials__quote<?php echo 0 === $t_index ? ' is-active' : ''; ?>" data-testimonial-index="<?php echo esc_attr( $t_index ); ?>">
 						<?php the_content(); ?>
+						<button
+							type="button"
+							class="sbvi-testimonials__toggle"
+							data-testimonial-toggle
+							data-label-more="<?php esc_attr_e( 'Read more', 'sinclairs-bvi' ); ?>"
+							data-label-less="<?php esc_attr_e( 'Read less', 'sinclairs-bvi' ); ?>"
+							aria-expanded="false"
+							hidden
+						><?php esc_html_e( 'Read more', 'sinclairs-bvi' ); ?></button>
 						<footer><?php echo esc_html( get_the_title() ); ?><?php echo $matter ? ' · ' . esc_html( $matter ) : ''; ?></footer>
 					</blockquote>
 					<?php

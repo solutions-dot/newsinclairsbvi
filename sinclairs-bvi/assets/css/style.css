@@ -14,6 +14,11 @@
 	--color-text-faint: color-mix(in srgb, var(--color-text) 55%, transparent);
 	--color-divider: color-mix(in srgb, var(--color-text) 16%, transparent);
 
+	/* Sampled directly from assets/images/sinclairs-logo.png (the wordmark
+	   + one ring vs. the second ring), not guessed — see the header nav. */
+	--color-brand-navy: #015697;
+	--color-brand-teal: #68c8d0;
+
 	--color-accent: #0e7c93;
 	--color-accent-hover: color-mix(in srgb, var(--color-accent) 85%, black);
 	--color-accent-active: color-mix(in srgb, var(--color-accent) 70%, black);
@@ -41,6 +46,7 @@
 	--radius-sm: 1px;
 	--radius-md: 2px;
 	--radius-lg: 4px;
+	--radius-photo: 16px;
 
 	--shadow-md: 0 3px 10px color-mix(in srgb, var(--color-neutral-900) 16%, transparent);
 	--shadow-lg: 0 12px 32px color-mix(in srgb, var(--color-neutral-900) 22%, transparent);
@@ -196,9 +202,13 @@ textarea.input { resize: vertical; }
 .sbvi-logo img { height: clamp(42px, 4.6vw, 58px); width: auto; }
 .sbvi-logo__text { font-family: var(--font-heading); font-weight: 600; font-size: 20px; }
 
-.sbvi-nav { display: none; align-items: center; gap: clamp(18px, 2.4vw, 34px); font-size: 14.5px; }
-.sbvi-nav__link { text-decoration: none; color: inherit; }
+.sbvi-nav { display: none; align-items: center; gap: clamp(18px, 2.4vw, 34px); font-size: 14.5px; color: var(--color-brand-navy); }
+.sbvi-nav__link {
+	text-decoration: none; color: inherit;
+	text-transform: uppercase; font-weight: 700; font-size: 12.5px; letter-spacing: .07em;
+}
 .sbvi-nav__link:hover { color: var(--color-accent); }
+.sbvi-nav__services .sbvi-nav__link { font-weight: 700; }
 .sbvi-nav__services { position: relative; display: inline-flex; align-items: center; gap: 6px; padding: var(--space-2) 0; }
 .sbvi-nav__caret { background: none; border: 0; cursor: pointer; padding: 4px; line-height: 0; }
 .sbvi-nav__caret span {
@@ -260,18 +270,10 @@ textarea.input { resize: vertical; }
 .sbvi-hero__media img, .sbvi-hero__media .sbvi-image-placeholder { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .sbvi-hero__scrim {
 	position: absolute; inset: 0; pointer-events: none;
-	background: linear-gradient(to top, color-mix(in srgb, var(--color-bg) 96%, transparent) 6%, color-mix(in srgb, var(--color-bg) 74%, transparent) 42%, transparent 78%);
+	background: linear-gradient(to top, color-mix(in srgb, var(--color-bg) 88%, transparent) 2%, color-mix(in srgb, var(--color-bg) 32%, transparent) 24%, transparent 52%);
 }
 .sbvi-hero__content { position: relative; width: 100%; padding-top: calc(var(--space-8) * 2.4); padding-bottom: calc(var(--space-8) * 1.4); }
 .sbvi-hero__inner { max-width: 940px; }
-.sbvi-hero__inner .sbvi-rule { margin-bottom: var(--space-2); }
-.sbvi-hero__inner .sbvi-rule:nth-of-type(2) { margin-bottom: calc(var(--space-6) * 1.2); }
-.sbvi-hero__kicker {
-	display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4);
-	font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase;
-	margin: 0; padding-bottom: var(--space-2);
-}
-.sbvi-hero__kicker .is-accent { color: var(--color-accent); }
 .sbvi-hero__heading {
 	font-size: clamp(38px, 6.6vw, 86px); line-height: 1.02; letter-spacing: -.03em;
 	margin: 0 0 var(--space-4); text-wrap: balance;
@@ -322,7 +324,7 @@ textarea.input { resize: vertical; }
 .sbvi-practice__row.is-active .sbvi-practice__arrow { opacity: 1; }
 
 .sbvi-practice__panel { position: sticky; top: 100px; }
-.sbvi-practice__photo { position: relative; width: 100%; aspect-ratio: 4 / 3; background: var(--color-neutral-200); }
+.sbvi-practice__photo { position: relative; width: 100%; aspect-ratio: 4 / 3; background: var(--color-neutral-200); border-radius: var(--radius-photo); overflow: hidden; }
 .js .sbvi-practice__photo-layer { position: absolute; inset: 0; opacity: 0; transition: opacity .55s ease; }
 .js .sbvi-practice__photo-layer.is-active { opacity: 1; }
 .sbvi-practice__photo-layer img, .sbvi-practice__photo-layer .sbvi-image-placeholder { width: 100%; height: 100%; object-fit: cover; }
@@ -349,7 +351,17 @@ textarea.input { resize: vertical; }
 	display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
 	gap: calc(var(--space-8) * 1.2); align-items: center;
 }
-.sbvi-articles-teaser__figure { aspect-ratio: 5 / 4; position: relative; overflow: hidden; }
+@media (min-width: 700px) {
+	.sbvi-articles-teaser__grid { grid-template-columns: 1.5fr 1fr; }
+}
+.sbvi-articles-teaser__figure {
+	aspect-ratio: 5 / 4; position: relative; overflow: hidden; border-radius: var(--radius-photo);
+	/* width:100% is load-bearing here: this element's only child is
+	   position:absolute (see below), so it has no in-flow content to
+	   size around — without an explicit width, max-width alone collapses
+	   it to 0x0 instead of just capping it. */
+	width: 100%; max-width: 380px;
+}
 .sbvi-articles-teaser__figure img, .sbvi-articles-teaser__figure .sbvi-image-placeholder { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 
 /* -------------------------------------------------------------------- */
@@ -362,8 +374,8 @@ textarea.input { resize: vertical; }
 .sbvi-testimonials__stage { position: relative; }
 .js .sbvi-testimonials__stage { min-height: clamp(230px, 27vh, 300px); }
 .sbvi-testimonials__quote { margin: 0 0 var(--space-6); }
-.js .sbvi-testimonials__quote { position: absolute; inset: 0; margin: 0; opacity: 0; transition: opacity .6s ease; }
-.js .sbvi-testimonials__quote.is-active { opacity: 1; }
+.js .sbvi-testimonials__quote { position: absolute; inset: 0; margin: 0; opacity: 0; transition: opacity .6s ease; pointer-events: none; }
+.js .sbvi-testimonials__quote.is-active { opacity: 1; pointer-events: auto; }
 .sbvi-testimonials__quote p, .sbvi-testimonials__quote .wp-block-paragraph {
 	font-family: var(--font-heading); font-style: italic;
 	/* Sized for a real multi-sentence client endorsement, not just the
@@ -372,8 +384,21 @@ textarea.input { resize: vertical; }
 	   wall of giant italic type. */
 	font-size: clamp(18px, 1.8vw, 26px);
 	line-height: 1.45; letter-spacing: -.01em;
-	max-width: 62ch; margin: 0 0 var(--space-4);
+	max-width: 62ch; margin: 0 0 var(--space-3);
+	/* Long real quotes are clamped to a few lines by default — "Read
+	   more" (below) lifts the clamp for that one quote only. */
+	display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; line-clamp: 4; overflow: hidden;
 }
+.sbvi-testimonials__quote.is-expanded p, .sbvi-testimonials__quote.is-expanded .wp-block-paragraph {
+	-webkit-line-clamp: unset; line-clamp: unset; overflow: visible;
+}
+.sbvi-testimonials__toggle {
+	display: inline-block; background: none; border: 0; padding: 0; margin: 0 0 var(--space-4);
+	font-size: 12.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+	color: var(--color-accent); cursor: pointer; text-decoration: underline; text-underline-offset: 3px;
+}
+.sbvi-testimonials__toggle:hover { color: var(--color-accent-hover); }
+.sbvi-testimonials__toggle[hidden] { display: none; }
 .sbvi-testimonials__quote footer {
 	font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--color-text-faint);
 }
@@ -402,7 +427,11 @@ textarea.input { resize: vertical; }
 .sbvi-banner img, .sbvi-banner .sbvi-image-placeholder { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .sbvi-banner__scrim {
 	position: absolute; inset: 0; pointer-events: none;
-	background: linear-gradient(to top, var(--color-bg) 1%, color-mix(in srgb, var(--color-bg) 34%, transparent) 44%, transparent 80%);
+	/* Just enough of a dissolve at the very bottom edge to blend into the
+	   page-header section below, rather than a hard photo/color seam —
+	   no overlaid text here to protect, so the rest of the photo stays
+	   fully clear. */
+	background: linear-gradient(to top, var(--color-bg) 1%, color-mix(in srgb, var(--color-bg) 18%, transparent) 20%, transparent 42%);
 }
 
 .sbvi-page-header { padding-top: calc(var(--space-8) * 1.6); padding-bottom: var(--space-8); }
@@ -423,7 +452,7 @@ textarea.input { resize: vertical; }
 .sbvi-about__body > p:first-child {
 	font-size: clamp(19px, 1.8vw, 23px); line-height: 1.5; font-family: var(--font-heading);
 }
-.sbvi-about__portrait { aspect-ratio: 3 / 4; align-self: start; position: sticky; top: 120px; overflow: hidden; }
+.sbvi-about__portrait { aspect-ratio: 3 / 4; align-self: start; position: sticky; top: 120px; overflow: hidden; border-radius: var(--radius-photo); }
 .sbvi-about__portrait img, .sbvi-about__portrait .sbvi-image-placeholder { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 
 @media (max-width: 699.98px) {
@@ -468,7 +497,7 @@ textarea.input { resize: vertical; }
 .sbvi-single-service { padding-bottom: calc(var(--space-8) * 1.6); }
 .sbvi-single-service__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: calc(var(--space-8) * 1.5); align-items: start; }
 .sbvi-single-service__grid .entry-content { max-width: 70ch; }
-.sbvi-single-service__photo { aspect-ratio: 4 / 5; position: sticky; top: 120px; overflow: hidden; }
+.sbvi-single-service__photo { aspect-ratio: 4 / 5; position: sticky; top: 120px; overflow: hidden; border-radius: var(--radius-photo); }
 .sbvi-single-service__photo img, .sbvi-single-service__photo .sbvi-image-placeholder { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 
 .sbvi-faq { background: var(--color-surface); }
@@ -528,7 +557,6 @@ textarea.input { resize: vertical; }
 .sbvi-article-row__standfirst { display: block; font-size: 16px; line-height: 1.55; color: var(--color-text-muted); margin-top: var(--space-2); max-width: 62ch; }
 
 .sbvi-single-article { padding-bottom: calc(var(--space-8) * 2); }
-.sbvi-single-article .entry-content { max-width: 72ch; }
 
 /* -------------------------------------------------------------------- */
 /* Contact                                                                */
@@ -556,16 +584,25 @@ textarea.input { resize: vertical; }
 
 .sbvi-generic-page { padding-bottom: calc(var(--space-8) * 1.6); }
 
-.sbvi-footer { background: var(--color-neutral-900); color: var(--color-neutral-200); margin-top: auto; }
+.sbvi-footer {
+	background: color-mix(in srgb, var(--color-accent) 18%, var(--color-neutral-900));
+	color: var(--color-neutral-200); margin-top: auto;
+}
 .sbvi-footer__inner { padding-top: calc(var(--space-8) * 1.6); padding-bottom: var(--space-8); }
 .sbvi-footer__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: calc(var(--space-8) * 1.1); }
-.sbvi-footer__brand img { height: 62px; width: auto; margin-bottom: var(--space-3); background: var(--color-bg); padding: 10px 14px; border-radius: var(--radius-sm); }
+/* The client supplied one logo file, drawn for light backgrounds — on
+   the dark footer it's rendered as a flat white mark via filter rather
+   than boxed on a white plaque, so it sits directly on the brand color. */
+.sbvi-footer__brand img { height: 62px; width: auto; margin-bottom: var(--space-3); filter: brightness(0) invert(1); }
 .sbvi-footer__brand .sbvi-logo__text { display: inline-block; margin-bottom: var(--space-3); }
-.sbvi-footer__brand p { font-size: 14px; line-height: 1.6; color: var(--color-neutral-400); max-width: 34ch; }
-.sbvi-footer__col h6 { color: var(--color-neutral-500); margin: 0; }
+.sbvi-footer__brand p { font-size: 14px; line-height: 1.6; color: var(--color-neutral-300); max-width: 34ch; }
+.sbvi-footer__col h6 {
+	color: var(--color-accent-on-dark); margin: 0;
+	text-transform: uppercase; font-size: 12px; letter-spacing: .08em;
+}
 .sbvi-footer__col-body { display: flex; flex-direction: column; padding-top: var(--space-3); }
-.sbvi-footer__col a { color: var(--color-neutral-200); text-decoration: none; font-size: 14px; margin-bottom: 9px; }
-.sbvi-footer__col a:hover { color: var(--color-accent-on-dark); }
+.sbvi-footer__col a { color: var(--color-accent-on-dark); text-decoration: none; font-size: 14px; margin-bottom: 9px; }
+.sbvi-footer__col a:hover { color: #fff; }
 
 /* Footer accordion: a real collapsed-by-default <details> on mobile (no
    JS needed — it's a native browser behaviour), forced back to a plain
@@ -579,11 +616,11 @@ textarea.input { resize: vertical; }
 .sbvi-footer__col summary::marker { content: ""; }
 .sbvi-footer__col summary::after {
 	content: ""; width: 9px; height: 9px; flex: none; margin-left: var(--space-3);
-	border-right: 1.5px solid var(--color-neutral-400); border-bottom: 1.5px solid var(--color-neutral-400);
+	border-right: 1.5px solid var(--color-accent-on-dark); border-bottom: 1.5px solid var(--color-accent-on-dark);
 	transform: rotate(45deg); transition: transform .2s ease;
 }
 .sbvi-footer__col[open] summary::after { transform: rotate(225deg); }
-.sbvi-footer__col:not(:last-of-type) { border-bottom: 1px solid color-mix(in srgb, var(--color-neutral-200) 14%, transparent); }
+.sbvi-footer__col:not(:last-of-type) { border-bottom: 1px solid color-mix(in srgb, var(--color-accent-on-dark) 20%, transparent); }
 .sbvi-footer__col:last-of-type { border-bottom: none; }
 
 @media (min-width: 900px) {
@@ -601,8 +638,9 @@ textarea.input { resize: vertical; }
 }
 .sbvi-footer__contact { font-size: 14px; line-height: 1.7; color: var(--color-neutral-300); margin: 0; }
 .sbvi-footer__contact a { color: var(--color-accent-on-dark); text-decoration: none; }
-.sbvi-footer__rule { height: 1px; background: color-mix(in srgb, var(--color-neutral-200) 22%, transparent); margin: calc(var(--space-8) * 1.1) 0 var(--space-4); }
-.sbvi-footer__bottom { display: flex; flex-wrap: wrap; gap: var(--space-3) var(--space-6); font-size: 12px; color: var(--color-neutral-500); }
+.sbvi-footer__contact a:hover { color: #fff; }
+.sbvi-footer__rule { height: 1px; background: color-mix(in srgb, var(--color-accent-on-dark) 30%, transparent); margin: calc(var(--space-8) * 1.1) 0 var(--space-4); }
+.sbvi-footer__bottom { display: flex; flex-wrap: wrap; gap: var(--space-3) var(--space-6); font-size: 12px; color: var(--color-neutral-400); }
 
 /* -------------------------------------------------------------------- */
 /* Small-screen type scale-down                                          */
