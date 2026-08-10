@@ -155,12 +155,10 @@
 		var resizeTimer = null;
 		var DURATION = 7000;
 
-		// Real testimonials vary a lot in length — the CSS min-height is
-		// just a safe initial guess before this runs. Measure each quote's
-		// natural height (briefly taking it out of absolute positioning,
-		// since inset:0 would otherwise report the stage's own height back)
-		// and size the stage to the tallest one, so a long quote can never
-		// overflow into the section below it.
+		// Quote text is clamped to a few lines by default (see style.css),
+		// so in normal use every quote is a similar, compact height and
+		// this just sizes the stage to that — it only grows temporarily
+		// when a "Read more" toggle below lifts the clamp on one quote.
 		function resizeStage() {
 			var max = 0;
 			quotes.forEach( function ( quote ) {
@@ -175,6 +173,45 @@
 			if ( max > 0 ) {
 				stage.style.minHeight = max + 'px';
 			}
+		}
+
+		// Only show "Read more" where the clamp is actually cutting text
+		// off — a short quote that already fits shouldn't get a toggle
+		// that does nothing. An expanded quote always keeps its (now
+		// "Read less") button so it can be collapsed again.
+		function checkTruncation() {
+			quotes.forEach( function ( quote ) {
+				var p = quote.querySelector( 'p' );
+				var toggle = quote.querySelector( '[data-testimonial-toggle]' );
+				if ( ! p || ! toggle ) {
+					return;
+				}
+				if ( quote.classList.contains( 'is-expanded' ) ) {
+					toggle.hidden = false;
+					return;
+				}
+				toggle.hidden = p.scrollHeight <= p.clientHeight + 1;
+			} );
+		}
+
+		function initToggles() {
+			quotes.forEach( function ( quote ) {
+				var toggle = quote.querySelector( '[data-testimonial-toggle]' );
+				if ( ! toggle ) {
+					return;
+				}
+				toggle.addEventListener( 'click', function () {
+					var expanded = quote.classList.toggle( 'is-expanded' );
+					toggle.textContent = expanded ? toggle.dataset.labelLess : toggle.dataset.labelMore;
+					toggle.setAttribute( 'aria-expanded', expanded ? 'true' : 'false' );
+					resizeStage();
+					if ( expanded ) {
+						stop();
+					} else {
+						start();
+					}
+				} );
+			} );
 		}
 
 		function show( index ) {
@@ -213,10 +250,15 @@
 			} );
 		} );
 
+		initToggles();
 		resizeStage();
+		checkTruncation();
 		window.addEventListener( 'resize', function () {
 			clearTimeout( resizeTimer );
-			resizeTimer = setTimeout( resizeStage, 150 );
+			resizeTimer = setTimeout( function () {
+				resizeStage();
+				checkTruncation();
+			}, 150 );
 		} );
 
 		start();
