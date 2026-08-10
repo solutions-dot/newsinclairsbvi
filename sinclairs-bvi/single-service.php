@@ -47,13 +47,8 @@ if ( have_posts() ) :
 		</section>
 
 		<section class="sbvi-single-service sbvi-container">
-			<div class="sbvi-single-service__grid">
-				<div class="entry-content" data-reveal>
-					<?php the_content(); ?>
-				</div>
-				<figure class="sbvi-single-service__photo" data-reveal>
-					<?php sbvi_image( get_post_thumbnail_id( $post_id ), 'sbvi-portrait', get_the_title(), 'sbvi-single-service__img' ); ?>
-				</figure>
+			<div class="entry-content" data-reveal>
+				<?php the_content(); ?>
 			</div>
 		</section>
 

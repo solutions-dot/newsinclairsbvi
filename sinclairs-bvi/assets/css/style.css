@@ -426,7 +426,7 @@ textarea.input { resize: vertical; }
 @media (max-width: 699.98px) {
 	/* Below the grid's single-column breakpoint, the photo stacks under
 	   the text — sticky has nothing meaningful left to stick within. */
-	.sbvi-about__portrait, .sbvi-single-service__photo { position: static; top: auto; }
+	.sbvi-about__portrait { position: static; top: auto; }
 }
 
 /* -------------------------------------------------------------------- */
@@ -463,10 +463,7 @@ textarea.input { resize: vertical; }
 /* -------------------------------------------------------------------- */
 
 .sbvi-single-service { padding-bottom: calc(var(--space-8) * 1.6); }
-.sbvi-single-service__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: calc(var(--space-8) * 1.5); align-items: start; }
-.sbvi-single-service__grid .entry-content { max-width: 70ch; }
-.sbvi-single-service__photo { aspect-ratio: 4 / 5; position: sticky; top: 120px; overflow: hidden; }
-.sbvi-single-service__photo img, .sbvi-single-service__photo .sbvi-image-placeholder { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.sbvi-single-service .entry-content { max-width: 70ch; }
 
 .sbvi-faq { background: var(--color-surface); }
 .sbvi-faq > .sbvi-container { padding-top: calc(var(--space-8) * 1.6); padding-bottom: calc(var(--space-8) * 1.6); }
