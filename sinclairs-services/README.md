@@ -15,10 +15,17 @@ ten practice areas with its own *Information & FAQs*. It also adds the
 ## Install
 
 1. Replace `wp-content/plugins/sinclairs-services/` with this folder.
-2. Activate under **Plugins**. Activation seeds everything it safely can
-   (see below).
-3. Check for an admin notice. If the Our Services page doesn't call the
-   shortcode yet, the notice says so and links straight to the page.
+2. **Deactivate, then activate** under **Plugins**. Activation is what
+   creates the `practice-areas` child page and points the ten menu items
+   at it — upgrading the files alone does not run it.
+3. Edit **Our Services** in Elementor and set its Shortcode widget to
+   `[sinclairs_services_index]`. (If it still says `[sinclairs_services]`
+   the page renders the index *and* all ten sections together — the
+   single-page arrangement, which also works, just isn't the split.)
+4. **Settings → Permalinks → Save** once, so the child page's URL
+   resolves.
+5. Check for an admin notice — if anything is still missing it says so
+   and links to the page concerned.
 
 ### What activation does, and doesn't
 
