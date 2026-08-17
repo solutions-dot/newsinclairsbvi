@@ -61,23 +61,6 @@
 	   Jump-to dropdown
 	   ------------------------------------------------------------------ */
 
-	/**
-	 * Option values are a bare "#section" when the shortcode renders on the
-	 * Services page itself, and an absolute Services URL when the jump box
-	 * is used standalone on some other page.
-	 */
-	function goToValue(value) {
-		if (!value) {
-			return;
-		}
-
-		if (value.charAt(0) === '#') {
-			scrollToSection(value);
-		} else {
-			window.location.href = value;
-		}
-	}
-
 	function initJump(root) {
 		var select = root.querySelector('.sc-jump__select');
 		var go = root.querySelector('.sc-jump__go');
@@ -87,12 +70,12 @@
 		}
 
 		select.addEventListener('change', function () {
-			goToValue(select.value);
+			scrollToSection(select.value);
 		});
 
 		if (go) {
 			go.addEventListener('click', function () {
-				goToValue(select.value);
+				scrollToSection(select.value);
 			});
 		}
 	}
@@ -103,22 +86,9 @@
 
 	function initAnchors() {
 		document.addEventListener('click', function (event) {
-			if (!(event.target instanceof Element)) {
-				return;
-			}
-
 			var link = event.target.closest('a[href*="#"]');
 
 			if (!link) {
-				return;
-			}
-
-			// Only ever touch this plugin's own links. When the nav dropdown
-			// is on, this script loads site-wide, and a document-level
-			// handler that swallowed every same-page hash link would break
-			// any theme or plugin control built on one — Elementor tabs,
-			// accordion toggles, modal triggers.
-			if (!link.closest('.sc-services') && !link.closest('.sc-nav-dropdown')) {
 				return;
 			}
 
