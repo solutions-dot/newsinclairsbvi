@@ -528,10 +528,12 @@ a.sc-nutshell__row:focus-visible .sc-nutshell__arrow {
 	transition: color .14s ease, background-color .14s ease;
 }
 
+#page .sc-nav-dropdown > li > a:hover,
+#page .sc-nav-dropdown > li > a:focus-visible,
 .sc-nav-dropdown > li > a:hover,
 .sc-nav-dropdown > li > a:focus-visible {
 	color: #fff !important;
-	background: #015797;
+	background: #015797 !important;
 }
 
 
@@ -559,10 +561,17 @@ a.sc-nutshell__row:focus-visible .sc-nutshell__arrow {
 	color: #015797;
 }
 
+/* #page is needed to out-specify the site's own
+   `#page .navbar-area a:hover { color:#65C8D0 !important }` — an ID
+   selector, so it wins over a class-only rule even when both are
+   !important. The bare selector is kept as a fallback for menus that
+   render outside #page. */
+#page .sc-nav-parent > .sub-menu > li > a:hover,
+#page .sc-nav-parent > .sub-menu > li > a:focus-visible,
 .sc-nav-parent > .sub-menu > li > a:hover,
 .sc-nav-parent > .sub-menu > li > a:focus-visible {
 	color: #fff !important;
-	background: #015797;
+	background: #015797 !important;
 }
 
 

@@ -3,7 +3,7 @@
  * Plugin Name:       Sinclairs (BVI) — Our Services
  * Plugin URI:        https://sinclairsbvi.com/our-services/
  * Description:       Renders the whole "Our Services" page — the In a Nutshell index, a jump-to dropdown and every practice area with its Information &amp; FAQs — from one shortcode. Also adds the "Our Services" nav dropdown that anchor-links to each section.
- * Version:           2.1.0
+ * Version:           2.1.1
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            Sinclairs (BVI)
@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SSVC_VERSION', '2.1.0' );
+define( 'SSVC_VERSION', '2.1.1' );
 define( 'SSVC_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SSVC_URI', plugin_dir_url( __FILE__ ) );
 
@@ -92,13 +92,17 @@ function ssvc_enqueue_assets() {
 }
 
 /**
- * The nav dropdown lives in the site header, so when it's switched on it
- * needs the stylesheet on every page — not only the Services page.
+ * The "Our Services" submenu appears in the site header on every page, so
+ * its styling has to load everywhere — not only on the Services page.
+ *
+ * This used to be gated on ssvc_nav_dropdown_enabled(), which is false
+ * once real menu items have been seeded. That left the seeded submenu
+ * completely unstyled on every page that doesn't run the shortcode. The
+ * stylesheet is small, and the rules are namespaced, so it now always
+ * loads.
  */
 function ssvc_enqueue_nav_assets() {
-	if ( ssvc_nav_dropdown_enabled() ) {
-		wp_enqueue_style( 'sc-frontend-css' );
-		wp_enqueue_script( 'sc-frontend-js' );
-	}
+	wp_enqueue_style( 'sc-frontend-css' );
+	wp_enqueue_script( 'sc-frontend-js' );
 }
 add_action( 'wp_enqueue_scripts', 'ssvc_enqueue_nav_assets', 20 );

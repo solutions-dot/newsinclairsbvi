@@ -81,10 +81,15 @@ function ssvc_nav_dropdown_markup() {
  * Mark the parent <li> so CSS can position the panel against it.
  */
 function ssvc_nav_menu_css_class( $classes, $item, $args, $depth ) {
-	if ( ! ssvc_nav_dropdown_enabled() || 0 !== (int) $depth ) {
+	if ( 0 !== (int) $depth ) {
 		return $classes;
 	}
 
+	// NOT gated on ssvc_nav_dropdown_enabled(). That flag is false once
+	// menu items have been seeded — which is precisely when this class is
+	// needed, because it is what styles the theme's own seeded submenu.
+	// Gating it here meant the hook never fired in the seeded case and the
+	// submenu fell back to the theme's default hover colour.
 	if ( ssvc_is_services_menu_item( $item ) ) {
 		$classes[] = 'sc-nav-parent';
 	}
