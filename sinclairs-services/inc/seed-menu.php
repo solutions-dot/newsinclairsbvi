@@ -63,29 +63,29 @@ function ssvc_find_services_menu_items() {
 }
 
 /**
- * URLs already sitting under a given parent, so seeding can skip them.
+ * The menu items already sitting under a given parent.
  */
-function ssvc_existing_child_urls( $menu_id, $parent_id ) {
-	$urls  = array();
-	$items = wp_get_nav_menu_items( $menu_id );
+function ssvc_existing_children( $menu_id, $parent_id ) {
+	$children = array();
+	$items    = wp_get_nav_menu_items( $menu_id );
 
 	if ( ! $items ) {
-		return $urls;
+		return $children;
 	}
 
 	foreach ( $items as $item ) {
 		if ( (int) $item->menu_item_parent === (int) $parent_id ) {
-			$urls[] = untrailingslashit( $item->url );
+			$children[] = $item;
 		}
 	}
 
-	return $urls;
+	return $children;
 }
 
 /**
  * Create the child items. Safe to call repeatedly.
  *
- * @return int Number of menu items actually created.
+ * @return int Number of menu items created plus repointed.
  */
 function ssvc_seed_menu_items() {
 	if ( ! function_exists( 'wp_update_nav_menu_item' ) ) {
@@ -98,17 +98,51 @@ function ssvc_seed_menu_items() {
 	// Services" item keeps pointing at the index page.
 	$base     = ssvc_detail_page_url();
 	$created  = 0;
+	$updated  = 0;
 
 	foreach ( $targets as $target ) {
-		$menu_id   = $target['menu_id'];
-		$parent    = $target['parent'];
-		$existing  = ssvc_existing_child_urls( $menu_id, $parent->ID );
-		$position  = (int) $parent->menu_order;
+		$menu_id  = $target['menu_id'];
+		$parent   = $target['parent'];
+		$children = ssvc_existing_children( $menu_id, $parent->ID );
+		$position = (int) $parent->menu_order;
+		$have     = array();
 
+		// Pass 1 — adopt and, where needed, repoint the items already
+		// there. An item is "ours" if its fragment names a known section.
+		// This is what migrates a menu seeded before the index/detail
+		// split, whose children still point at the index page's anchors;
+		// skipping them would leave the dropdown silently broken.
+		foreach ( $children as $item ) {
+			$fragment = wp_parse_url( (string) $item->url, PHP_URL_FRAGMENT );
+
+			if ( ! $fragment || ! isset( $sections[ $fragment ] ) ) {
+				continue;
+			}
+
+			$have[ $fragment ] = true;
+			$wanted            = $base . '#' . $fragment;
+
+			if ( untrailingslashit( (string) $item->url ) === untrailingslashit( $wanted ) ) {
+				continue;
+			}
+
+			$result = wp_update_nav_menu_item( $menu_id, (int) $item->ID, array(
+				'menu-item-title'     => $item->title,
+				'menu-item-url'       => $wanted,
+				'menu-item-status'    => 'publish',
+				'menu-item-type'      => 'custom',
+				'menu-item-parent-id' => $parent->ID,
+				'menu-item-position'  => (int) $item->menu_order,
+			) );
+
+			if ( ! is_wp_error( $result ) && $result ) {
+				$updated++;
+			}
+		}
+
+		// Pass 2 — create whatever is still missing.
 		foreach ( $sections as $id => $title ) {
-			$url = $base . '#' . $id;
-
-			if ( in_array( untrailingslashit( $url ), $existing, true ) ) {
+			if ( isset( $have[ $id ] ) ) {
 				continue;
 			}
 
@@ -116,7 +150,7 @@ function ssvc_seed_menu_items() {
 
 			$result = wp_update_nav_menu_item( $menu_id, 0, array(
 				'menu-item-title'     => $title,
-				'menu-item-url'       => $url,
+				'menu-item-url'       => $base . '#' . $id,
 				'menu-item-status'    => 'publish',
 				'menu-item-type'      => 'custom',
 				'menu-item-parent-id' => $parent->ID,
@@ -129,11 +163,11 @@ function ssvc_seed_menu_items() {
 		}
 	}
 
-	if ( $created ) {
+	if ( $created || $updated ) {
 		update_option( SSVC_SEEDED_OPTION, 1 );
 	}
 
-	return $created;
+	return $created + $updated;
 }
 
 /**

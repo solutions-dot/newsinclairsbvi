@@ -24,9 +24,12 @@ ten practice areas with its own *Information & FAQs*. It also adds the
 
 | | Behaviour |
 |---|---|
-| **Page** | Created **only if missing**, with `[sinclairs_services]` as its content. An existing page is **never** modified — see the warning below. |
-| **Menu items** | Ten child items seeded under the "Our Services" menu item, each linking to `/our-services/#anchor`. Idempotent. |
+| **Pages** | The index page and its `practice-areas` child are created **only if missing**. An existing page is **never** modified — see the warning below. |
+| **Menu items** | Ten child items under the "Our Services" menu item, each linking to the detail page's anchor. |
+| **Migration** | Children already pointing at the *old* single-page anchors (`/our-services/#trade-marks`) are **repointed** to the detail page rather than skipped — otherwise a menu seeded before the page split would silently break. Matched on the URL fragment, so renamed items survive. |
 | **Anchors** | Not seeded — the section `id`s are emitted by the shortcode, so they exist wherever it renders. |
+
+Both creating and repointing are idempotent: a second run changes nothing.
 
 > **An existing Our Services page is never rewritten.** On this site that
 > page is Elementor-built: its shortcode lives inside `_elementor_data`,
@@ -39,13 +42,25 @@ ten practice areas with its own *Information & FAQs*. It also adds the
 Everything is idempotent, so deactivating and reactivating is a safe way
 to re-run seeding after building the menu or page.
 
+## The two pages
+
+The index and the detail sections live on separate pages:
+
+| Page | Shortcode | Role |
+|---|---|---|
+| `/our-services/` | `[sinclairs_services_index]` | Jump box + *In a Nutshell* index. Where the nav "Our Services" link lands. Each row crosses to the detail page's anchor. |
+| `/our-services/practice-areas/` | `[sinclairs_services_detail]` | The ten sections with their anchors and *Information & FAQs*. Where the nav dropdown items land. |
+
 ## Shortcodes
 
 | Shortcode | Renders |
 |---|---|
-| `[sinclairs_services]` | The whole page — intro, jump box, nutshell index, all ten sections |
-| `[sinclairs_services_nutshell]` | Just the *In a Nutshell* index |
+| `[sinclairs_services_index]` | Jump box + *In a Nutshell* index |
+| `[sinclairs_services_detail]` | The ten sections |
+| `[sinclairs_services]` | Everything on one page (single-page arrangement) |
+| `[sinclairs_services_nutshell]` | Just the index |
 | `[sinclairs_services_menu]` | Just the jump-to dropdown |
+| `[sinclairs_services_summary]` | Alias of `_index` — the tag the previous plugin registered, kept so the home page's existing call doesn't break |
 
 ### Attributes
 

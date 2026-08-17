@@ -332,3 +332,13 @@ function ssvc_shortcode_menu() {
 	return ssvc_open() . ssvc_menu_markup( ssvc_detail_page_url() ) . '</div>';
 }
 add_shortcode( 'sinclairs_services_menu', 'ssvc_shortcode_menu' );
+
+/**
+ * [sinclairs_services_summary] — the tag the previous plugin registered.
+ *
+ * It is still called from a (currently hidden) container on the home
+ * page. Without this alias, replacing the old plugin would leave the raw
+ * shortcode text rendering there. Mapped to the index, which is the
+ * closest equivalent to what it used to output.
+ */
+add_shortcode( 'sinclairs_services_summary', 'ssvc_shortcode_index' );
