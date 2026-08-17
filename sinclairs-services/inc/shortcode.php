@@ -90,8 +90,13 @@ function ssvc_render_faqs( array $faqs, $section_id, $overview = '' ) {
 /**
  * The In a Nutshell index — every service visible at once with its short
  * wording, each row jumping to the matching section.
+ *
+ * $base is '' when this renders on the Services page (so rows are plain
+ * in-page fragments) and the Services page URL when the index is used
+ * standalone elsewhere — otherwise "#trade-marks" would resolve against
+ * whatever page it was dropped on, where no such section exists.
  */
-function ssvc_nutshell_markup() {
+function ssvc_nutshell_markup( $base = '' ) {
 	$out = '<div class="sc-nutshell" id="sc-nutshell">';
 
 	foreach ( ssvc_nutshell_groups() as $group ) {
@@ -102,7 +107,7 @@ function ssvc_nutshell_markup() {
 		foreach ( $group['rows'] as $row ) {
 			$has_link = ! empty( $row['target'] );
 			$tag      = $has_link ? 'a' : 'span';
-			$attrs    = $has_link ? ' href="#' . esc_attr( $row['target'] ) . '"' : '';
+			$attrs    = $has_link ? ' href="' . esc_url( $base . '#' . $row['target'] ) . '"' : '';
 			$classes  = 'sc-nutshell__row' . ( $has_link ? '' : ' is-unlinked' );
 
 			$out .= '<li>';
@@ -130,8 +135,12 @@ function ssvc_nutshell_markup() {
  * hidden by the script's absence and the select still lists everything,
  * so nothing is lost — the nutshell index above it links to the same
  * anchors.
+ *
+ * $base works as it does for the index above: empty on the Services page,
+ * the Services URL when the box is used standalone. frontend.js scrolls
+ * for a "#fragment" value and navigates for a full URL.
  */
-function ssvc_menu_markup() {
+function ssvc_menu_markup( $base = '' ) {
 	$sections = ssvc_section_index();
 
 	if ( ! $sections ) {
@@ -145,7 +154,7 @@ function ssvc_menu_markup() {
 	$out .= '<option value="">' . esc_html__( 'Select a service…', 'sinclairs-services' ) . '</option>';
 
 	foreach ( $sections as $id => $title ) {
-		$out .= '<option value="#' . esc_attr( $id ) . '">' . esc_html( $title ) . '</option>';
+		$out .= '<option value="' . esc_attr( $base . '#' . $id ) . '">' . esc_html( $title ) . '</option>';
 	}
 
 	$out .= '</select>';
@@ -170,6 +179,7 @@ function ssvc_shortcode_services( $atts ) {
 	ssvc_enqueue_assets();
 
 	$accordion = ( 'accordion' === $atts['layout'] );
+	$nutshell  = ( 'yes' === $atts['nutshell'] );
 	$intro     = ssvc_page_intro();
 
 	$out = '<div class="sc-services sc-services--' . esc_attr( $accordion ? 'accordion' : 'rail' ) . '">';
@@ -186,7 +196,7 @@ function ssvc_shortcode_services( $atts ) {
 		$out .= ssvc_menu_markup();
 	}
 
-	if ( 'yes' === $atts['nutshell'] ) {
+	if ( $nutshell ) {
 		$out .= ssvc_nutshell_markup();
 	}
 
@@ -211,7 +221,10 @@ function ssvc_shortcode_services( $atts ) {
 			$out .= '<div class="sc-section__rule" aria-hidden="true"></div>';
 			$out .= '<p class="sc-section__brief">' . esc_html( $section['brief'] ) . '</p>';
 		}
-		$out .= '<a class="sc-section__top" href="#sc-nutshell">' . esc_html__( 'All services', 'sinclairs-services' ) . '</a>';
+		// Only offer the back link when there is an index to go back to.
+		if ( $nutshell ) {
+			$out .= '<a class="sc-section__top" href="#sc-nutshell">' . esc_html__( 'All services', 'sinclairs-services' ) . '</a>';
+		}
 		$out .= '</div>';
 
 		$out .= '<div class="sc-section__main">';
@@ -234,10 +247,13 @@ add_shortcode( 'sinclairs_services', 'ssvc_shortcode_services' );
 
 /**
  * [sinclairs_services_nutshell]
+ *
+ * Standalone, so its rows need to point at the Services page rather than
+ * at fragments of whatever page it has been dropped on.
  */
 function ssvc_shortcode_nutshell() {
 	ssvc_enqueue_assets();
-	return '<div class="sc-services">' . ssvc_nutshell_markup() . '</div>';
+	return '<div class="sc-services">' . ssvc_nutshell_markup( ssvc_services_page_url() ) . '</div>';
 }
 add_shortcode( 'sinclairs_services_nutshell', 'ssvc_shortcode_nutshell' );
 
@@ -246,6 +262,6 @@ add_shortcode( 'sinclairs_services_nutshell', 'ssvc_shortcode_nutshell' );
  */
 function ssvc_shortcode_menu() {
 	ssvc_enqueue_assets();
-	return '<div class="sc-services">' . ssvc_menu_markup() . '</div>';
+	return '<div class="sc-services">' . ssvc_menu_markup( ssvc_services_page_url() ) . '</div>';
 }
 add_shortcode( 'sinclairs_services_menu', 'ssvc_shortcode_menu' );
