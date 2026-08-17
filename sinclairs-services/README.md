@@ -87,12 +87,39 @@ renamed the icon carried across:
 
 ## The nav dropdown
 
-`inc/nav.php` attaches to whichever menu item points at the Services page
-— matched on URL path first, falling back to the title — so it works with
-the existing "primary-menu" with no theme edit. It's a plain
-single-column list of names, per the reference the client supplied.
+There are two mechanisms, and the plugin picks between them so they can
+never both show.
 
-Turn it off with:
+### Seeded menu items (what you get by default)
+
+**On activation** the plugin adds real child menu items under whichever
+menu item points at the Services page — custom links to
+`/our-services/#anchor`, one per practice area. They appear in
+**Appearance → Menus** like any other item, so they can be reordered,
+renamed or deleted, and the theme renders them as its own native submenu.
+
+Seeding is idempotent: an item whose URL already exists under the parent
+is skipped, so activating again never duplicates.
+
+If the menu didn't exist yet at activation — or the "Our Services" item
+was added afterwards — an admin notice appears with an **Add the submenu
+items** button. Deactivating and reactivating works too.
+
+`assets/frontend.css` gives the seeded submenu the look from the client's
+reference (plain list, teal top rule). Those rules set appearance only —
+no `display`, `visibility`, `position` or `transform` — so the theme's own
+open/close behaviour is untouched. Delete that block to use the theme's
+native dropdown styling instead.
+
+### Injected dropdown (fallback)
+
+If nothing has been seeded, `inc/nav.php` renders the panel at request
+time instead, attaching to the same menu item — matched on URL path
+first, falling back to the title. This needs no menu changes at all, but
+the panel is invisible in wp-admin, so it can't be edited there.
+
+Seeding sets the `ssvc_menu_seeded` option, which turns this off
+automatically. Force it either way with:
 
 ```php
 add_filter( 'sinclairs_services_nav_dropdown', '__return_false' );

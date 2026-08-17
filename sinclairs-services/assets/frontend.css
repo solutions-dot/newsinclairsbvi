@@ -526,6 +526,37 @@ a.sc-nutshell__row:focus-visible .sc-nutshell__arrow {
 
 
 /* --------------------------------------------------------------------------
+   Seeded submenu
+   When real menu items are seeded (Appearance → Menus), the theme renders
+   its own .sub-menu and handles opening/closing it. These rules therefore
+   set appearance ONLY — no display, visibility, position or transform —
+   so the theme's own show/hide logic is left completely alone.
+   Delete this block if the theme's native dropdown styling is preferred.
+   -------------------------------------------------------------------------- */
+
+.sc-nav-parent > .sub-menu {
+	padding-top: 10px;
+	padding-bottom: 10px;
+	background: #fff;
+	border-top: 2px solid #65C8D0;
+	box-shadow: 0 14px 34px rgba(0, 0, 0, 0.14);
+}
+
+.sc-nav-parent > .sub-menu > li > a {
+	padding: 9px 24px;
+	font-size: 15px;
+	line-height: 1.35;
+	color: #015797;
+}
+
+.sc-nav-parent > .sub-menu > li > a:hover,
+.sc-nav-parent > .sub-menu > li > a:focus-visible {
+	color: #0C4DA2;
+	background: #efefef;
+}
+
+
+/* --------------------------------------------------------------------------
    Responsive
    -------------------------------------------------------------------------- */
 

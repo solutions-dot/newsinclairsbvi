@@ -17,11 +17,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Master switch. Filterable so the dropdown can be turned off without
- * deactivating the whole plugin.
+ * Master switch for the *injected* dropdown.
+ *
+ * Once real submenu items have been seeded into the menu (see
+ * inc/seed-menu.php) the theme renders its own submenu, so injecting a
+ * second panel would show the list twice. Seeding therefore switches this
+ * off automatically. Still filterable either way.
  */
 function ssvc_nav_dropdown_enabled() {
-	return (bool) apply_filters( 'sinclairs_services_nav_dropdown', true );
+	$enabled = ! get_option( SSVC_SEEDED_OPTION );
+
+	return (bool) apply_filters( 'sinclairs_services_nav_dropdown', $enabled );
 }
 
 /**
