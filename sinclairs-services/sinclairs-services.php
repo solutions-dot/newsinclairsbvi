@@ -37,15 +37,23 @@ define( 'SSVC_URI', plugin_dir_url( __FILE__ ) );
 
 require SSVC_DIR . 'inc/content.php';
 require SSVC_DIR . 'inc/icons.php';
+require SSVC_DIR . 'inc/seed-page.php';
 require SSVC_DIR . 'inc/shortcode.php';
 require SSVC_DIR . 'inc/nav.php';
 require SSVC_DIR . 'inc/seed-menu.php';
 
 /**
- * On activation, add real submenu items under "Our Services" pointing at
- * each section anchor, so the dropdown is editable in Appearance → Menus
- * rather than being injected invisibly at render time. Idempotent — see
- * inc/seed-menu.php.
+ * Activation seeds, in this order:
+ *
+ *   1. the Our Services page — only when one doesn't already exist. An
+ *      existing page is never rewritten; see inc/seed-page.php for why
+ *      (it is Elementor-built on this site).
+ *   2. real submenu items under "Our Services", one per section anchor,
+ *      so the dropdown is editable in Appearance → Menus rather than
+ *      injected invisibly at render time.
+ *
+ * Page first, so the menu links point at the real permalink. Both steps
+ * are idempotent.
  */
 register_activation_hook( __FILE__, 'ssvc_activate' );
 

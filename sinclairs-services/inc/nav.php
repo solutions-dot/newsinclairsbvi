@@ -31,12 +31,9 @@ function ssvc_nav_dropdown_enabled() {
 }
 
 /**
- * URL of the Services page. Defaults to the live path; filterable in case
- * the page is ever moved or renamed.
+ * ssvc_services_page_url() lives in inc/seed-page.php, alongside the page
+ * lookup it depends on.
  */
-function ssvc_services_page_url() {
-	return apply_filters( 'sinclairs_services_page_url', home_url( '/our-services/' ) );
-}
 
 /**
  * Is this menu item the "Our Services" entry?

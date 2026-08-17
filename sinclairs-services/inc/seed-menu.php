@@ -140,6 +140,8 @@ function ssvc_seed_menu_items() {
  * seed once a menu exists.
  */
 function ssvc_activate() {
+	// Page first: the menu anchors are built from its permalink.
+	ssvc_seed_page();
 	ssvc_seed_menu_items();
 }
 

@@ -15,9 +15,29 @@ ten practice areas with its own *Information & FAQs*. It also adds the
 ## Install
 
 1. Replace `wp-content/plugins/sinclairs-services/` with this folder.
-2. Activate under **Plugins** if it isn't already active.
-3. Edit the **Our Services** page and make sure its Elementor Shortcode
-   widget contains `[sinclairs_services]`.
+2. Activate under **Plugins**. Activation seeds everything it safely can
+   (see below).
+3. Check for an admin notice. If the Our Services page doesn't call the
+   shortcode yet, the notice says so and links straight to the page.
+
+### What activation does, and doesn't
+
+| | Behaviour |
+|---|---|
+| **Page** | Created **only if missing**, with `[sinclairs_services]` as its content. An existing page is **never** modified — see the warning below. |
+| **Menu items** | Ten child items seeded under the "Our Services" menu item, each linking to `/our-services/#anchor`. Idempotent. |
+| **Anchors** | Not seeded — the section `id`s are emitted by the shortcode, so they exist wherever it renders. |
+
+> **An existing Our Services page is never rewritten.** On this site that
+> page is Elementor-built: its shortcode lives inside `_elementor_data`,
+> not `post_content`, and Elementor replaces `post_content` wholesale when
+> it renders. Writing there would be invisible at best and destructive at
+> worst. So when the shortcode is missing from an Elementor page, the
+> plugin says so in an admin notice and links to the page — it will not
+> guess. Set the Shortcode widget to `[sinclairs_services]` by hand.
+
+Everything is idempotent, so deactivating and reactivating is a safe way
+to re-run seeding after building the menu or page.
 
 ## Shortcodes
 
