@@ -94,7 +94,9 @@ function ssvc_seed_menu_items() {
 
 	$targets  = ssvc_find_services_menu_items();
 	$sections = ssvc_section_index();
-	$base     = ssvc_services_page_url();
+	// Dropdown items go to the detail page's anchors; the parent "Our
+	// Services" item keeps pointing at the index page.
+	$base     = ssvc_detail_page_url();
 	$created  = 0;
 
 	foreach ( $targets as $target ) {
@@ -140,8 +142,10 @@ function ssvc_seed_menu_items() {
  * seed once a menu exists.
  */
 function ssvc_activate() {
-	// Page first: the menu anchors are built from its permalink.
+	// Pages first: the menu anchors are built from the detail page's
+	// permalink, and the detail page is created as a child of the index.
 	ssvc_seed_page();
+	ssvc_seed_detail_page();
 	ssvc_seed_menu_items();
 }
 

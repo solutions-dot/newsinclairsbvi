@@ -30,7 +30,7 @@
 	--sc-line-sc: rgba(1, 87, 151, 0.30);
 
 	--sc-radius:  10px;
-	--sc-gap:     clamp(28px, 4vw, 56px);
+	--sc-gap:     clamp(24px, 3vw, 44px);
 
 	/* Anchored sections must clear the sticky header (and the admin bar
 	   when logged in) or the heading lands underneath it. */
@@ -64,7 +64,7 @@
 	color: var(--sc-teal);
 }
 
-.sc-intro__title {
+.sc-services .sc-intro__title {
 	margin: 0 0 12px;
 	font-size: clamp(28px, 3.4vw, 42px);
 	line-height: 1.15;
@@ -84,7 +84,12 @@
    A real <select>, so it uses the native picker on mobile.
    -------------------------------------------------------------------------- */
 
-.sc-jump { margin: 0 0 var(--sc-gap); }
+/* Centred: it sits on its own below the page's existing header, so a
+   left-aligned control would read as orphaned. */
+.sc-jump {
+	margin: 0 auto var(--sc-gap);
+	text-align: center;
+}
 
 .sc-jump__label {
 	display: block;
@@ -100,8 +105,10 @@
 	position: relative;
 	display: flex;
 	align-items: stretch;
+	justify-content: center;
 	gap: 10px;
 	max-width: 560px;
+	margin: 0 auto;
 }
 
 .sc-jump__select {
@@ -170,14 +177,14 @@
 
 .sc-nutshell {
 	padding: clamp(24px, 3vw, 40px);
-	margin-bottom: calc(var(--sc-gap) * 1.4);
+	margin-bottom: var(--sc-gap);
 	background: var(--sc-surface);
 	border-radius: var(--sc-radius);
 }
 
-.sc-nutshell__group + .sc-nutshell__group { margin-top: 34px; }
+.sc-nutshell__group + .sc-nutshell__group { margin-top: 26px; }
 
-.sc-nutshell__group-label {
+.sc-services .sc-nutshell__group-label {
 	margin: 0 0 14px;
 	padding-bottom: 10px;
 	font-size: clamp(17px, 1.6vw, 20px);
@@ -197,7 +204,7 @@
 	grid-template-columns: minmax(190px, 250px) 1fr auto;
 	gap: 6px 22px;
 	align-items: baseline;
-	padding: 14px 14px 14px 12px;
+	padding: 11px 14px 11px 12px;
 	text-decoration: none;
 	color: inherit;
 	border-bottom: 1px solid var(--sc-line);
@@ -222,8 +229,13 @@ a.sc-nutshell__row:focus-visible { box-shadow: 0 0 0 2px var(--sc-blue); }
 
 a.sc-nutshell__row:hover .sc-nutshell__label { color: var(--sc-blue); }
 
+/* Explicit 400: the theme bolds spans in some contexts, which made these
+   descriptions render as heavy as the labels beside them. Set on this
+   rule rather than as a blanket reset, so .sc-nutshell__label keeps its
+   intended weight. */
 .sc-nutshell__text {
 	font-size: 15px;
+	font-weight: 400;
 	color: var(--sc-muted);
 }
 
@@ -254,7 +266,7 @@ a.sc-nutshell__row:focus-visible .sc-nutshell__arrow {
 	display: grid;
 	grid-template-columns: minmax(240px, 320px) 1fr;
 	gap: var(--sc-gap);
-	padding: clamp(32px, 4vw, 56px) 0;
+	padding: clamp(26px, 3vw, 40px) 0;
 	border-top: 1px solid var(--sc-line);
 	scroll-margin-top: var(--sc-anchor-offset);
 }
@@ -271,15 +283,15 @@ a.sc-nutshell__row:focus-visible .sc-nutshell__arrow {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 52px;
-	height: 52px;
+	width: 64px;
+	height: 64px;
 	margin-bottom: 16px;
 	color: var(--sc-navy);
 	background: var(--sc-sand);
 	border-radius: var(--sc-radius);
 }
 
-.sc-section__icon svg { width: 26px; height: 26px; }
+.sc-section__icon svg { width: 32px; height: 32px; }
 
 .sc-section__num {
 	margin: 0 0 6px;
@@ -289,9 +301,9 @@ a.sc-nutshell__row:focus-visible .sc-nutshell__arrow {
 	color: var(--sc-teal);
 }
 
-.sc-section__title {
+.sc-services .sc-section__title {
 	margin: 0;
-	font-size: clamp(21px, 2.1vw, 27px);
+	font-size: clamp(20px, 1.7vw, 24px);
 	line-height: 1.2;
 	font-weight: 700;
 	color: var(--sc-navy);
@@ -328,7 +340,6 @@ a.sc-nutshell__row:focus-visible .sc-nutshell__arrow {
 /* Prose column */
 
 .sc-section__prose {
-	max-width: 68ch;
 	font-size: clamp(15.5px, 1.15vw, 17px);
 }
 
@@ -338,7 +349,7 @@ a.sc-nutshell__row:focus-visible .sc-nutshell__arrow {
 	color: var(--sc-navy);
 }
 
-.sc-section__subhead {
+.sc-services .sc-section__subhead {
 	margin: 1.6em 0 0.5em;
 	font-size: 1.05em;
 	font-weight: 700;
@@ -354,7 +365,7 @@ a.sc-nutshell__row:focus-visible .sc-nutshell__arrow {
 
 .sc-faqs { margin-top: 32px; }
 
-.sc-faqs__heading {
+.sc-services .sc-faqs__heading {
 	margin: 0 0 14px;
 	padding-bottom: 10px;
 	font-size: 13px;
@@ -374,7 +385,7 @@ a.sc-nutshell__row:focus-visible .sc-nutshell__arrow {
 	align-items: flex-start;
 	justify-content: space-between;
 	gap: 20px;
-	padding: 15px 2px;
+	padding: 13px 2px;
 	font-weight: 600;
 	color: var(--sc-navy);
 	cursor: pointer;
@@ -428,7 +439,6 @@ a.sc-nutshell__row:focus-visible .sc-nutshell__arrow {
 
 .sc-faq__answer {
 	padding: 0 2px 18px;
-	max-width: 68ch;
 	color: var(--sc-muted);
 }
 
@@ -520,8 +530,8 @@ a.sc-nutshell__row:focus-visible .sc-nutshell__arrow {
 
 .sc-nav-dropdown > li > a:hover,
 .sc-nav-dropdown > li > a:focus-visible {
-	color: #0C4DA2;
-	background: #efefef;
+	color: #fff !important;
+	background: #015797;
 }
 
 
@@ -551,8 +561,8 @@ a.sc-nutshell__row:focus-visible .sc-nutshell__arrow {
 
 .sc-nav-parent > .sub-menu > li > a:hover,
 .sc-nav-parent > .sub-menu > li > a:focus-visible {
-	color: #0C4DA2;
-	background: #efefef;
+	color: #fff !important;
+	background: #015797;
 }
 
 

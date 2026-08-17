@@ -19,6 +19,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 const SSVC_PAGE_SLUG = 'our-services';
 
 /**
+ * The detail page is a child of the index page, so it reads as
+ * /our-services/practice-areas/.
+ */
+const SSVC_DETAIL_SLUG = 'practice-areas';
+
+/**
  * The Services page, or null.
  *
  * Looked up by slug first, then by title, so a site that renamed the page
@@ -60,6 +66,71 @@ function ssvc_services_page_url() {
 	$url  = $page ? trailingslashit( get_permalink( $page ) ) : home_url( '/' . SSVC_PAGE_SLUG . '/' );
 
 	return apply_filters( 'sinclairs_services_page_url', $url );
+}
+
+/**
+ * The detail page (the ten sections), or null.
+ */
+function ssvc_find_detail_page() {
+	if ( array_key_exists( 'ssvc_detail_cache', $GLOBALS ) ) {
+		return $GLOBALS['ssvc_detail_cache'];
+	}
+
+	$page = get_page_by_path( SSVC_PAGE_SLUG . '/' . SSVC_DETAIL_SLUG );
+
+	if ( ! $page ) {
+		// Fall back to a top-level slug, in case the page was moved out
+		// from under the index page.
+		$page = get_page_by_path( SSVC_DETAIL_SLUG );
+	}
+
+	$GLOBALS['ssvc_detail_cache'] = $page;
+
+	return $page;
+}
+
+/**
+ * URL of the detail page — the target every index row, jump-box option
+ * and nav dropdown item points at.
+ */
+function ssvc_detail_page_url() {
+	$page = ssvc_find_detail_page();
+	$url  = $page
+		? trailingslashit( get_permalink( $page ) )
+		: home_url( '/' . SSVC_PAGE_SLUG . '/' . SSVC_DETAIL_SLUG . '/' );
+
+	return apply_filters( 'sinclairs_services_detail_page_url', $url );
+}
+
+/**
+ * Create the detail page under the index page. Only ever creates; an
+ * existing page is left alone, exactly as with the index page.
+ */
+function ssvc_seed_detail_page() {
+	$page = ssvc_find_detail_page();
+
+	if ( $page ) {
+		return (int) $page->ID;
+	}
+
+	$parent = ssvc_find_services_page();
+
+	$id = wp_insert_post( array(
+		'post_title'   => 'Practice Areas',
+		'post_name'    => SSVC_DETAIL_SLUG,
+		'post_status'  => 'publish',
+		'post_type'    => 'page',
+		'post_parent'  => $parent ? (int) $parent->ID : 0,
+		'post_content' => '[sinclairs_services_detail]',
+	) );
+
+	if ( is_wp_error( $id ) || ! $id ) {
+		return 0;
+	}
+
+	unset( $GLOBALS['ssvc_detail_cache'] );
+
+	return (int) $id;
 }
 
 /**
