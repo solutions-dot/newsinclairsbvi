@@ -181,6 +181,57 @@
 		}, 50);
 	}
 
+	/* ------------------------------------------------------------------
+	   Keep "Our Services" clickable
+	   The theme cancels navigation on every top-level menu link that has
+	   children:
+
+	     $(document).on('click',
+	       '.navbar-area .navbar-nav li.menu-item-has-children>a',
+	       function (e) { e.preventDefault(); ... });
+
+	   Seeding the ten sub-items gave "Our Services" children for the
+	   first time, which silently turned it into a toggle-only link. This
+	   listener runs in the capture phase on document — before that
+	   delegated bubble handler can see the event — stops it propagating,
+	   and performs the navigation itself.
+
+	   Safe for the submenu: on desktop it opens on hover, and on mobile
+	   the CSS renders it open inline, so the parent never needs to act
+	   as a toggle.
+	   ------------------------------------------------------------------ */
+
+	function keepParentClickable() {
+		document.addEventListener('click', function (event) {
+			if (!(event.target instanceof Element)) {
+				return;
+			}
+
+			var link = event.target.closest('.sc-nav-parent > a');
+
+			if (!link) {
+				return;
+			}
+
+			var href = link.getAttribute('href');
+
+			// A placeholder link genuinely is just a toggle — leave it be.
+			if (!href || href === '#') {
+				return;
+			}
+
+			// Modified clicks (new tab, download, middle-click) must keep
+			// their native behaviour.
+			if (event.metaKey || event.ctrlKey || event.shiftKey ||
+				event.altKey || event.button !== 0) {
+				return;
+			}
+
+			event.stopPropagation();
+			window.location.href = link.href;
+		}, true);
+	}
+
 	function init() {
 		Array.prototype.forEach.call(
 			document.querySelectorAll('[data-sc-jump]'),
@@ -188,6 +239,7 @@
 		);
 		initAnchors();
 		initNavDropdown();
+		keepParentClickable();
 		openTargetedFaq();
 	}
 
