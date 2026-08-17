@@ -61,6 +61,24 @@
 	   Jump-to dropdown
 	   ------------------------------------------------------------------ */
 
+	/**
+	 * An option's value is a bare "#section" when the sections are on this
+	 * same page, and an absolute URL when they live on the detail page.
+	 * scrollToSection() only understands fragments and returns early on
+	 * anything else, so a full URL has to be navigated to instead.
+	 */
+	function goToValue(value) {
+		if (!value) {
+			return;
+		}
+
+		if (value.charAt(0) === '#') {
+			scrollToSection(value);
+		} else {
+			window.location.href = value;
+		}
+	}
+
 	function initJump(root) {
 		var select = root.querySelector('.sc-jump__select');
 		var go = root.querySelector('.sc-jump__go');
@@ -70,12 +88,12 @@
 		}
 
 		select.addEventListener('change', function () {
-			scrollToSection(select.value);
+			goToValue(select.value);
 		});
 
 		if (go) {
 			go.addEventListener('click', function () {
-				scrollToSection(select.value);
+				goToValue(select.value);
 			});
 		}
 	}
