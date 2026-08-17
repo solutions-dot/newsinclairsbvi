@@ -104,9 +104,22 @@
 
 	function initAnchors() {
 		document.addEventListener('click', function (event) {
+			if (!(event.target instanceof Element)) {
+				return;
+			}
+
 			var link = event.target.closest('a[href*="#"]');
 
 			if (!link) {
+				return;
+			}
+
+			// Only ever touch this plugin's own links. This script loads on
+			// every page so the nav submenu works, and a document-level
+			// handler that swallowed every same-page hash link would break
+			// anything else built on one — Elementor tabs, Essential Addons
+			// toggles, Royal Addons accordions, modal triggers.
+			if (!link.closest('.sc-services') && !link.closest('.sc-nav-dropdown')) {
 				return;
 			}
 

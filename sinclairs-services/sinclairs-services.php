@@ -3,7 +3,7 @@
  * Plugin Name:       Sinclairs (BVI) — Our Services
  * Plugin URI:        https://sinclairsbvi.com/our-services/
  * Description:       Renders the whole "Our Services" page — the In a Nutshell index, a jump-to dropdown and every practice area with its Information &amp; FAQs — from one shortcode. Also adds the "Our Services" nav dropdown that anchor-links to each section.
- * Version:           2.1.6
+ * Version:           2.1.7
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            Sinclairs (BVI)
@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SSVC_VERSION', '2.1.6' );
+define( 'SSVC_VERSION', '2.1.7' );
 define( 'SSVC_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SSVC_URI', plugin_dir_url( __FILE__ ) );
 
