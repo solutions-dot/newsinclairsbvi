@@ -627,16 +627,19 @@ a.sc-nutshell__row:focus-visible .sc-nutshell__arrow {
    Seeded submenu on mobile
    The theme collapses its nav below 992px (Bootstrap navbar-expand-lg) and
    does not expose the submenu inside that drawer, so the ten services were
-   unreachable on a phone. Show them inline and indented instead of as a
-   floating panel — there is no hover on touch, so an always-open list is
-   the reliable behaviour.
+   unreachable on a phone.
+
+   They are shown inline and indented rather than as a floating panel —
+   there is no hover on touch. Crucially the list starts COLLAPSED and is
+   opened by the caret button; the parent link itself still navigates to
+   the index page, so tapping it never surprises anyone with a toggle.
    -------------------------------------------------------------------------- */
 
 @media (max-width: 991.98px) {
 
 	#page .sc-nav-parent > .sub-menu,
 	.sc-nav-parent > .sub-menu {
-		display: block !important;
+		display: none !important;
 		position: static !important;
 		float: none !important;
 		width: auto !important;
@@ -654,14 +657,31 @@ a.sc-nutshell__row:focus-visible .sc-nutshell__arrow {
 		border-left: 2px solid #65C8D0;
 	}
 
+	/* Opened by the caret (see frontend.js). */
+	#page .sc-nav-parent > .sub-menu.is-open,
+	.sc-nav-parent > .sub-menu.is-open {
+		display: block !important;
+	}
+
 	#page .sc-nav-parent > .sub-menu > li > a,
 	.sc-nav-parent > .sub-menu > li > a {
 		padding: 8px 0;
 		font-size: 14.5px;
 	}
 
-	/* The caret is only meaningful for a hover panel. */
-	.sc-nav-toggle { display: none; }
+	/* Comfortable tap target, kept clear of the parent link. */
+	.sc-nav-toggle {
+		display: inline-flex;
+		width: 40px;
+		height: 40px;
+	}
+}
+
+/* On desktop the panel opens on hover, so the caret is decorative only
+   and the theme usually draws its own. Hidden to avoid two carets. */
+@media (min-width: 992px) {
+	.sc-nav-parent > .sub-menu ~ .sc-nav-toggle,
+	.sc-nav-parent > .sc-nav-toggle { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -124,7 +124,12 @@
 		var parents = document.querySelectorAll('.sc-nav-parent');
 
 		Array.prototype.forEach.call(parents, function (parent) {
-			var dropdown = parent.querySelector('.sc-nav-dropdown');
+			// Either the injected panel, or — far more usually — the real
+			// submenu the theme renders from the seeded menu items. On
+			// mobile that submenu starts collapsed, so it needs the same
+			// toggle wiring.
+			var dropdown = parent.querySelector('.sc-nav-dropdown') ||
+				parent.querySelector('.sub-menu');
 			var toggle = parent.querySelector('.sc-nav-toggle');
 
 			if (!dropdown || !toggle) {

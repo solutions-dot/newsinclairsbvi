@@ -107,18 +107,22 @@ add_filter( 'nav_menu_css_class', 'ssvc_nav_menu_css_class', 10, 4 );
  * closes the </li>.
  */
 function ssvc_nav_menu_start_el( $item_output, $item, $depth, $args ) {
-	if ( ! ssvc_nav_dropdown_enabled() || 0 !== (int) $depth ) {
+	if ( 0 !== (int) $depth || ! ssvc_is_services_menu_item( $item ) ) {
 		return $item_output;
 	}
 
-	if ( ! ssvc_is_services_menu_item( $item ) ) {
-		return $item_output;
-	}
-
-	$toggle = '<button type="button" class="sc-nav-toggle" aria-expanded="false" aria-label="'
+	// The caret is rendered whether or not the injected panel is — the
+	// seeded submenu needs it too, because on mobile that submenu starts
+	// collapsed and the parent link navigates rather than toggling.
+	$output = $item_output
+		. '<button type="button" class="sc-nav-toggle" aria-expanded="false" aria-label="'
 		. esc_attr__( 'Toggle the Our Services menu', 'sinclairs-services' )
 		. '"><span aria-hidden="true"></span></button>';
 
-	return $item_output . $toggle . ssvc_nav_dropdown_markup();
+	if ( ssvc_nav_dropdown_enabled() ) {
+		$output .= ssvc_nav_dropdown_markup();
+	}
+
+	return $output;
 }
 add_filter( 'walker_nav_menu_start_el', 'ssvc_nav_menu_start_el', 10, 4 );
