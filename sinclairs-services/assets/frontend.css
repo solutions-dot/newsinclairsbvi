@@ -1,0 +1,582 @@
+/* ==========================================================================
+   Sinclairs (BVI) — Our Services
+   --------------------------------------------------------------------------
+   Colours are the site's existing palette, sampled from the live CSS
+   rather than invented:
+
+     #0C4DA2  primary blue      (GDPR buttons, links — the dominant accent)
+     #015797  navy              (nav links, practice boxes)
+     #65C8D0  teal              (nav hover, practice box hover)
+     #ecdbc9  sand              (icon tile behind practice-box icons)
+     #efefef  light surface
+     #202020  body ink
+
+   Everything is namespaced under .sc-services so it cannot leak into the
+   Lawfinity theme or other Elementor widgets on the page.
+   ========================================================================== */
+
+.sc-services {
+	--sc-blue:    #0C4DA2;
+	--sc-navy:    #015797;
+	--sc-teal:    #65C8D0;
+	--sc-sand:    #ecdbc9;
+	--sc-ink:     #202020;
+	--sc-surface: #efefef;
+	--sc-white:   #fff;
+
+	--sc-muted:   rgba(32, 32, 32, 0.66);
+	--sc-faint:   rgba(32, 32, 32, 0.46);
+	--sc-line:    rgba(1, 87, 151, 0.16);
+	--sc-line-sc: rgba(1, 87, 151, 0.30);
+
+	--sc-radius:  10px;
+	--sc-gap:     clamp(28px, 4vw, 56px);
+
+	/* Anchored sections must clear the sticky header (and the admin bar
+	   when logged in) or the heading lands underneath it. */
+	--sc-anchor-offset: 110px;
+
+	color: var(--sc-ink);
+	font-family: inherit;
+	line-height: 1.65;
+}
+
+.sc-services *,
+.sc-services *::before,
+.sc-services *::after { box-sizing: border-box; }
+
+.sc-services p { margin: 0 0 1em; }
+.sc-services p:last-child { margin-bottom: 0; }
+
+
+/* --------------------------------------------------------------------------
+   Page intro
+   -------------------------------------------------------------------------- */
+
+.sc-intro { margin-bottom: var(--sc-gap); }
+
+.sc-intro__kicker {
+	margin: 0 0 10px;
+	font-size: 13px;
+	font-weight: 600;
+	letter-spacing: 0.16em;
+	text-transform: uppercase;
+	color: var(--sc-teal);
+}
+
+.sc-intro__title {
+	margin: 0 0 12px;
+	font-size: clamp(28px, 3.4vw, 42px);
+	line-height: 1.15;
+	font-weight: 700;
+	color: var(--sc-navy);
+}
+
+.sc-intro__dek {
+	max-width: 62ch;
+	font-size: clamp(16px, 1.3vw, 18px);
+	color: var(--sc-muted);
+}
+
+
+/* --------------------------------------------------------------------------
+   Jump-to dropdown
+   A real <select>, so it uses the native picker on mobile.
+   -------------------------------------------------------------------------- */
+
+.sc-jump { margin: 0 0 var(--sc-gap); }
+
+.sc-jump__label {
+	display: block;
+	margin-bottom: 8px;
+	font-size: 12px;
+	font-weight: 600;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var(--sc-faint);
+}
+
+.sc-jump__control {
+	position: relative;
+	display: flex;
+	align-items: stretch;
+	gap: 10px;
+	max-width: 560px;
+}
+
+.sc-jump__select {
+	flex: 1 1 auto;
+	min-width: 0;
+	appearance: none;
+	-webkit-appearance: none;
+	padding: 13px 44px 13px 16px;
+	font: inherit;
+	font-size: 15px;
+	color: var(--sc-navy);
+	background: var(--sc-white);
+	border: 1px solid var(--sc-line-sc);
+	border-radius: var(--sc-radius);
+	cursor: pointer;
+	transition: border-color .18s ease, box-shadow .18s ease;
+}
+
+.sc-jump__select:hover { border-color: var(--sc-teal); }
+
+.sc-jump__select:focus-visible {
+	outline: none;
+	border-color: var(--sc-blue);
+	box-shadow: 0 0 0 3px rgba(12, 77, 162, 0.18);
+}
+
+/* Chevron. pointer-events:none so clicks fall through to the select. */
+.sc-jump__caret {
+	position: absolute;
+	top: 50%;
+	right: 92px;
+	width: 9px;
+	height: 9px;
+	margin-top: -6px;
+	pointer-events: none;
+	border-right: 2px solid var(--sc-navy);
+	border-bottom: 2px solid var(--sc-navy);
+	transform: rotate(45deg);
+}
+
+.sc-jump__go {
+	flex: 0 0 auto;
+	padding: 0 22px;
+	font: inherit;
+	font-size: 15px;
+	font-weight: 600;
+	color: var(--sc-white);
+	background: var(--sc-navy);
+	border: 0;
+	border-radius: var(--sc-radius);
+	cursor: pointer;
+	transition: background-color .18s ease;
+}
+
+.sc-jump__go:hover { background: var(--sc-blue); }
+
+.sc-jump__go:focus-visible {
+	outline: 2px solid var(--sc-blue);
+	outline-offset: 2px;
+}
+
+
+/* --------------------------------------------------------------------------
+   "In a Nutshell" index
+   -------------------------------------------------------------------------- */
+
+.sc-nutshell {
+	padding: clamp(24px, 3vw, 40px);
+	margin-bottom: calc(var(--sc-gap) * 1.4);
+	background: var(--sc-surface);
+	border-radius: var(--sc-radius);
+}
+
+.sc-nutshell__group + .sc-nutshell__group { margin-top: 34px; }
+
+.sc-nutshell__group-label {
+	margin: 0 0 14px;
+	padding-bottom: 10px;
+	font-size: clamp(17px, 1.6vw, 20px);
+	font-weight: 700;
+	color: var(--sc-navy);
+	border-bottom: 2px solid var(--sc-teal);
+}
+
+.sc-nutshell__rows {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.sc-nutshell__row {
+	display: grid;
+	grid-template-columns: minmax(190px, 250px) 1fr auto;
+	gap: 6px 22px;
+	align-items: baseline;
+	padding: 14px 14px 14px 12px;
+	text-decoration: none;
+	color: inherit;
+	border-bottom: 1px solid var(--sc-line);
+	border-radius: 6px;
+	transition: background-color .16s ease;
+}
+
+.sc-nutshell__rows li:last-child .sc-nutshell__row { border-bottom: 0; }
+
+a.sc-nutshell__row:hover,
+a.sc-nutshell__row:focus-visible {
+	background: var(--sc-white);
+	outline: none;
+}
+
+a.sc-nutshell__row:focus-visible { box-shadow: 0 0 0 2px var(--sc-blue); }
+
+.sc-nutshell__label {
+	font-weight: 700;
+	color: var(--sc-navy);
+}
+
+a.sc-nutshell__row:hover .sc-nutshell__label { color: var(--sc-blue); }
+
+.sc-nutshell__text {
+	font-size: 15px;
+	color: var(--sc-muted);
+}
+
+.sc-nutshell__arrow {
+	color: var(--sc-teal);
+	font-size: 17px;
+	opacity: 0;
+	transform: translateX(-4px);
+	transition: opacity .16s ease, transform .16s ease;
+}
+
+a.sc-nutshell__row:hover .sc-nutshell__arrow,
+a.sc-nutshell__row:focus-visible .sc-nutshell__arrow {
+	opacity: 1;
+	transform: translateX(0);
+}
+
+/* Rows with no detail section yet (Residential Conveyancing) read as
+   plain text — no hover, no arrow, no false affordance. */
+.sc-nutshell__row.is-unlinked { cursor: default; }
+
+
+/* --------------------------------------------------------------------------
+   Service sections — sticky rail + prose
+   -------------------------------------------------------------------------- */
+
+.sc-section {
+	display: grid;
+	grid-template-columns: minmax(240px, 320px) 1fr;
+	gap: var(--sc-gap);
+	padding: clamp(32px, 4vw, 56px) 0;
+	border-top: 1px solid var(--sc-line);
+	scroll-margin-top: var(--sc-anchor-offset);
+}
+
+.sc-section:first-child { border-top: 0; padding-top: 0; }
+
+.sc-section__rail {
+	position: sticky;
+	top: var(--sc-anchor-offset);
+	align-self: start;
+}
+
+.sc-section__icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 52px;
+	height: 52px;
+	margin-bottom: 16px;
+	color: var(--sc-navy);
+	background: var(--sc-sand);
+	border-radius: var(--sc-radius);
+}
+
+.sc-section__icon svg { width: 26px; height: 26px; }
+
+.sc-section__num {
+	margin: 0 0 6px;
+	font-size: 12px;
+	font-weight: 700;
+	letter-spacing: 0.18em;
+	color: var(--sc-teal);
+}
+
+.sc-section__title {
+	margin: 0;
+	font-size: clamp(21px, 2.1vw, 27px);
+	line-height: 1.2;
+	font-weight: 700;
+	color: var(--sc-navy);
+}
+
+.sc-section__rule {
+	width: 46px;
+	height: 3px;
+	margin: 16px 0;
+	background: var(--sc-teal);
+}
+
+.sc-section__brief {
+	margin: 0;
+	font-size: 15px;
+	color: var(--sc-muted);
+}
+
+.sc-section__top {
+	display: inline-block;
+	margin-top: 18px;
+	font-size: 13px;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+	color: var(--sc-blue);
+	text-decoration: none;
+	border-bottom: 1px solid transparent;
+}
+
+.sc-section__top::before { content: "\2191\00a0"; }
+.sc-section__top:hover { border-bottom-color: currentColor; }
+
+
+/* Prose column */
+
+.sc-section__prose {
+	max-width: 68ch;
+	font-size: clamp(15.5px, 1.15vw, 17px);
+}
+
+.sc-section__lede {
+	font-size: 1.12em;
+	font-weight: 600;
+	color: var(--sc-navy);
+}
+
+.sc-section__subhead {
+	margin: 1.6em 0 0.5em;
+	font-size: 1.05em;
+	font-weight: 700;
+	color: var(--sc-navy);
+}
+
+.sc-section__subhead:first-child { margin-top: 0; }
+
+
+/* --------------------------------------------------------------------------
+   Information & FAQs accordion
+   -------------------------------------------------------------------------- */
+
+.sc-faqs { margin-top: 32px; }
+
+.sc-faqs__heading {
+	margin: 0 0 14px;
+	padding-bottom: 10px;
+	font-size: 13px;
+	font-weight: 700;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var(--sc-navy);
+	border-bottom: 1px solid var(--sc-line-sc);
+}
+
+.sc-faq {
+	border-bottom: 1px solid var(--sc-line);
+}
+
+.sc-faq > summary {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 20px;
+	padding: 15px 2px;
+	font-weight: 600;
+	color: var(--sc-navy);
+	cursor: pointer;
+	list-style: none;
+	transition: color .16s ease;
+}
+
+/* Suppress the native disclosure triangle in both engines. */
+.sc-faq > summary::-webkit-details-marker { display: none; }
+.sc-faq > summary::marker { content: ""; }
+
+.sc-faq > summary:hover { color: var(--sc-blue); }
+
+.sc-faq > summary:focus-visible {
+	outline: 2px solid var(--sc-blue);
+	outline-offset: 2px;
+	border-radius: 4px;
+}
+
+/* Plus/minus built from two bars; the vertical one collapses when open. */
+.sc-faq__icon {
+	position: relative;
+	flex: 0 0 auto;
+	width: 16px;
+	height: 16px;
+	margin-top: 4px;
+}
+
+.sc-faq__icon::before,
+.sc-faq__icon::after {
+	content: "";
+	position: absolute;
+	background: var(--sc-teal);
+	transition: transform .2s ease, opacity .2s ease;
+}
+
+.sc-faq__icon::before {
+	top: 7px; left: 0;
+	width: 16px; height: 2px;
+}
+
+.sc-faq__icon::after {
+	top: 0; left: 7px;
+	width: 2px; height: 16px;
+}
+
+.sc-faq[open] .sc-faq__icon::after {
+	opacity: 0;
+	transform: rotate(90deg);
+}
+
+.sc-faq__answer {
+	padding: 0 2px 18px;
+	max-width: 68ch;
+	color: var(--sc-muted);
+}
+
+.sc-faq--overview > summary { color: var(--sc-blue); }
+
+.sc-faqs__disclaimer {
+	margin-top: 16px;
+	font-size: 13px;
+	font-style: italic;
+	color: var(--sc-faint);
+}
+
+
+/* --------------------------------------------------------------------------
+   Nav dropdown — plain single-column list, per the client's reference
+   -------------------------------------------------------------------------- */
+
+.sc-nav-parent { position: relative; }
+
+/* Caret next to "Our Services". Hover opens the panel via CSS; this
+   button exists for touch and keyboard, where hover never fires. */
+.sc-nav-toggle {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 22px;
+	height: 22px;
+	padding: 0;
+	margin-left: 2px;
+	vertical-align: middle;
+	background: none;
+	border: 0;
+	cursor: pointer;
+}
+
+.sc-nav-toggle > span {
+	width: 7px;
+	height: 7px;
+	margin-top: -3px;
+	border-right: 2px solid currentColor;
+	border-bottom: 2px solid currentColor;
+	transform: rotate(45deg);
+	transition: transform .18s ease;
+}
+
+.sc-nav-toggle[aria-expanded="true"] > span {
+	margin-top: 2px;
+	transform: rotate(225deg);
+}
+
+.sc-nav-dropdown {
+	position: absolute;
+	top: 100%;
+	left: 0;
+	z-index: 999;
+	min-width: 290px;
+	margin: 0;
+	padding: 10px 0;
+	list-style: none;
+	background: var(--sc-white, #fff);
+	border-top: 2px solid #65C8D0;
+	box-shadow: 0 14px 34px rgba(0, 0, 0, 0.14);
+
+	opacity: 0;
+	visibility: hidden;
+	transform: translateY(-6px);
+	transition: opacity .16s ease, transform .16s ease, visibility .16s;
+}
+
+.sc-nav-parent:hover > .sc-nav-dropdown,
+.sc-nav-parent:focus-within > .sc-nav-dropdown,
+.sc-nav-dropdown.is-open {
+	opacity: 1;
+	visibility: visible;
+	transform: translateY(0);
+}
+
+.sc-nav-dropdown > li { margin: 0; }
+
+.sc-nav-dropdown > li > a {
+	display: block;
+	padding: 9px 24px;
+	font-size: 15px;
+	line-height: 1.35;
+	color: #015797;
+	text-decoration: none;
+	transition: color .14s ease, background-color .14s ease;
+}
+
+.sc-nav-dropdown > li > a:hover,
+.sc-nav-dropdown > li > a:focus-visible {
+	color: #0C4DA2;
+	background: #efefef;
+}
+
+
+/* --------------------------------------------------------------------------
+   Responsive
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 1024px) {
+
+	.sc-section {
+		grid-template-columns: 1fr;
+		gap: 26px;
+	}
+
+	/* Sticky is pointless once the rail is stacked above the prose. */
+	.sc-section__rail {
+		position: static;
+		top: auto;
+	}
+
+	.sc-section__brief { max-width: 68ch; }
+}
+
+@media (max-width: 768px) {
+
+	.sc-nutshell__row {
+		grid-template-columns: 1fr;
+		gap: 4px;
+	}
+
+	.sc-nutshell__arrow { display: none; }
+
+	.sc-jump__control { flex-wrap: wrap; }
+
+	.sc-jump__select { flex: 1 1 100%; }
+
+	.sc-jump__caret { right: 18px; }
+
+	.sc-jump__go { flex: 1 1 100%; padding: 12px 22px; }
+
+	/* Full-width dropdown reads better than a floating panel on phones. */
+	.sc-nav-dropdown {
+		position: static;
+		min-width: 0;
+		box-shadow: none;
+		opacity: 1;
+		visibility: visible;
+		transform: none;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+	.sc-services *,
+	.sc-nav-dropdown {
+		transition-duration: 0.01ms !important;
+	}
+}
