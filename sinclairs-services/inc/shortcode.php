@@ -228,14 +228,26 @@ function ssvc_shortcode_index( $atts ) {
 
 	ssvc_enqueue_assets();
 
-	$base = ssvc_detail_page_url();
-	$out  = ssvc_open( 'index' );
+	// Only link across to the detail page if it is really there. When it
+	// isn't — the plugin's files were updated but activation never ran,
+	// or the page was deleted — fall back to the single-page arrangement
+	// and render the sections here. Linking to a page that doesn't exist
+	// would turn every row into a 404.
+	$has_detail = ssvc_detail_page_exists();
+	$base       = $has_detail ? ssvc_detail_page_url() : '';
+
+	$out = ssvc_open( 'index' );
 
 	if ( 'yes' === $atts['jump'] ) {
 		$out .= ssvc_menu_markup( $base );
 	}
 
 	$out .= ssvc_nutshell_markup( $base );
+
+	if ( ! $has_detail ) {
+		$out .= ssvc_sections_markup( false, '#sc-nutshell' );
+	}
+
 	$out .= '</div>';
 
 	return $out;

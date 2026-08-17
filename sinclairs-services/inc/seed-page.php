@@ -90,6 +90,18 @@ function ssvc_find_detail_page() {
 }
 
 /**
+ * Does the detail page actually exist?
+ *
+ * Callers must check this before linking to it. ssvc_detail_page_url()
+ * falls back to a guessed path when the page is absent, which is fine
+ * for building a URL but must never be used to emit live links — doing
+ * so produces a page full of 404s.
+ */
+function ssvc_detail_page_exists() {
+	return (bool) ssvc_find_detail_page();
+}
+
+/**
  * URL of the detail page — the target every index row, jump-box option
  * and nav dropdown item points at.
  */
@@ -208,6 +220,23 @@ function ssvc_reset_page_cache() {
 function ssvc_page_admin_notice() {
 	if ( ! current_user_can( 'edit_pages' ) ) {
 		return;
+	}
+
+	// The detail page missing is the more urgent problem: the index will
+	// still render, but its rows have nowhere to go, so the plugin falls
+	// back to showing the sections inline until this is resolved.
+	if ( ! ssvc_detail_page_exists() ) {
+		$url = wp_nonce_url(
+			admin_url( 'admin-post.php?action=ssvc_seed_menu' ),
+			'ssvc_seed_menu'
+		);
+		echo '<div class="notice notice-warning"><p><strong>';
+		esc_html_e( 'Sinclairs Services', 'sinclairs-services' );
+		echo '</strong><br>';
+		esc_html_e( 'The practice-areas page does not exist, so the index is showing all ten sections inline instead of linking to them.', 'sinclairs-services' );
+		echo ' <a class="button button-primary" href="' . esc_url( $url ) . '">';
+		esc_html_e( 'Create it now', 'sinclairs-services' );
+		echo '</a></p></div>';
 	}
 
 	$status = ssvc_page_shortcode_status();

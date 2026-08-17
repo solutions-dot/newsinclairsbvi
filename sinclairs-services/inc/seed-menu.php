@@ -95,8 +95,12 @@ function ssvc_seed_menu_items() {
 	$targets  = ssvc_find_services_menu_items();
 	$sections = ssvc_section_index();
 	// Dropdown items go to the detail page's anchors; the parent "Our
-	// Services" item keeps pointing at the index page.
-	$base     = ssvc_detail_page_url();
+	// Services" item keeps pointing at the index page. If the detail page
+	// isn't there, target the index instead — which is where the sections
+	// render in that case — rather than seeding ten dead links.
+	$base     = ssvc_detail_page_exists()
+		? ssvc_detail_page_url()
+		: ssvc_services_page_url();
 	$created  = 0;
 	$updated  = 0;
 
@@ -219,6 +223,11 @@ function ssvc_handle_seed_request() {
 	}
 
 	check_admin_referer( 'ssvc_seed_menu' );
+
+	// Create the pages first, so the menu items can point at a real
+	// detail page rather than falling back to the index.
+	ssvc_seed_page();
+	ssvc_seed_detail_page();
 
 	$created = ssvc_seed_menu_items();
 

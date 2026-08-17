@@ -623,6 +623,47 @@ a.sc-nutshell__row:focus-visible .sc-nutshell__arrow {
 	}
 }
 
+/* --------------------------------------------------------------------------
+   Seeded submenu on mobile
+   The theme collapses its nav below 992px (Bootstrap navbar-expand-lg) and
+   does not expose the submenu inside that drawer, so the ten services were
+   unreachable on a phone. Show them inline and indented instead of as a
+   floating panel — there is no hover on touch, so an always-open list is
+   the reliable behaviour.
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 991.98px) {
+
+	#page .sc-nav-parent > .sub-menu,
+	.sc-nav-parent > .sub-menu {
+		display: block !important;
+		position: static !important;
+		float: none !important;
+		width: auto !important;
+		min-width: 0 !important;
+		max-height: none !important;
+		overflow: visible !important;
+		opacity: 1 !important;
+		visibility: visible !important;
+		transform: none !important;
+		box-shadow: none !important;
+		background: transparent !important;
+		border-top: 0 !important;
+		padding: 0 0 6px 14px !important;
+		margin: 0 !important;
+		border-left: 2px solid #65C8D0;
+	}
+
+	#page .sc-nav-parent > .sub-menu > li > a,
+	.sc-nav-parent > .sub-menu > li > a {
+		padding: 8px 0;
+		font-size: 14.5px;
+	}
+
+	/* The caret is only meaningful for a hover panel. */
+	.sc-nav-toggle { display: none; }
+}
+
 @media (prefers-reduced-motion: reduce) {
 
 	.sc-services *,
