@@ -146,6 +146,54 @@ function ssvc_seed_detail_page() {
 }
 
 /**
+ * Create the detail page automatically if it is missing.
+ *
+ * Activation is the obvious place for this, but activation only runs when
+ * someone deactivates and reactivates — updating the plugin's files does
+ * not trigger it. That left sites stuck with no detail page and the index
+ * falling back to the single-page arrangement. Running on admin_init as
+ * well means the split comes up on its own the next time wp-admin is
+ * loaded, with no manual step.
+ *
+ * Cheap: after the first successful run ssvc_detail_page_exists() short-
+ * circuits on a single get_page_by_path(). A failure is recorded so a
+ * site that genuinely can't create the page doesn't retry on every
+ * request.
+ */
+function ssvc_maybe_seed_pages() {
+	if ( wp_doing_ajax() || ( function_exists( 'wp_installing' ) && wp_installing() ) ) {
+		return;
+	}
+
+	if ( get_option( 'ssvc_autocreate_failed' ) ) {
+		return;
+	}
+
+	// Nothing to attach the child page to yet.
+	if ( ! ssvc_find_services_page() ) {
+		return;
+	}
+
+	if ( ssvc_detail_page_exists() ) {
+		return;
+	}
+
+	$id = ssvc_seed_detail_page();
+
+	if ( ! $id ) {
+		update_option( 'ssvc_autocreate_failed', 1 );
+		return;
+	}
+
+	// Point the menu at the page that now exists, and flush rewrites so
+	// /our-services/practice-areas/ resolves without a manual
+	// Settings → Permalinks → Save.
+	ssvc_seed_menu_items();
+	flush_rewrite_rules( false );
+}
+add_action( 'admin_init', 'ssvc_maybe_seed_pages' );
+
+/**
  * Where (if anywhere) the shortcode is on the page.
  *
  * @return string 'content' | 'elementor' | 'missing' | 'no-page'
