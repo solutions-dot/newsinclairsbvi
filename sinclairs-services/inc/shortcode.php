@@ -354,3 +354,63 @@ add_shortcode( 'sinclairs_services_menu', 'ssvc_shortcode_menu' );
  * closest equivalent to what it used to output.
  */
 add_shortcode( 'sinclairs_services_summary', 'ssvc_shortcode_index' );
+
+/**
+ * [sinclairs_services_list] — just the service titles, each linking to
+ * its section. For use away from the Services pages: the About page, a
+ * footer column, a sidebar.
+ *
+ * Attributes:
+ *   theme="light|dark"   dark = white text, for use on a navy/photo panel
+ *   columns="1|2"        1 (default) suits a half-width column
+ *   heading="…"          optional heading above the list
+ *
+ * Links resolve to wherever the sections actually live — the detail page
+ * when it exists, the index page when the plugin is in its single-page
+ * fallback — so this never points at a missing page.
+ */
+function ssvc_shortcode_list( $atts ) {
+	$atts = shortcode_atts( array(
+		'theme'   => 'light',
+		'columns' => '1',
+		'heading' => '',
+	), $atts, 'sinclairs_services_list' );
+
+	$sections = ssvc_section_index();
+
+	if ( ! $sections ) {
+		return '';
+	}
+
+	ssvc_enqueue_assets();
+
+	$base    = ssvc_detail_page_exists() ? ssvc_detail_page_url() : ssvc_services_page_url();
+	$dark    = ( 'dark' === $atts['theme'] );
+	$columns = ( '2' === $atts['columns'] ) ? '2' : '1';
+
+	$classes = 'sc-services sc-services--list';
+	if ( $dark ) {
+		$classes .= ' sc-services--dark';
+	}
+
+	$out = '<div class="' . esc_attr( $classes ) . '">';
+
+	if ( '' !== $atts['heading'] ) {
+		$out .= '<h3 class="sc-list__heading">' . esc_html( $atts['heading'] ) . '</h3>';
+	}
+
+	$out .= '<ul class="sc-list sc-list--cols-' . esc_attr( $columns ) . '">';
+
+	foreach ( $sections as $id => $title ) {
+		$out .= '<li class="sc-list__item">';
+		$out .= '<a class="sc-list__link" href="' . esc_url( $base . '#' . $id ) . '">';
+		$out .= '<span class="sc-list__text">' . esc_html( $title ) . '</span>';
+		$out .= '<span class="sc-list__arrow" aria-hidden="true">&rarr;</span>';
+		$out .= '</a></li>';
+	}
+
+	$out .= '</ul></div>';
+
+	return $out;
+}
+add_shortcode( 'sinclairs_services_list', 'ssvc_shortcode_list' );
