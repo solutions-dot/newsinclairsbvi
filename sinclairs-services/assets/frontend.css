@@ -701,7 +701,22 @@ a.sc-nutshell__row:focus-visible .sc-nutshell__arrow {
    (nav hover, practice-box hover).
    -------------------------------------------------------------------------- */
 
-.sc-services--list { color: inherit; }
+/* Centred as a block within its section (the About page's navy panel is
+   much wider than the list needs), while the text inside stays
+   left-aligned — text-align is never touched here, only the wrapper's
+   own position. columns="2" is meant for something wider than a
+   half-page column (e.g. a full-width footer strip), so it opts out of
+   the width cap via :has() rather than being squeezed to match. */
+.sc-services--list {
+	max-width: 560px;
+	margin-left: auto;
+	margin-right: auto;
+	color: inherit;
+}
+
+.sc-services--list:has(.sc-list--cols-2) {
+	max-width: none;
+}
 
 .sc-list__heading {
 	margin: 0 0 var(--sc-space-3, 16px);
