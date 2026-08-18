@@ -711,6 +711,9 @@ a.sc-nutshell__row:focus-visible .sc-nutshell__arrow {
 	max-width: 560px;
 	margin-left: auto;
 	margin-right: auto;
+	padding-left: 20px;
+	padding-right: 20px;
+	box-sizing: border-box;
 	color: inherit;
 }
 
