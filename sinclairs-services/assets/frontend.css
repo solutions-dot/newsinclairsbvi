@@ -691,3 +691,115 @@ a.sc-nutshell__row:focus-visible .sc-nutshell__arrow {
 		transition-duration: 0.01ms !important;
 	}
 }
+
+
+/* --------------------------------------------------------------------------
+   [sinclairs_services_list] — plain clickable title list
+   For placement away from the Services pages (About page, footer column,
+   a sidebar). theme="dark" is for a navy/photo panel — white text, teal
+   on hover/focus, matching the accent already used elsewhere on-dark
+   (nav hover, practice-box hover).
+   -------------------------------------------------------------------------- */
+
+.sc-services--list { color: inherit; }
+
+.sc-list__heading {
+	margin: 0 0 var(--sc-space-3, 16px);
+	font-size: 13px;
+	font-weight: 700;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var(--sc-teal);
+}
+
+.sc-list {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 2px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+/* Two columns is an explicit opt-in (columns="2"), used only where the
+   panel is wide enough — e.g. a full-width footer strip, not the half-page
+   column this shortcode was built for. Collapses back to one column below
+   640px regardless, so it never gets cramped on a phone. */
+.sc-list--cols-2 {
+	grid-template-columns: repeat(2, 1fr);
+	column-gap: 32px;
+}
+
+@media (max-width: 640px) {
+	.sc-list--cols-2 { grid-template-columns: 1fr; }
+}
+
+.sc-list__item { margin: 0; }
+
+.sc-list__link {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 14px;
+	padding: 14px 4px;
+	text-decoration: none;
+	color: var(--sc-navy);
+	border-bottom: 1px solid var(--sc-line);
+	transition: color .16s ease, padding-left .16s ease, border-color .16s ease;
+}
+
+.sc-list--cols-1 .sc-list__item:last-child .sc-list__link { border-bottom: 0; }
+
+.sc-list__text {
+	font-size: 16px;
+	font-weight: 600;
+	line-height: 1.35;
+}
+
+.sc-list__arrow {
+	flex: 0 0 auto;
+	font-size: 17px;
+	color: var(--sc-teal);
+	opacity: 0;
+	transform: translateX(-4px);
+	transition: opacity .16s ease, transform .16s ease;
+}
+
+.sc-list__link:hover,
+.sc-list__link:focus-visible {
+	color: var(--sc-blue);
+	padding-left: 10px;
+	outline: none;
+}
+
+.sc-list__link:focus-visible { box-shadow: inset 0 0 0 2px var(--sc-blue); }
+
+.sc-list__link:hover .sc-list__arrow,
+.sc-list__link:focus-visible .sc-list__arrow {
+	opacity: 1;
+	transform: translateX(0);
+}
+
+/* Dark variant — white text on a navy/photo panel. */
+.sc-services--dark .sc-list__heading { color: var(--sc-teal); }
+
+.sc-services--dark .sc-list__link {
+	color: #fff;
+	border-bottom-color: rgba(255, 255, 255, 0.22);
+}
+
+.sc-services--dark .sc-list__link:hover,
+.sc-services--dark .sc-list__link:focus-visible {
+	color: var(--sc-teal);
+}
+
+.sc-services--dark .sc-list__link:focus-visible {
+	box-shadow: inset 0 0 0 2px var(--sc-teal);
+}
+
+.sc-services--dark .sc-list__arrow { color: var(--sc-teal); }
+
+@media (max-width: 480px) {
+	.sc-list__text { font-size: 15px; }
+	.sc-list__link { padding: 12px 2px; }
+}

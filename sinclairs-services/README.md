@@ -68,6 +68,7 @@ The index and the detail sections live on separate pages:
 | `[sinclairs_services_nutshell]` | Just the index |
 | `[sinclairs_services_menu]` | Just the jump-to dropdown |
 | `[sinclairs_services_summary]` | Alias of `_index` — the tag the previous plugin registered, kept so the home page's existing call doesn't break |
+| `[sinclairs_services_list]` | Plain clickable title list — no descriptions, no icons. For placement away from the Services pages (About page, footer column, a sidebar) |
 
 ### Attributes
 
@@ -91,6 +92,37 @@ one-word change so they can be compared on the live page:
   heading, and the detail prose folds into the same accordion as a leading
   *Overview* panel. More compact; the trade-off is that a visitor landing
   on a section sees only headings until they click.
+
+
+## `[sinclairs_services_list]`
+
+A plain title list, each entry linking straight to its section — no
+descriptions, no icons, no jump box. Built for placement away from the
+Services pages themselves: the About page, a footer column, a sidebar.
+
+Links resolve to wherever the sections actually render — the detail page
+when it exists, the index page when the plugin is in its single-page
+fallback — using the same `ssvc_detail_page_exists()` check the index and
+nav dropdown use, so this never points at a missing page either.
+
+```
+[sinclairs_services_list]                          light text, one column
+[sinclairs_services_list theme="dark"]              white text + teal hover,
+                                                     for a navy or photo panel
+[sinclairs_services_list columns="2"]               two columns on wide
+                                                     placements; still
+                                                     collapses to one below
+                                                     640px
+[sinclairs_services_list heading="Our Services"]    optional heading above
+                                                     the list
+```
+
+`theme="dark"` is what the About page's navy half-panel uses — white
+titles, teal on hover/focus, matching the accent already used everywhere
+else on a dark background (nav hover, practice-box hover). The list is a
+single-column `<ul>` by default, so it stacks correctly on mobile with no
+extra CSS; `columns="2"` is an opt-in for a wider placement than a
+half-page column.
 
 ## Where the content lives
 
