@@ -175,6 +175,46 @@ function ssvc_seed_menu_items() {
 }
 
 /**
+ * Repoint the seeded menu items whenever the detail page's publish
+ * status changes between "publish" and anything else.
+ *
+ * ssvc_maybe_seed_pages() treats the detail page as already set up the
+ * moment it exists at all (see the comment there), so it never notices a
+ * published page being moved to draft/private, or a draft being
+ * published — either way the ten submenu items keep pointing at whatever
+ * URL was correct when they were last seeded. Left alone, a page taken
+ * offline strands the dropdown on a now-inaccessible URL until someone
+ * happens to reactivate the plugin or click "Add the submenu items"
+ * again — and that notice does not even reappear, since it is gated on
+ * the same "already seeded" option this transition doesn't touch.
+ *
+ * ssvc_seed_menu_items() is idempotent and reads the *current* status via
+ * ssvc_detail_page_exists(), so simply re-running it on any publish-
+ * boundary transition of the detail page is enough to correct it in
+ * either direction.
+ */
+function ssvc_maybe_repoint_menu_on_status_change( $new_status, $old_status, $post ) {
+	if ( $new_status === $old_status || 'page' !== $post->post_type ) {
+		return;
+	}
+
+	if ( 'publish' !== $new_status && 'publish' !== $old_status ) {
+		return;
+	}
+
+	ssvc_reset_detail_page_cache();
+
+	$detail = ssvc_find_detail_page();
+
+	if ( ! $detail || (int) $detail->ID !== (int) $post->ID ) {
+		return;
+	}
+
+	ssvc_seed_menu_items();
+}
+add_action( 'transition_post_status', 'ssvc_maybe_repoint_menu_on_status_change', 10, 3 );
+
+/**
  * Activation hook target. Wrapped so a site with no menu yet doesn't
  * fatal — it simply seeds nothing, and the admin notice below offers to
  * seed once a menu exists.

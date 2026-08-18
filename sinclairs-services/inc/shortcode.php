@@ -329,19 +329,28 @@ add_shortcode( 'sinclairs_services', 'ssvc_shortcode_services' );
 
 /**
  * [sinclairs_services_nutshell] — the index alone, for use anywhere.
+ *
+ * Unlike [sinclairs_services_index], this can be placed on a page that
+ * has no sections of its own to fall back to (the About page, say), so a
+ * missing/unpublished detail page falls back to the index page's URL —
+ * not to a bare "#anchor" — same as [sinclairs_services_list].
  */
 function ssvc_shortcode_nutshell() {
 	ssvc_enqueue_assets();
-	return ssvc_open() . ssvc_nutshell_markup( ssvc_detail_page_url() ) . '</div>';
+	$base = ssvc_detail_page_exists() ? ssvc_detail_page_url() : ssvc_services_page_url();
+	return ssvc_open() . ssvc_nutshell_markup( $base ) . '</div>';
 }
 add_shortcode( 'sinclairs_services_nutshell', 'ssvc_shortcode_nutshell' );
 
 /**
- * [sinclairs_services_menu] — the jump box alone, for use anywhere.
+ * [sinclairs_services_menu] — the jump box alone, for use anywhere. See
+ * ssvc_shortcode_nutshell() above for why the fallback is the index page,
+ * not a bare anchor.
  */
 function ssvc_shortcode_menu() {
 	ssvc_enqueue_assets();
-	return ssvc_open() . ssvc_menu_markup( ssvc_detail_page_url() ) . '</div>';
+	$base = ssvc_detail_page_exists() ? ssvc_detail_page_url() : ssvc_services_page_url();
+	return ssvc_open() . ssvc_menu_markup( $base ) . '</div>';
 }
 add_shortcode( 'sinclairs_services_menu', 'ssvc_shortcode_menu' );
 

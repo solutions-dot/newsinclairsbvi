@@ -90,6 +90,14 @@ function ssvc_find_detail_page() {
 }
 
 /**
+ * Clear the per-request lookup cache — used after creating the detail
+ * page, and before re-checking it right after its status just changed.
+ */
+function ssvc_reset_detail_page_cache() {
+	unset( $GLOBALS['ssvc_detail_cache'] );
+}
+
+/**
  * Is the detail page there AND publicly viewable?
  *
  * Callers must check this before linking to it — every public-facing
@@ -155,7 +163,7 @@ function ssvc_seed_detail_page() {
 		return 0;
 	}
 
-	unset( $GLOBALS['ssvc_detail_cache'] );
+	ssvc_reset_detail_page_cache();
 
 	return (int) $id;
 }
