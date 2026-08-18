@@ -90,15 +90,38 @@ function ssvc_find_detail_page() {
 }
 
 /**
- * Does the detail page actually exist?
+ * Clear the per-request lookup cache — used after creating the detail
+ * page, and before re-checking it right after its status just changed.
+ */
+function ssvc_reset_detail_page_cache() {
+	unset( $GLOBALS['ssvc_detail_cache'] );
+}
+
+/**
+ * Is the detail page there AND publicly viewable?
  *
- * Callers must check this before linking to it. ssvc_detail_page_url()
- * falls back to a guessed path when the page is absent, which is fine
- * for building a URL but must never be used to emit live links — doing
- * so produces a page full of 404s.
+ * Callers must check this before linking to it — every public-facing
+ * decision (index/list fallback, nav menu target) goes through here.
+ * ssvc_detail_page_url() falls back to a guessed path when the page is
+ * absent, which is fine for building a URL but must never be used to
+ * emit live links — doing so produces a page full of 404s.
+ *
+ * "Exists" alone isn't enough: get_page_by_path() has no status filter,
+ * so it happily returns a draft or private page. Without the publish
+ * check here, a client who creates the practice-areas page as a draft
+ * (to build it out before going live) would have public visitors sent
+ * to a page they can't see — the exact same class of bug as the missing
+ * page, just one step later. Deliberately NOT used by the "have we
+ * already run setup" checks (ssvc_maybe_seed_pages(), ssvc_seed_detail_page())
+ * — those use ssvc_find_detail_page() directly and must keep matching a
+ * draft/private page too, or they would recreate it as a duplicate, or
+ * re-flush rewrite rules on every admin page load while the draft sits
+ * unpublished.
  */
 function ssvc_detail_page_exists() {
-	return (bool) ssvc_find_detail_page();
+	$page = ssvc_find_detail_page();
+
+	return (bool) ( $page && 'publish' === $page->post_status );
 }
 
 /**
@@ -140,7 +163,7 @@ function ssvc_seed_detail_page() {
 		return 0;
 	}
 
-	unset( $GLOBALS['ssvc_detail_cache'] );
+	ssvc_reset_detail_page_cache();
 
 	return (int) $id;
 }
@@ -155,10 +178,10 @@ function ssvc_seed_detail_page() {
  * well means the split comes up on its own the next time wp-admin is
  * loaded, with no manual step.
  *
- * Cheap: after the first successful run ssvc_detail_page_exists() short-
- * circuits on a single get_page_by_path(). A failure is recorded so a
- * site that genuinely can't create the page doesn't retry on every
- * request.
+ * Cheap: after the first successful run ssvc_find_detail_page() short-
+ * circuits on a single get_page_by_path() (status-agnostic — see the
+ * comment on the check itself for why). A failure is recorded so a site
+ * that genuinely can't create the page doesn't retry on every request.
  */
 function ssvc_maybe_seed_pages() {
 	if ( wp_doing_ajax() || ( function_exists( 'wp_installing' ) && wp_installing() ) ) {
@@ -174,7 +197,14 @@ function ssvc_maybe_seed_pages() {
 		return;
 	}
 
-	if ( ssvc_detail_page_exists() ) {
+	// Status-agnostic on purpose: this is "have we already done the
+	// one-time creation," not "is it safe to link the public to it." A
+	// draft or private page at this path must still count as already
+	// created, or every admin page load would call ssvc_seed_detail_page()
+	// (harmless — it finds the existing page) followed by
+	// flush_rewrite_rules() (not harmless — expensive, and not meant to
+	// run on every request) for as long as the page stays unpublished.
+	if ( ssvc_find_detail_page() ) {
 		return;
 	}
 
@@ -270,21 +300,36 @@ function ssvc_page_admin_notice() {
 		return;
 	}
 
-	// The detail page missing is the more urgent problem: the index will
-	// still render, but its rows have nowhere to go, so the plugin falls
-	// back to showing the sections inline until this is resolved.
+	// The detail page not being publicly viewable is the more urgent
+	// problem: the index will still render, but its rows have nowhere
+	// public to go, so the plugin falls back to showing the sections
+	// inline until this is resolved. Two distinct causes get two distinct
+	// messages, because the fix for each is different — creating a page
+	// that already exists as a draft would be a silent no-op, and telling
+	// the admin to "publish it" when nothing exists yet would send them
+	// looking for a page that isn't there.
 	if ( ! ssvc_detail_page_exists() ) {
-		$url = wp_nonce_url(
-			admin_url( 'admin-post.php?action=ssvc_seed_menu' ),
-			'ssvc_seed_menu'
-		);
+		$existing = ssvc_find_detail_page();
+
 		echo '<div class="notice notice-warning"><p><strong>';
 		esc_html_e( 'Sinclairs Services', 'sinclairs-services' );
 		echo '</strong><br>';
-		esc_html_e( 'The practice-areas page does not exist, so the index is showing all ten sections inline instead of linking to them.', 'sinclairs-services' );
-		echo ' <a class="button button-primary" href="' . esc_url( $url ) . '">';
-		esc_html_e( 'Create it now', 'sinclairs-services' );
-		echo '</a></p></div>';
+
+		if ( $existing ) {
+			esc_html_e( 'The practice-areas page exists but is not published, so the index is showing all ten sections inline instead of linking to them.', 'sinclairs-services' );
+			echo ' <a class="button button-primary" href="' . esc_url( get_edit_post_link( $existing->ID ) ) . '">';
+			esc_html_e( 'Edit the page', 'sinclairs-services' );
+			echo '</a></p></div>';
+		} else {
+			$url = wp_nonce_url(
+				admin_url( 'admin-post.php?action=ssvc_seed_menu' ),
+				'ssvc_seed_menu'
+			);
+			esc_html_e( 'The practice-areas page does not exist, so the index is showing all ten sections inline instead of linking to them.', 'sinclairs-services' );
+			echo ' <a class="button button-primary" href="' . esc_url( $url ) . '">';
+			esc_html_e( 'Create it now', 'sinclairs-services' );
+			echo '</a></p></div>';
+		}
 	}
 
 	$status = ssvc_page_shortcode_status();
