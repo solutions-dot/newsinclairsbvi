@@ -132,7 +132,14 @@
 
 .sbvis__layer--buttons { width: auto; }
 
-.sbvis__heading {
+/*
+ * .sbvis .sbvis__heading rather than the bare class: this is an <h2>,
+ * and a theme very commonly carries its own "h2 { font-size: … }" or
+ * ".entry-content h2" rule. A two-class chain outranks a single tag or
+ * class selector without resorting to !important, so the slide's own
+ * size wins regardless of what the theme declares for headings generally.
+ */
+.sbvis .sbvis__heading {
 	margin: 0;
 	font-family: inherit;
 	font-weight: 700;
@@ -336,7 +343,18 @@
  * frame enough that an off-centre anchor reads as misplaced.
  */
 @media (max-width: 1024px) {
-	.sbvis--hm-ratio .sbvis__stage { aspect-ratio: 16 / 9; height: auto; }
+	/*
+	 * A 16:9 strip at phone width is short — 375px wide gives roughly
+	 * 211px tall — and centred heading + sub-heading text is frequently
+	 * taller than that. Because the text layer is centred with
+	 * transform: translate(-50%, -50%), overflowing content pushes
+	 * upward past the top of the stage rather than wrapping or being
+	 * clipped, which reads as the heading floating above the image. A
+	 * floor stops the box getting shorter than text reasonably needs,
+	 * while an image that is naturally taller than the floor still just
+	 * uses its own 16:9 height.
+	 */
+	.sbvis--hm-ratio .sbvis__stage { aspect-ratio: 16 / 9; height: auto; min-height: 340px; }
 	.sbvis--hm-fixed .sbvis__stage { aspect-ratio: auto; height: var(--sbvis-h-mobile, 480px); }
 	.sbvis--hm-viewport .sbvis__stage { aspect-ratio: auto; height: 100svh; }
 
