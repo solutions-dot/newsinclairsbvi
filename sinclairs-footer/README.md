@@ -36,6 +36,7 @@ that stays as it is.
 [sinclairs_footer headings="no"]     drop the column headings
 [sinclairs_footer align="center"]    centre each column's block in its
                                      cell (text stays ranged left)
+[sinclairs_footer collapse="no"]     stop the columns folding on mobile
 [sinclairs_footer padding="sm"]      less space above and below; also
                                      "none", "lg", or an exact length
                                      such as padding="12px"
@@ -53,7 +54,7 @@ Also available as a template tag:
 |---|---|
 | Desktop | Three columns, sized to their content rather than equal thirds — the hours column is short and would leave a hole in the middle at `1fr`, while the address needs the room |
 | ≤ 900px | Two columns, with the contact block spanning the full width beneath, since the address is the long one and would otherwise wrap awkwardly |
-| ≤ 600px | One centred column. The contact and hours rows stay left-aligned inside it — an icon plus two lines of text centres badly, and a centred address wraps to a ragged triangle |
+| ≤ 600px | One column, and each section folds under its heading — tap to open. The first is open on arrival so the footer is not three bare words. Each block is centred as a unit with its contents ranged left, and the three share a width so the arrows and icons line up down the page |
 
 ## Changing the content
 
@@ -72,6 +73,14 @@ Or edit `inc/content.php` directly.
 - No background colour of its own: it takes the colour of the section it
   sits in, so the existing teal panel keeps working.
 - No font registered — it inherits the theme's typeface.
+- The mobile accordion is native `details` / `summary`. The columns
+  carry `open` in the markup and the script only ever *closes* them once
+  it has confirmed the viewport is narrow — so with JavaScript off every
+  column stays open, rather than a visitor being left with a footer they
+  cannot open. On desktop the summary is inert, so a click on a heading
+  cannot fold a column away where nothing would re-open it. A section
+  someone has opened on their phone is not shut again by a resize, an
+  on-screen keyboard, or the address bar collapsing.
 - The `screen-reader-text` class is defined in the plugin's own CSS
   rather than relied on from the theme: without a definition the
   "Telephone:" / "Address:" labels would render as visible stray words.

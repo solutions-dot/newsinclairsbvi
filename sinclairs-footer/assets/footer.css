@@ -172,6 +172,29 @@ a.sbvif__rowtext:focus-visible {
    which is where flex-start alone would put it. */
 .sbvif__row .sbvif__icon { margin-top: 0.22em; }
 
+/* ---------- Collapsible columns ----------
+   On desktop the <details> is not a control at all: the summary is
+   inert, its chevron is hidden, and the body is always visible. It only
+   becomes an accordion at the mobile breakpoint below. */
+
+.sbvif__fold > summary {
+	list-style: none;
+	cursor: default;
+}
+
+.sbvif__fold > summary::-webkit-details-marker { display: none; }
+.sbvif__fold > summary::marker { content: ""; }
+
+.sbvif__chevron { display: none; }
+
+/* Desktop: neutralise the disclosure entirely. Without this a click on
+   the heading would fold a column away on a wide screen, where the
+   script has no reason to re-open it. */
+@media (min-width: 601px) {
+	.sbvif__fold > summary { pointer-events: none; }
+	.sbvif__foldbody { display: block !important; }
+}
+
 /* ---------- Centred variant ----------
    Centres each column's block within its cell, but leaves the text
    inside it ranged left. Centring the text itself is what goes wrong in
@@ -254,4 +277,47 @@ a.sbvif__rowtext:focus-visible {
 		justify-content: flex-start;
 		padding: 9px 0;
 	}
+
+	/* Now the heading is a control: it needs to look tappable, fill the
+	   width so the whole strip is the target, and carry a chevron. */
+	.sbvif--collapsible .sbvif__fold > summary {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 10px;
+		cursor: pointer;
+		padding: 12px 0;
+		margin-bottom: 0;
+		-webkit-tap-highlight-color: transparent;
+	}
+
+	.sbvif--collapsible .sbvif__fold > summary:focus-visible {
+		outline: 2px solid currentColor;
+		outline-offset: 2px;
+	}
+
+	.sbvif--collapsible .sbvif__chevron {
+		display: block;
+		width: 8px;
+		height: 8px;
+		border-right: 2px solid currentColor;
+		border-bottom: 2px solid currentColor;
+		transform: rotate(45deg) translate(-1px, -1px);
+		transition: transform 200ms ease;
+		opacity: 0.8;
+	}
+
+	.sbvif--collapsible .sbvif__fold[open] > summary .sbvif__chevron {
+		transform: rotate(225deg) translate(-1px, -1px);
+	}
+
+	.sbvif--collapsible .sbvif__foldbody { padding: 4px 0 12px; }
+
+	/* Tighter, since each closed column is now one row rather than a
+	   block — the old gap left the three headings floating apart. */
+	.sbvif--collapsible .sbvif__grid { gap: 4px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.sbvif__chevron { transition: none; }
 }

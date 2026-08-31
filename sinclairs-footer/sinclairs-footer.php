@@ -3,7 +3,7 @@
  * Plugin Name:       Sinclairs (BVI) — Footer
  * Plugin URI:        https://sinclairsbvi.com/
  * Description:       The site footer as one shortcode, <code>[sinclairs_footer]</code>: navigation, opening hours and contact details in three balanced columns, each with an icon. Phone numbers dial, the email opens a mail client and the address opens a map. Does not include the copyright bar.
- * Version:           1.2.0
+ * Version:           1.3.0
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            Sinclairs (BVI)
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SBVIF_VERSION', '1.2.0' );
+define( 'SBVIF_VERSION', '1.3.0' );
 define( 'SBVIF_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SBVIF_URI', plugin_dir_url( __FILE__ ) );
 
@@ -41,6 +41,7 @@ function sbvif_asset_version( $relative_path ) {
 add_action( 'wp_enqueue_scripts', 'sbvif_register_assets' );
 function sbvif_register_assets() {
 	wp_register_style( 'sbvif', SBVIF_URI . 'assets/footer.css', array(), sbvif_asset_version( 'assets/footer.css' ) );
+	wp_register_script( 'sbvif', SBVIF_URI . 'assets/footer.js', array(), sbvif_asset_version( 'assets/footer.js' ), true );
 }
 
 /**
@@ -51,6 +52,8 @@ function sbvif_register_assets() {
  */
 function sbvif_enqueue_assets() {
 	sbvif_register_assets();
+
+	wp_enqueue_script( 'sbvif' );
 
 	if ( wp_style_is( 'sbvif', 'done' ) ) {
 		return;
