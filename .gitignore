@@ -1,0 +1,6 @@
+# Build artefacts: the installable plugin zips are generated from the
+# plugin folders on demand, so the folder is the source of truth and the
+# zip should not be committed alongside it.
+/sinclairs-slider.zip
+/sinclairs-services.zip
+/sinclairs-bvi.zip
