@@ -256,9 +256,9 @@ function ssvc_collapse_markup() {
 		$out .= '</summary>';
 
 		$out .= '<div class="sc-collapse__panel">';
-		if ( ! empty( $section['brief'] ) ) {
-			$out .= '<p class="sc-collapse__brief">' . esc_html( $section['brief'] ) . '</p>';
-		}
+		// No 'brief' here: the bar's title already says which service
+		// this is, and the section's own opening line follows straight
+		// after, so the summary only repeated what sat either side of it.
 		$out .= '<div class="sc-section__prose">' . $body . '</div>';
 		$out .= ssvc_render_faqs( $section['faqs'], $section['id'] );
 		// No "All services" link here: the bars are the index. Every
