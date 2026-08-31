@@ -214,6 +214,61 @@ function ssvc_sections_markup( $accordion = false, $back_url = '' ) {
 	return $out;
 }
 
+/**
+ * The ten services as a stack of collapsed bars — the arrangement the
+ * client asked for: every service visible as a title, nothing expanded
+ * until it is clicked.
+ *
+ * Built on native <details>/<summary> rather than divs and JS. With
+ * JavaScript off the bars still open and close, the browser's own
+ * find-in-page can reach inside a closed one, and keyboard and screen
+ * reader behaviour is the platform's rather than something re-invented
+ * here. frontend.js only adds what the element cannot do by itself:
+ * closing the others, and honouring a deep link.
+ *
+ * The section id stays on the <details> so every existing link — the
+ * nav dropdown, the home page, the jump box, [sinclairs_services_list]
+ * — keeps resolving to the same anchor it always did.
+ */
+function ssvc_collapse_markup( $back_url = '' ) {
+	$out = '<div class="sc-collapses" data-sc-collapses>';
+
+	foreach ( ssvc_sections() as $i => $section ) {
+		$number = str_pad( (string) ( $i + 1 ), 2, '0', STR_PAD_LEFT );
+		$body   = ssvc_render_body( $section['body'] );
+		$icon   = ssvc_icon( $section['id'] );
+
+		$out .= '<details class="sc-collapse" id="' . esc_attr( $section['id'] ) . '" data-sc-collapse>';
+
+		$out .= '<summary class="sc-collapse__bar">';
+		if ( $icon ) {
+			// Plugin-authored markup from inc/icons.php, not user input.
+			$out .= '<span class="sc-collapse__icon">' . $icon . '</span>';
+		}
+		$out .= '<span class="sc-collapse__num">' . esc_html( $number ) . '</span>';
+		$out .= '<span class="sc-collapse__title">' . esc_html( $section['title'] ) . '</span>';
+		$out .= '<span class="sc-collapse__chevron" aria-hidden="true"></span>';
+		$out .= '</summary>';
+
+		$out .= '<div class="sc-collapse__panel">';
+		if ( ! empty( $section['brief'] ) ) {
+			$out .= '<p class="sc-collapse__brief">' . esc_html( $section['brief'] ) . '</p>';
+		}
+		$out .= '<div class="sc-section__prose">' . $body . '</div>';
+		$out .= ssvc_render_faqs( $section['faqs'], $section['id'] );
+		if ( $back_url ) {
+			$out .= '<a class="sc-section__top" href="' . esc_url( $back_url ) . '">' . esc_html__( 'All services', 'sinclairs-services' ) . '</a>';
+		}
+		$out .= '</div>';
+
+		$out .= '</details>';
+	}
+
+	$out .= '</div>';
+
+	return $out;
+}
+
 function ssvc_open( $modifier = '' ) {
 	return '<div class="sc-services' . ( $modifier ? ' sc-services--' . esc_attr( $modifier ) : '' ) . '">';
 }
@@ -259,19 +314,29 @@ add_shortcode( 'sinclairs_services_index', 'ssvc_shortcode_index' );
  */
 function ssvc_shortcode_detail( $atts ) {
 	$atts = shortcode_atts( array(
-		'layout' => 'rail',
+		// 'collapse' (default) — every service a closed bar, one open at
+		// a time. 'rail' and 'accordion' are the earlier layouts, kept
+		// so an existing page can pin the arrangement it already has.
+		'layout' => 'collapse',
 		'jump'   => 'no',
 	), $atts, 'sinclairs_services_detail' );
 
 	ssvc_enqueue_assets();
 
-	$out = ssvc_open( 'accordion' === $atts['layout'] ? 'accordion' : 'rail' );
+	$layout = in_array( $atts['layout'], array( 'collapse', 'rail', 'accordion' ), true ) ? $atts['layout'] : 'collapse';
+
+	$out = ssvc_open( $layout );
 
 	if ( 'yes' === $atts['jump'] ) {
 		$out .= ssvc_menu_markup();
 	}
 
-	$out .= ssvc_sections_markup( 'accordion' === $atts['layout'], ssvc_services_page_url() );
+	if ( 'collapse' === $layout ) {
+		$out .= ssvc_collapse_markup( ssvc_services_page_url() );
+	} else {
+		$out .= ssvc_sections_markup( 'accordion' === $layout, ssvc_services_page_url() );
+	}
+
 	$out .= '</div>';
 
 	return $out;
@@ -287,7 +352,7 @@ add_shortcode( 'sinclairs_services_detail', 'ssvc_shortcode_detail' );
  */
 function ssvc_shortcode_services( $atts ) {
 	$atts = shortcode_atts( array(
-		'layout'   => 'rail',   // 'rail' (default) or 'accordion'
+		'layout'   => 'rail',   // 'rail' (default), 'collapse' or 'accordion'
 		// Off by default: the page already carries its own "OUR EXPERTISE"
 		// header above the shortcode, so rendering ours repeats it.
 		'intro'    => 'no',
@@ -297,10 +362,11 @@ function ssvc_shortcode_services( $atts ) {
 
 	ssvc_enqueue_assets();
 
+	$collapse  = ( 'collapse' === $atts['layout'] );
 	$accordion = ( 'accordion' === $atts['layout'] );
 	$nutshell  = ( 'yes' === $atts['nutshell'] );
 
-	$out = ssvc_open( $accordion ? 'accordion' : 'rail' );
+	$out = ssvc_open( $collapse ? 'collapse' : ( $accordion ? 'accordion' : 'rail' ) );
 
 	if ( 'yes' === $atts['intro'] ) {
 		$intro = ssvc_page_intro();
@@ -320,7 +386,11 @@ function ssvc_shortcode_services( $atts ) {
 	}
 
 	// Back link only where there is an index above to go back to.
-	$out .= ssvc_sections_markup( $accordion, $nutshell ? '#sc-nutshell' : '' );
+	if ( $collapse ) {
+		$out .= ssvc_collapse_markup( $nutshell ? '#sc-nutshell' : '' );
+	} else {
+		$out .= ssvc_sections_markup( $accordion, $nutshell ? '#sc-nutshell' : '' );
+	}
 	$out .= '</div>';
 
 	return $out;

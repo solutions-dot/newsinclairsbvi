@@ -73,25 +73,43 @@ The index and the detail sections live on separate pages:
 ### Attributes
 
 ```
-[sinclairs_services layout="rail"]        default
-[sinclairs_services layout="accordion"]   alternative arrangement
-[sinclairs_services nutshell="no"]        hide the index
-[sinclairs_services jump="no"]            hide the jump box
-[sinclairs_services intro="no"]           hide the "Our Expertise" header
+[sinclairs_services_detail layout="collapse"]   default on the detail page
+[sinclairs_services_detail layout="rail"]       the earlier arrangement
+[sinclairs_services layout="rail"]              default on the single page
+[sinclairs_services nutshell="no"]              hide the index
+[sinclairs_services jump="no"]                  hide the jump box
+[sinclairs_services intro="no"]                 hide the "Our Expertise" header
 ```
 
-**`layout` is the one worth knowing about.** Both arrangements were
-discussed with the client; this ships with `rail` and the other is a
-one-word change so they can be compared on the live page:
+**`layout` is the one worth knowing about.** Three arrangements:
 
-- **`rail`** (default) — the short "in a nutshell" wording sits in a
-  sticky side rail beside the service name; the detail prose from the Word
-  documents stays visible; the Q&As collapse under one *Information &
-  FAQs* heading.
+- **`collapse`** — every service is a closed navy bar; clicking one
+  expands it and closes whichever was open. The service's prose and its
+  *Information & FAQs* sit inside the expanded panel, the FAQs still
+  collapsed individually. This is the default for
+  `[sinclairs_services_detail]`.
+- **`rail`** — the short "in a nutshell" wording sits in a sticky side
+  rail beside the service name; the detail prose from the Word documents
+  stays visible; the Q&As collapse under one *Information & FAQs*
+  heading. Still the default for `[sinclairs_services]`.
 - **`accordion`** — the short wording becomes a standfirst under the
   heading, and the detail prose folds into the same accordion as a leading
-  *Overview* panel. More compact; the trade-off is that a visitor landing
-  on a section sees only headings until they click.
+  *Overview* panel.
+
+### Deep links into a collapsed service
+
+Every existing link keeps working and now expands what it points at.
+`/our-services/#trade-marks` — from the nav dropdown, the home page, the
+jump box or `[sinclairs_services_list]` — opens Trade Marks, closes the
+others, and scrolls to it. `/our-services/#trade-marks-faq-2` opens that
+FAQ *and* the service containing it, since a FAQ revealed inside a
+collapsed parent would be invisible.
+
+The bars are native `<details>` elements, so they open and close with
+JavaScript off, browser find-in-page can reach inside a closed one, and
+keyboard and screen-reader behaviour is the platform's own. The script
+only adds what the element cannot do alone: closing the siblings, and
+honouring a deep link.
 
 
 ## `[sinclairs_services_list]`
