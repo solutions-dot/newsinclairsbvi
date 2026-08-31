@@ -612,10 +612,20 @@ a.sc-nutshell__row:focus-visible .sc-nutshell__arrow {
 .sc-nav-parent { position: relative; }
 
 /*
+ * Wraps just the link and its caret, sized to that row alone. On mobile
+ * the seeded submenu is a sibling block inside the same <li>, and once
+ * it opens the <li> grows to the height of all ten rows — the toggle
+ * needs a positioning context that stays row-sized regardless, or
+ * top: 50% against the <li> would centre it against that whole expanded
+ * height instead of the row it belongs to.
+ */
+.sc-nav-row { position: relative; display: block; }
+
+/*
  * Caret next to "Our Services". Hover opens the panel via CSS; this
  * button exists for touch and keyboard, where hover never fires.
  *
- * Positioned absolutely against .sc-nav-parent rather than left inline
+ * Positioned absolutely against .sc-nav-row rather than left inline
  * next to the link: the theme's own "Our Services" <a> renders as a
  * full-width block (matching every other row in its mobile drawer), so
  * a button placed in normal flow right after it has no room left on
@@ -798,8 +808,10 @@ a.sc-nutshell__row:focus-visible .sc-nutshell__arrow {
 		transform: none;
 	}
 
-	/* Room for the absolutely positioned toggle at the right of the row. */
-	.sc-nav-parent > a { padding-right: 44px; }
+	/* Room for the absolutely positioned toggle at the right of the row.
+	   The link now nests inside .sc-nav-row rather than being a direct
+	   child of .sc-nav-parent, so the selector follows it there. */
+	.sc-nav-row > a { padding-right: 44px; }
 }
 
 /* --------------------------------------------------------------------------
@@ -860,8 +872,11 @@ a.sc-nutshell__row:focus-visible .sc-nutshell__arrow {
 /* On desktop the panel opens on hover, so the caret is decorative only
    and the theme usually draws its own. Hidden to avoid two carets. */
 @media (min-width: 992px) {
-	.sc-nav-parent > .sub-menu ~ .sc-nav-toggle,
-	.sc-nav-parent > .sc-nav-toggle { display: none; }
+	/* Descendant, not direct child: the toggle now nests inside
+	   .sc-nav-row rather than being a direct child of .sc-nav-parent,
+	   and a descendant selector keeps this correct regardless of how
+	   deep it sits. */
+	.sc-nav-parent .sc-nav-toggle { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -300,7 +300,12 @@
 				return;
 			}
 
-			var link = event.target.closest('.sc-nav-parent > a');
+			// .sc-nav-row > a, not .sc-nav-parent > a: the link's direct
+			// parent is the row wrapper (see inc/nav.php), so this must
+			// follow it there or the click falls through to the theme's
+			// own delegated handler, which is exactly what this exists
+			// to prevent.
+			var link = event.target.closest('.sc-nav-row > a');
 
 			if (!link) {
 				return;

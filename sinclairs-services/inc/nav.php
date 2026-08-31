@@ -114,15 +114,27 @@ function ssvc_nav_menu_start_el( $item_output, $item, $depth, $args ) {
 	// The caret is rendered whether or not the injected panel is — the
 	// seeded submenu needs it too, because on mobile that submenu starts
 	// collapsed and the parent link navigates rather than toggling.
-	$output = $item_output
+	//
+	// The link and the caret are wrapped in their own .sc-nav-row rather
+	// than positioned against .sc-nav-parent (the <li>) directly: on
+	// mobile the seeded submenu is a sibling inside that same <li>, and
+	// once it opens the <li> grows to the height of all ten rows. A
+	// toggle centred with top: 50% against the <li> would then centre
+	// against that whole expanded height and land in the middle of the
+	// submenu instead of beside the "Our Services" text. .sc-nav-row
+	// sizes to the link alone, so the toggle's position never depends on
+	// whether the submenu below it happens to be open.
+	$row = '<span class="sc-nav-row">'
+		. $item_output
 		. '<button type="button" class="sc-nav-toggle" aria-expanded="false" aria-label="'
 		. esc_attr__( 'Toggle the Our Services menu', 'sinclairs-services' )
-		. '"><span aria-hidden="true"></span></button>';
+		. '"><span aria-hidden="true"></span></button>'
+		. '</span>';
 
 	if ( ssvc_nav_dropdown_enabled() ) {
-		$output .= ssvc_nav_dropdown_markup();
+		$row .= ssvc_nav_dropdown_markup();
 	}
 
-	return $output;
+	return $row;
 }
 add_filter( 'walker_nav_menu_start_el', 'ssvc_nav_menu_start_el', 10, 4 );
