@@ -1,0 +1,132 @@
+/* Slide editor styling — kept close to core admin conventions so it
+   feels like part of WordPress rather than a bolted-on panel. */
+
+.sbvis-box { padding: 4px 0 8px; }
+
+.sbvis-hint {
+	margin: 0 0 14px;
+	padding: 10px 14px;
+	background: #f0f6fc;
+	border-left: 4px solid #2271b1;
+	color: #1d2327;
+	max-width: 780px;
+}
+
+/* ---------- Focal point picker ---------- */
+
+.sbvis-focal {
+	position: relative;
+	display: block;
+	max-width: 640px;
+	background: #f0f0f1 repeating-linear-gradient(45deg, #e8e8e9 0 10px, #f0f0f1 10px 20px);
+	border: 1px solid #dcdcde;
+	border-radius: 6px;
+	overflow: hidden;
+	cursor: crosshair;
+	aspect-ratio: 16 / 9;
+}
+
+.sbvis-focal:focus-visible { outline: 2px solid #2271b1; outline-offset: 2px; }
+
+.sbvis-focal img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.sbvis-focal__empty {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 0;
+	color: #646970;
+}
+
+/* Two rings in opposite colours so the marker stays visible on both a
+   bright sky and a dark suit. */
+.sbvis-focal__marker {
+	position: absolute;
+	width: 26px;
+	height: 26px;
+	margin: -13px 0 0 -13px;
+	border-radius: 50%;
+	border: 2px solid #fff;
+	box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.65), 0 2px 8px rgba(0, 0, 0, 0.4);
+	pointer-events: none;
+}
+
+.sbvis-focal__marker::after {
+	content: "";
+	position: absolute;
+	inset: 9px;
+	background: #fff;
+	border-radius: 50%;
+}
+
+.sbvis-focal__readout { color: #646970; margin: 6px 0 0; }
+
+.sbvis-image-field__actions { margin: 12px 0 4px; display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* ---------- 9-point anchor grid ---------- */
+
+.sbvis-anchor-grid {
+	display: grid;
+	grid-template-columns: repeat(3, 34px);
+	grid-template-rows: repeat(3, 34px);
+	gap: 4px;
+	margin-bottom: 10px;
+}
+
+.sbvis-anchor {
+	position: relative;
+	display: block;
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+	background: #fff;
+	cursor: pointer;
+	transition: border-color 120ms ease, background-color 120ms ease;
+}
+
+.sbvis-anchor:hover { border-color: #2271b1; }
+
+.sbvis-anchor input {
+	position: absolute;
+	opacity: 0;
+	pointer-events: none;
+}
+
+.sbvis-anchor span[aria-hidden] {
+	position: absolute;
+	inset: 0;
+	margin: auto;
+	width: 10px;
+	height: 10px;
+	border-radius: 2px;
+	background: #c3c4c7;
+}
+
+.sbvis-anchor.is-active,
+.sbvis-anchor:has(input:checked) {
+	border-color: #2271b1;
+	background: #f0f6fc;
+}
+
+.sbvis-anchor.is-active span[aria-hidden],
+.sbvis-anchor:has(input:checked) span[aria-hidden] { background: #2271b1; }
+
+.sbvis-anchor:has(input:focus-visible) { outline: 2px solid #2271b1; outline-offset: 2px; }
+
+.sbvis-nudge { display: flex; gap: 18px; flex-wrap: wrap; align-items: center; margin: 0; }
+.sbvis-nudge label { color: #646970; }
+
+.sbvis-conditional { margin-top: 12px; }
+.sbvis-inline-label { color: #646970; margin-left: 6px; }
+
+.sbvis-box input[type="range"] { vertical-align: middle; width: 220px; max-width: 100%; }
+.sbvis-box output { display: inline-block; min-width: 4.5em; font-weight: 600; }
+.sbvis-box input[type="color"] { vertical-align: middle; width: 44px; height: 30px; padding: 2px; }
+
+.sbvis-settings .form-table th { width: 220px; }
