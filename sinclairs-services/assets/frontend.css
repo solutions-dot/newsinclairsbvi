@@ -29,6 +29,12 @@
 	--sc-line:    rgba(1, 87, 151, 0.16);
 	--sc-line-sc: rgba(1, 87, 151, 0.30);
 
+	/* One body-copy size, shared by the section prose and the FAQs so
+	   the two cannot drift apart: the FAQs used to inherit the theme's
+	   page size while the prose set its own, which left the questions
+	   and answers rendering at a different size from the text above. */
+	--sc-body-size: clamp(15.5px, 1.15vw, 17px);
+
 	--sc-radius:  10px;
 	--sc-gap:     clamp(24px, 3vw, 44px);
 
@@ -484,7 +490,7 @@ a.sc-nutshell__row:focus-visible .sc-nutshell__arrow {
 /* Prose column */
 
 .sc-section__prose {
-	font-size: clamp(15.5px, 1.15vw, 17px);
+	font-size: var(--sc-body-size);
 }
 
 .sc-section__lede {
@@ -507,7 +513,10 @@ a.sc-nutshell__row:focus-visible .sc-nutshell__arrow {
    Information & FAQs accordion
    -------------------------------------------------------------------------- */
 
-.sc-faqs { margin-top: 32px; }
+.sc-faqs {
+	margin-top: 32px;
+	font-size: var(--sc-body-size);
+}
 
 .sc-services .sc-faqs__heading {
 	margin: 0 0 14px;
