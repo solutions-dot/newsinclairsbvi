@@ -59,6 +59,7 @@ function sbvis_slide_defaults() {
 		'btn_style'     => 'solid',
 		'btn_size'      => 'medium',
 		'btn_color'     => '',
+		'btn_custom'    => 0,
 		'btn_text'      => '#ffffff',
 		'btn_follow'    => 1,
 		'btn_anchor'    => 'middle-center',
@@ -279,9 +280,10 @@ function sbvis_box_buttons( $post ) {
 						}
 						?>
 					</select>
+					<label class="sbvis-inline-label"><input type="checkbox" name="<?php echo esc_attr( sbvis_field_name( 'btn_custom' ) ); ?>" value="1" <?php checked( $slide['btn_custom'], 1 ); ?> /> <?php esc_html_e( 'Use a custom colour for this slide', 'sinclairs-slider' ); ?></label>
 					<input type="color" name="<?php echo esc_attr( sbvis_field_name( 'btn_color' ) ); ?>" value="<?php echo esc_attr( $slide['btn_color'] ? $slide['btn_color'] : sbvis_setting( 'accent' ) ); ?>" />
 					<input type="color" name="<?php echo esc_attr( sbvis_field_name( 'btn_text' ) ); ?>" value="<?php echo esc_attr( $slide['btn_text'] ); ?>" />
-					<p class="description"><?php esc_html_e( 'Background colour, then label colour. Leave as they are to use the slider default.', 'sinclairs-slider' ); ?></p>
+					<p class="description"><?php esc_html_e( 'Background colour, then label colour. Left unticked, the button follows the slider-wide button colour in Settings, so changing it there updates every slide at once.', 'sinclairs-slider' ); ?></p>
 				</td>
 			</tr>
 			<tr>
@@ -345,7 +347,7 @@ function sbvis_save_slide( $post_id, $post ) {
 
 	// Checkboxes are absent when unticked, so they are handled outside
 	// the main loop rather than falling back to their default.
-	$checkboxes = array( 'mobile_stack', 'btn_on', 'btn_new', 'btn_follow', 'btn2_on', 'btn2_new' );
+	$checkboxes = array( 'mobile_stack', 'btn_on', 'btn_new', 'btn_follow', 'btn2_on', 'btn2_new', 'btn_custom' );
 
 	foreach ( sbvis_slide_defaults() as $key => $default ) {
 		if ( in_array( $key, $checkboxes, true ) ) {
@@ -355,6 +357,14 @@ function sbvis_save_slide( $post_id, $post ) {
 
 		$value = isset( $raw[ $key ] ) ? $raw[ $key ] : $default;
 		update_post_meta( $post_id, '_sbvis_' . $key, sbvis_sanitize_slide_field( $key, $value, $default ) );
+	}
+
+	// A colour input submits its value whether or not the client touched
+	// it, so without this an untouched field would be stored as a
+	// per-slide override and the slide would stop following the
+	// slider-wide button colour.
+	if ( empty( $raw['btn_custom'] ) ) {
+		update_post_meta( $post_id, '_sbvis_btn_color', '' );
 	}
 }
 
