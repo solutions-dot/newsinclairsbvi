@@ -3,7 +3,7 @@
  * Plugin Name:       Sinclairs (BVI) — Footer
  * Plugin URI:        https://sinclairsbvi.com/
  * Description:       The site footer as one shortcode, <code>[sinclairs_footer]</code>: navigation, opening hours and contact details in three balanced columns, each with an icon. Phone numbers dial, the email opens a mail client and the address opens a map. Does not include the copyright bar.
- * Version:           1.3.1
+ * Version:           1.3.2
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            Sinclairs (BVI)
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SBVIF_VERSION', '1.3.1' );
+define( 'SBVIF_VERSION', '1.3.2' );
 define( 'SBVIF_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SBVIF_URI', plugin_dir_url( __FILE__ ) );
 

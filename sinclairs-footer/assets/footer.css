@@ -258,8 +258,6 @@ a.sbvif__rowtext:focus-visible {
 		text-align: center;
 	}
 
-	.sbvif__heading { border-bottom: 0; padding-bottom: 0; }
-
 	/*
 	 * Each block is centred as a unit with its contents ranged left,
 	 * and all three share a width so their left edges line up down the
@@ -288,7 +286,11 @@ a.sbvif__rowtext:focus-visible {
 		justify-content: center;
 		gap: 10px;
 		cursor: pointer;
-		padding: 12px 0;
+		/* The rule under the heading is the border on .sbvif__heading,
+		   so the bottom padding is the gap between the words and the
+		   line. 12px sat too tight under uppercase tracked-out type,
+		   which has no descenders to fill the space. */
+		padding: 14px 0 18px;
 		margin-bottom: 0;
 		-webkit-tap-highlight-color: transparent;
 	}
@@ -313,7 +315,8 @@ a.sbvif__rowtext:focus-visible {
 		transform: rotate(225deg) translate(-1px, -1px);
 	}
 
-	.sbvif--collapsible .sbvif__foldbody { padding: 4px 0 12px; }
+	/* And the matching gap on the other side of the line. */
+	.sbvif--collapsible .sbvif__foldbody { padding: 16px 0 14px; }
 
 	/* Tighter, since each closed column is now one row rather than a
 	   block — the old gap left the three headings floating apart. */
