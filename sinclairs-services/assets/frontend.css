@@ -871,6 +871,9 @@ a.sc-nutshell__row:focus-visible .sc-nutshell__arrow {
    against an image or the edge of its column. The width of the list
    itself is whatever the containing column gives it; nothing here
    constrains it. */
+/* An exact pad="…" arrives as --sc-list-pad. */
+.sc-services--list { padding-left: var(--sc-list-pad, 0); }
+
 .sc-list-pad--sm { padding-left: clamp(12px, 1.5vw, 20px); }
 .sc-list-pad--md { padding-left: clamp(20px, 3vw, 44px); }
 .sc-list-pad--lg { padding-left: clamp(32px, 5vw, 80px); }
@@ -914,17 +917,10 @@ a.sc-nutshell__row:focus-visible .sc-nutshell__arrow {
 
 .sc-list--cols-1 .sc-list__item:last-child .sc-list__link { border-bottom: 0; }
 
-/*
- * Specificity and !important are both deliberate here. A bare
- * .sc-list__text is a single class, and the theme overrides it — it
- * already uses ID selectors and !important on its own nav rules, so a
- * polite selector loses and the size attribute appears to do nothing.
- * Scoped tightly enough that it can only ever hit this shortcode.
- */
-.sc-services .sc-list .sc-list__link .sc-list__text {
+.sc-list__text {
 	/* --sc-list-size is set inline only when size="…" names an exact
 	   length; otherwise the keyword steps below decide. */
-	font-size: var(--sc-list-size, 16px) !important;
+	font-size: var(--sc-list-size, 16px);
 	font-weight: 600;
 	line-height: 1.35;
 }
@@ -932,21 +928,26 @@ a.sc-nutshell__row:focus-visible .sc-nutshell__arrow {
 /* size="large" / "xlarge". 16px was chosen for a half-width column and
    reads as small in a full-width panel, so the larger steps scale the
    row padding with the type rather than leaving the rows tight. */
-.sc-services .sc-list--size-large .sc-list__link .sc-list__text {
-	font-size: var(--sc-list-size, clamp(17px, 1.35vw, 19px)) !important;
-}
-
-.sc-services .sc-list--size-xlarge .sc-list__link .sc-list__text {
-	font-size: var(--sc-list-size, clamp(19px, 1.7vw, 23px)) !important;
-}
+.sc-list--size-large .sc-list__text  { font-size: var(--sc-list-size, clamp(17px, 1.35vw, 19px)); }
+.sc-list--size-xlarge .sc-list__text { font-size: var(--sc-list-size, clamp(19px, 1.7vw, 23px)); }
 
 /* An exact size="…" is a fixed length, so unlike the keyword steps it
    would not come down on a phone. Scale it there instead of leaving a
-   desktop size to crowd a narrow screen. */
+   desktop size to crowd a narrow screen. The extra .sc-services is only
+   to outrank the two keyword rules above, not to fight the theme. */
 @media (max-width: 640px) {
-	.sc-services .sc-list .sc-list__link .sc-list__text {
-		font-size: calc(var(--sc-list-size, 16px) * 0.9) !important;
+	.sc-services .sc-list .sc-list__text {
+		font-size: calc(var(--sc-list-size, 16px) * 0.9);
 	}
+
+	/* A desktop inset is dead space on a phone: the panel is the whole
+	   screen there, with no image beside it to clear. */
+	.sc-services--list { padding-left: calc(var(--sc-list-pad, 0px) * 0.25); }
+
+	.sc-list-pad--sm,
+	.sc-list-pad--md,
+	.sc-list-pad--lg,
+	.sc-list-pad--xl { padding-left: 0; }
 }
 
 .sc-list--size-large .sc-list__link  { padding: 17px 4px; }

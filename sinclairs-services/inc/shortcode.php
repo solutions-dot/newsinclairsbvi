@@ -500,7 +500,11 @@ function ssvc_shortcode_list( $atts ) {
 	if ( in_array( $pad_raw, array( 'sm', 'md', 'lg', 'xl' ), true ) ) {
 		$pad_class = ' sc-list-pad--' . $pad_raw;
 	} elseif ( preg_match( '/^\d{1,4}(\.\d{1,2})?(px|%|rem|em|vw)$/', $pad_raw ) ) {
-		$pad_style = 'padding-left:' . $pad_raw . ';';
+		// A custom property rather than padding-left directly: an inline
+		// declaration outranks every stylesheet rule, so a 140px inset
+		// meant for a desktop panel would still be eating 140px of a
+		// phone screen. As a property the CSS can scale it down.
+		$pad_style = '--sc-list-pad:' . $pad_raw . ';';
 	}
 
 	$classes = 'sc-services sc-services--list';
