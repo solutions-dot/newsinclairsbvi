@@ -44,28 +44,24 @@
 
 /* ---------- The card ---------- */
 
+.sbvit__stage {
+	display: flex;
+	align-items: center;
+	gap: clamp(6px, 1.4vw, 20px);
+}
+
 .sbvit__card {
 	position: relative;
+	flex: 1 1 auto;
+	/* Without this a long unbroken word in a quote can force the card
+	   wider than its share and push an arrow off the edge. */
+	min-width: 0;
 	padding: clamp(28px, 3.4vw, 52px) clamp(22px, 3.6vw, 60px) clamp(26px, 3vw, 44px);
 	background: #fff;
 	border: 1px solid var(--sbvit-line);
 	border-radius: 14px;
 	box-shadow: 0 2px 18px rgba(1, 87, 151, 0.06);
 	overflow: hidden;
-}
-
-/* A watermark, not content: the quote marks a reader actually needs are
-   in the text itself, so this is hidden from assistive technology. */
-.sbvit__mark {
-	position: absolute;
-	top: clamp(-18px, -1vw, -6px);
-	left: clamp(10px, 1.6vw, 26px);
-	font-size: clamp(90px, 9vw, 150px);
-	line-height: 1;
-	color: var(--sbvit-sand);
-	opacity: 0.85;
-	pointer-events: none;
-	user-select: none;
 }
 
 /*
@@ -112,6 +108,7 @@
 	margin: 0 0 clamp(14px, 1.6vw, 22px);
 	padding-bottom: clamp(12px, 1.4vw, 18px);
 	border-bottom: 1px solid var(--sbvit-line);
+	text-align: center;
 }
 
 .sbvit .sbvit__name {
@@ -153,6 +150,7 @@
 
 /* ---------- Navigation, under the card ---------- */
 
+/* Only rendered when dots="yes"; the arrows no longer live here. */
 .sbvit__nav {
 	display: flex;
 	align-items: center;
@@ -163,6 +161,7 @@
 
 .sbvit__arrow {
 	appearance: none;
+	flex: 0 0 auto;
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -230,12 +229,12 @@
 		border-radius: 12px;
 	}
 
-	.sbvit__mark { font-size: 76px; left: 8px; top: -8px; }
-
-	/* Comfortably past the 44px touch target minimum, and the dots grow
-	   with it — 9px is a fine target for a mouse and a poor one for a
-	   thumb. */
-	.sbvit__arrow { width: 44px; height: 44px; }
+	/* A phone has little width to spare, so the arrows come in rather
+	   than eating into the card — swipe is the primary gesture here
+	   anyway. They stay at 44px, the touch target minimum, since a
+	   smaller circle is worse than no circle. */
+	.sbvit__stage { gap: 4px; }
+	.sbvit__arrow { width: 44px; height: 44px; border-width: 1px; }
 	.sbvit__dot { width: 10px; height: 10px; }
 	.sbvit__dot.is-active { width: 28px; }
 	.sbvit__nav { gap: 12px; }

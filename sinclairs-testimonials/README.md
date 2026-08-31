@@ -14,7 +14,10 @@ words **below in quotes**. One shortcode.
   height follows whichever testimonial is showing and animates between
   them.
 - **Name and title first, quote after** — the order asked for.
-- **Arrows and dots sit under the card**, not overlapping the text.
+- **Arrows flank the card**, one either side, laid out as a flex row so
+  they can never sit on top of the text. Position dots are off by
+  default — with the arrows either side there is nothing left to put in
+  a strip underneath.
 - **Mobile**: swipe to move between testimonials, 44px touch targets,
   and type and padding that scale down rather than being pinned to
   desktop sizes.
@@ -26,7 +29,7 @@ words **below in quotes**. One shortcode.
 [sinclairs_testimonials autoplay="yes"]               advance automatically
 [sinclairs_testimonials delay="12000"]                ms per testimonial
 [sinclairs_testimonials arrows="no"]                  hide previous / next
-[sinclairs_testimonials dots="no"]                    hide the position dots
+[sinclairs_testimonials dots="yes"]                   add position dots below
 ```
 
 Autoplay is **off by default**. Reading speed varies far more than a
