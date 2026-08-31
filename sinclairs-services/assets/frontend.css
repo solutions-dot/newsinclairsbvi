@@ -362,6 +362,19 @@ a.sc-nutshell__row:focus-visible .sc-nutshell__arrow {
 	transform: rotate(225deg) translate(-2px, -2px);
 }
 
+/*
+ * Inside a collapsed service the opening line is not a standfirst: the
+ * bar above it is already the emphasis, and a second bold navy block
+ * directly under it read as a highlight the client did not want. It
+ * sets as ordinary body copy here; the rail layout keeps the lede
+ * treatment, where it has a plain heading beside it rather than a bar.
+ */
+.sc-collapse__panel .sc-section__lede {
+	font-size: inherit;
+	font-weight: 400;
+	color: inherit;
+}
+
 .sc-collapse__panel {
 	padding: 26px 26px 30px;
 	border: 1px solid var(--sc-line);
