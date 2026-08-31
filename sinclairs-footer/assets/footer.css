@@ -1,0 +1,215 @@
+/* ==========================================================================
+   Sinclairs (BVI) — Footer
+   --------------------------------------------------------------------------
+   Paints no background: it takes the colour of the section it is dropped
+   into, which is the existing teal panel. Registers no font, and sets no
+   size on its body text — links, hours and contact details inherit the
+   page's own type so the footer reads at the same size as everything
+   else. Namespaced under .sbvif so nothing leaks into the theme.
+   ========================================================================== */
+
+.sbvif {
+	--sbvif-fg:      #ffffff;
+	--sbvif-muted:   rgba(255, 255, 255, 0.82);
+	--sbvif-icon:    #ecdbc9;              /* the sand of the current arrows */
+	--sbvif-rule:    rgba(255, 255, 255, 0.22);
+	--sbvif-hover:   #ecdbc9;
+
+	color: var(--sbvif-fg);
+	font-family: inherit;
+	font-size: inherit;
+	line-height: 1.6;
+}
+
+/* For a pale panel rather than the teal one. */
+.sbvif--dark {
+	--sbvif-fg:    #202020;
+	--sbvif-muted: rgba(32, 32, 32, 0.72);
+	--sbvif-icon:  #015797;
+	--sbvif-rule:  rgba(1, 87, 151, 0.20);
+	--sbvif-hover: #0C4DA2;
+}
+
+.sbvif *,
+.sbvif *::before,
+.sbvif *::after { box-sizing: border-box; }
+
+/*
+ * Three columns that share the width by content rather than in equal
+ * thirds: the hours column holds two short lines and would leave a hole
+ * in the middle at 1fr, while the address needs the room. auto for the
+ * short one, and the two text columns take what is left.
+ */
+.sbvif__grid {
+	display: grid;
+	grid-template-columns: minmax(160px, 0.85fr) minmax(150px, auto) minmax(240px, 1.25fr);
+	gap: clamp(24px, 4vw, 64px);
+	align-items: start;
+	max-width: 1180px;
+	margin: 0 auto;
+	padding: clamp(28px, 3.5vw, 56px) clamp(18px, 3vw, 40px);
+}
+
+.sbvif__col { min-width: 0; }
+
+.sbvif .sbvif__heading {
+	margin: 0 0 clamp(12px, 1.4vw, 18px);
+	padding-bottom: 10px;
+	font-family: inherit;
+	font-size: 0.8em;
+	font-weight: 700;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var(--sbvif-fg);
+	border-bottom: 1px solid var(--sbvif-rule);
+}
+
+/* ---------- Links ---------- */
+
+.sbvif__links {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.sbvif__links li { margin: 0 0 2px; }
+
+.sbvif__link {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 7px 0;
+	color: var(--sbvif-fg);
+	text-decoration: none;
+	transition: color 160ms ease, gap 160ms ease;
+}
+
+.sbvif__link:hover,
+.sbvif__link:focus-visible {
+	color: var(--sbvif-hover);
+	gap: 16px;
+}
+
+.sbvif__link:focus-visible {
+	outline: 2px solid currentColor;
+	outline-offset: 3px;
+}
+
+/* ---------- Hours and contact rows ---------- */
+
+.sbvif__rows {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.sbvif__row {
+	display: flex;
+	align-items: flex-start;
+	gap: 12px;
+	margin: 0 0 14px;
+	color: var(--sbvif-muted);
+}
+
+.sbvif__row:last-child { margin-bottom: 0; }
+
+.sbvif__rowtext {
+	color: inherit;
+	text-decoration: none;
+	transition: color 160ms ease;
+}
+
+/* Only the actionable rows are links, so only they respond. */
+a.sbvif__rowtext:hover,
+a.sbvif__rowtext:focus-visible {
+	color: var(--sbvif-hover);
+	text-decoration: underline;
+	text-underline-offset: 0.25em;
+}
+
+a.sbvif__rowtext:focus-visible {
+	outline: 2px solid currentColor;
+	outline-offset: 3px;
+}
+
+.sbvif__days,
+.sbvif__time { display: block; }
+
+.sbvif__time { color: var(--sbvif-muted); }
+
+/* ---------- Icons ---------- */
+
+.sbvif__icon {
+	flex: 0 0 auto;
+	width: 1.15em;
+	height: 1.15em;
+	color: var(--sbvif-icon);
+}
+
+/* Nudged down to sit on the first line's baseline rather than its top,
+   which is where flex-start alone would put it. */
+.sbvif__row .sbvif__icon { margin-top: 0.22em; }
+
+/* ---------- Centred variant ---------- */
+
+.sbvif--center .sbvif__grid { text-align: center; }
+.sbvif--center .sbvif__link,
+.sbvif--center .sbvif__row { justify-content: center; }
+.sbvif--center .sbvif__heading { border-bottom: 0; padding-bottom: 0; }
+
+/* ---------- Screen-reader-only text ----------
+   The theme provides this class, but the footer must not depend on the
+   theme for it: without a definition these labels would render as
+   visible stray words. */
+
+.sbvif .screen-reader-text {
+	position: absolute !important;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+
+/* ---------- Tablet: three columns is too tight ---------- */
+
+@media (max-width: 900px) {
+	/* Two columns, with the address spanning the full width beneath —
+	   it is the long one and would otherwise force an awkward wrap. */
+	.sbvif__grid {
+		grid-template-columns: 1fr 1fr;
+		gap: clamp(20px, 3vw, 36px);
+	}
+
+	.sbvif__col--contact { grid-column: 1 / -1; }
+}
+
+/* ---------- Phones ---------- */
+
+@media (max-width: 600px) {
+	.sbvif__grid {
+		grid-template-columns: 1fr;
+		gap: 30px;
+		padding: 32px 20px;
+		text-align: center;
+	}
+
+	/* Centred, so the three stacked blocks read as one column rather
+	   than three ragged left edges of different widths. */
+	.sbvif__heading { border-bottom: 0; padding-bottom: 0; }
+	.sbvif__link { justify-content: center; }
+
+	/* The rows stay left-aligned within a centred block: an icon
+	   followed by two lines of text centres badly, and the address
+	   would wrap to a ragged triangle. */
+	.sbvif__rows {
+		display: inline-block;
+		text-align: left;
+		max-width: 20em;
+	}
+
+	.sbvif__link { padding: 9px 0; }
+}
