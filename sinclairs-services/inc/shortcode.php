@@ -438,6 +438,12 @@ add_shortcode( 'sinclairs_services_summary', 'ssvc_shortcode_index' );
  *   theme="light|dark"   dark = white text, for use on a navy/photo panel
  *   columns="1|2"        1 (default) suits a half-width column
  *   heading="…"          optional heading above the list
+ *   size="normal|large|xlarge"
+ *                        title size. normal (default) is what the list
+ *                        was built at; the larger steps suit a full
+ *                        panel like the home page's services block,
+ *                        where 16px reads as small against the
+ *                        surrounding type.
  *
  * Links resolve to wherever the sections actually live — the detail page
  * when it exists, the index page when the plugin is in its single-page
@@ -448,6 +454,7 @@ function ssvc_shortcode_list( $atts ) {
 		'theme'   => 'light',
 		'columns' => '1',
 		'heading' => '',
+		'size'    => 'normal',
 	), $atts, 'sinclairs_services_list' );
 
 	$sections = ssvc_section_index();
@@ -461,6 +468,7 @@ function ssvc_shortcode_list( $atts ) {
 	$base    = ssvc_detail_page_exists() ? ssvc_detail_page_url() : ssvc_services_page_url();
 	$dark    = ( 'dark' === $atts['theme'] );
 	$columns = ( '2' === $atts['columns'] ) ? '2' : '1';
+	$size    = in_array( $atts['size'], array( 'normal', 'large', 'xlarge' ), true ) ? $atts['size'] : 'normal';
 
 	$classes = 'sc-services sc-services--list';
 	if ( $dark ) {
@@ -473,7 +481,7 @@ function ssvc_shortcode_list( $atts ) {
 		$out .= '<h3 class="sc-list__heading">' . esc_html( $atts['heading'] ) . '</h3>';
 	}
 
-	$out .= '<ul class="sc-list sc-list--cols-' . esc_attr( $columns ) . '">';
+	$out .= '<ul class="sc-list sc-list--cols-' . esc_attr( $columns ) . ' sc-list--size-' . esc_attr( $size ) . '">';
 
 	foreach ( $sections as $id => $title ) {
 		$out .= '<li class="sc-list__item">';

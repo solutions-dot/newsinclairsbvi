@@ -133,6 +133,11 @@ nav dropdown use, so this never points at a missing page either.
                                                      640px
 [sinclairs_services_list heading="Our Services"]    optional heading above
                                                      the list
+[sinclairs_services_list size="large"]              bigger titles; also
+                                                     "xlarge". 16px was
+                                                     chosen for a half-width
+                                                     column and reads small
+                                                     in a full-width panel
 ```
 
 `theme="dark"` is what the About page's navy half-panel uses — white
