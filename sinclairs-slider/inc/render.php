@@ -79,8 +79,7 @@ function sbvis_slider_markup( $ids = array(), $extra_class = '' ) {
 
 	$settings = sbvis_settings();
 
-	wp_enqueue_style( 'sbvis-slider', SBVIS_URI . 'assets/css/slider.css', array(), sbvis_asset_version( 'assets/css/slider.css' ) );
-	wp_enqueue_script( 'sbvis-slider', SBVIS_URI . 'assets/js/slider.js', array(), sbvis_asset_version( 'assets/js/slider.js' ), true );
+	sbvis_enqueue_assets();
 
 	$root_style = sbvis_style_string( array(
 		'--sbvis-accent'    => $settings['accent'],
@@ -185,9 +184,11 @@ function sbvis_render_slide( $post, $index, $total, $settings ) {
 			<div class="sbvis__layer sbvis__layer--text" style="<?php echo esc_attr( sbvis_style_string( array(
 				'--x'          => $text_x . '%',
 				'--y'          => $text_y . '%',
-				'--size'       => (float) $slide['text_size'] . 'rem',
-				'--size-m'     => (float) $slide['text_size_m'] . 'rem',
-				'--sub-size'   => (float) $slide['sub_size'] . 'rem',
+				// Unitless on purpose — slider.css multiplies these by
+				// 1rem so the fluid-size calc() stays dimensionally valid.
+				'--size'       => (float) $slide['text_size'],
+				'--size-m'     => (float) $slide['text_size_m'],
+				'--sub-size'   => (float) $slide['sub_size'],
 				'--color'      => $slide['text_color'],
 				'--align'      => $slide['text_align'],
 				'--max-width'  => (float) $slide['text_width'] . '%',
@@ -371,14 +372,51 @@ function sbvis_render_block( $attributes ) {
 }
 
 /**
+ * Bring in the front-end assets, whichever route rendered the slider.
+ *
+ * The wp_enqueue_scripts pass below catches the shortcode and block
+ * cases before wp_head(), but it cannot see the sinclairs_slider()
+ * template tag, which a theme normally calls from a template *after*
+ * get_header() has already run wp_head(). Enqueueing at that point
+ * leaves the stylesheet to be printed in the footer, so the hero paints
+ * unstyled first. When wp_head has been and gone we therefore print the
+ * link tag immediately, inline at the slider, instead.
+ */
+function sbvis_enqueue_assets() {
+	sbvis_register_front_assets();
+
+	wp_enqueue_script( 'sbvis-slider' );
+
+	if ( wp_style_is( 'sbvis-slider', 'done' ) ) {
+		return;
+	}
+
+	if ( did_action( 'wp_head' ) && ! doing_action( 'wp_head' ) ) {
+		wp_print_styles( 'sbvis-slider' );
+		return;
+	}
+
+	wp_enqueue_style( 'sbvis-slider' );
+}
+
+function sbvis_register_front_assets() {
+	if ( ! wp_style_is( 'sbvis-slider', 'registered' ) ) {
+		wp_register_style( 'sbvis-slider', SBVIS_URI . 'assets/css/slider.css', array(), sbvis_asset_version( 'assets/css/slider.css' ) );
+	}
+
+	if ( ! wp_script_is( 'sbvis-slider', 'registered' ) ) {
+		wp_register_script( 'sbvis-slider', SBVIS_URI . 'assets/js/slider.js', array(), sbvis_asset_version( 'assets/js/slider.js' ), true );
+	}
+}
+
+/**
  * Registering up front and enqueueing early where we can avoids the
  * flash of unstyled hero you get when a stylesheet is only enqueued
  * once the shortcode runs inside the_content().
  */
 add_action( 'wp_enqueue_scripts', 'sbvis_maybe_enqueue_front_assets' );
 function sbvis_maybe_enqueue_front_assets() {
-	wp_register_style( 'sbvis-slider', SBVIS_URI . 'assets/css/slider.css', array(), sbvis_asset_version( 'assets/css/slider.css' ) );
-	wp_register_script( 'sbvis-slider', SBVIS_URI . 'assets/js/slider.js', array(), sbvis_asset_version( 'assets/js/slider.js' ), true );
+	sbvis_register_front_assets();
 
 	if ( ! is_singular() ) {
 		return;

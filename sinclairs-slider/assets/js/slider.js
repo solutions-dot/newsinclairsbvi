@@ -27,6 +27,8 @@
 		this.timer = null;
 		this.rafId = null;
 		this.startedAt = 0;
+		// Reasons autoplay is currently held; see pause()/resume().
+		this.paused = {};
 		// Autoplay is off entirely for visitors who asked for reduced
 		// motion — a slide that changes under you is motion too.
 		this.playing = !!config.autoplay && !reduceMotion && this.slides.length > 1;
@@ -70,30 +72,36 @@
 		});
 
 		if (this.config.pauseOnHover) {
-			this.root.addEventListener('mouseenter', function () { self.pause(); });
-			this.root.addEventListener('mouseleave', function () { self.resume(); });
+			this.root.addEventListener('mouseenter', function () { self.pause('hover'); });
+			this.root.addEventListener('mouseleave', function () { self.resume('hover'); });
 		}
 
 		// Pausing while off-screen or on a background tab keeps the
-		// timer honest and saves the visitor's battery.
-		this.root.addEventListener('focusin', function () { self.pause(); });
-		this.root.addEventListener('focusout', function () { self.resume(); });
+		// timer honest and saves the visitor's battery. Each reason is
+		// tracked separately, so moving the pointer away does not
+		// restart autoplay under someone still tabbing through it.
+		this.root.addEventListener('focusin', function () { self.pause('focus'); });
+		this.root.addEventListener('focusout', function () { self.resume('focus'); });
 
 		document.addEventListener('visibilitychange', function () {
 			if (document.hidden) {
-				self.pause();
+				self.pause('hidden');
 			} else {
-				self.resume();
+				self.resume('hidden');
 			}
 		});
 
 		if ('IntersectionObserver' in window) {
+			// Assume off-screen until the observer says otherwise; its
+			// first callback fires straight away and clears this.
+			this.pause('offscreen');
+
 			new IntersectionObserver(function (entries) {
 				entries.forEach(function (entry) {
 					if (entry.isIntersecting) {
-						self.resume();
+						self.resume('offscreen');
 					} else {
-						self.pause();
+						self.pause('offscreen');
 					}
 				});
 			}, { threshold: 0.15 }).observe(this.root);
@@ -240,16 +248,34 @@
 		}
 	};
 
-	Slider.prototype.pause = function () {
+	/*
+	 * Pause and resume are reference-counted by reason: autoplay only
+	 * restarts once every reason that paused it has cleared. Without
+	 * that, a mouseleave would restart the slider while keyboard focus
+	 * was still inside it, or while the tab was in the background.
+	 */
+	Slider.prototype.pause = function (reason) {
+		this.paused[reason || 'manual'] = true;
+
 		if (this.playing) {
 			this.stop();
 		}
 	};
 
-	Slider.prototype.resume = function () {
-		if (this.playing && !this.timer && !document.hidden) {
-			this.play();
+	Slider.prototype.resume = function (reason) {
+		delete this.paused[reason || 'manual'];
+
+		if (!this.playing || this.timer) {
+			return;
 		}
+
+		for (var key in this.paused) {
+			if (Object.prototype.hasOwnProperty.call(this.paused, key)) {
+				return;
+			}
+		}
+
+		this.play();
 	};
 
 	function init() {
