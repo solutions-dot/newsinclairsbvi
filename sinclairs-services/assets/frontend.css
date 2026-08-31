@@ -939,15 +939,28 @@ a.sc-nutshell__row:focus-visible .sc-nutshell__arrow {
 	.sc-services .sc-list .sc-list__text {
 		font-size: calc(var(--sc-list-size, 16px) * 0.9);
 	}
+}
 
-	/* A desktop inset is dead space on a phone: the panel is the whole
-	   screen there, with no image beside it to clear. */
-	.sc-services--list { padding-left: calc(var(--sc-list-pad, 0px) * 0.25); }
+/*
+ * A desktop inset is dead space once the panel is the full width of the
+ * screen, with no image beside it to clear — but it must not go to
+ * nothing: the column carries no padding of its own here, so zero
+ * leaves the titles against the edge. Both sides, since the row's arrow
+ * sits hard against the right.
+ *
+ * 1024px rather than a phone-only width: the panel goes full-bleed as
+ * soon as the layout stacks, which happens well before an actual phone.
+ */
+@media (max-width: 1024px) {
+	.sc-services--list {
+		padding-left: max(18px, calc(var(--sc-list-pad, 0px) * 0.25));
+		padding-right: 18px;
+	}
 
 	.sc-list-pad--sm,
 	.sc-list-pad--md,
 	.sc-list-pad--lg,
-	.sc-list-pad--xl { padding-left: 0; }
+	.sc-list-pad--xl { padding-left: 18px; }
 }
 
 .sc-list--size-large .sc-list__link  { padding: 17px 4px; }
