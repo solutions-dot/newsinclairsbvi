@@ -915,7 +915,9 @@ a.sc-nutshell__row:focus-visible .sc-nutshell__arrow {
 .sc-list--cols-1 .sc-list__item:last-child .sc-list__link { border-bottom: 0; }
 
 .sc-list__text {
-	font-size: 16px;
+	/* --sc-list-size is set inline only when size="…" names an exact
+	   length; otherwise the keyword steps below decide. */
+	font-size: var(--sc-list-size, 16px);
 	font-weight: 600;
 	line-height: 1.35;
 }
@@ -923,8 +925,8 @@ a.sc-nutshell__row:focus-visible .sc-nutshell__arrow {
 /* size="large" / "xlarge". 16px was chosen for a half-width column and
    reads as small in a full-width panel, so the larger steps scale the
    row padding with the type rather than leaving the rows tight. */
-.sc-list--size-large .sc-list__text  { font-size: clamp(17px, 1.35vw, 19px); }
-.sc-list--size-xlarge .sc-list__text { font-size: clamp(19px, 1.7vw, 23px); }
+.sc-list--size-large .sc-list__text  { font-size: var(--sc-list-size, clamp(17px, 1.35vw, 19px)); }
+.sc-list--size-xlarge .sc-list__text { font-size: var(--sc-list-size, clamp(19px, 1.7vw, 23px)); }
 
 .sc-list--size-large .sc-list__link  { padding: 17px 4px; }
 .sc-list--size-xlarge .sc-list__link { padding: 20px 4px; }

@@ -134,10 +134,12 @@ nav dropdown use, so this never points at a missing page either.
 [sinclairs_services_list heading="Our Services"]    optional heading above
                                                      the list
 [sinclairs_services_list size="large"]              bigger titles; also
-                                                     "xlarge". 16px was
-                                                     chosen for a half-width
-                                                     column and reads small
-                                                     in a full-width panel
+                                                     "xlarge", or an exact
+                                                     length such as
+                                                     size="18px". The steps
+                                                     are only a couple of
+                                                     pixels apart, so a
+                                                     length is often easier
 [sinclairs_services_list pad="md"]                  left inset ("sm", "md",
                                                      "lg", "xl"), or an
                                                      explicit length such as

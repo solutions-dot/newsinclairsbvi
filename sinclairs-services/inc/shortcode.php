@@ -449,7 +449,9 @@ add_shortcode( 'sinclairs_services_summary', 'ssvc_shortcode_index' );
  *                        was built at; the larger steps suit a full
  *                        panel like the home page's services block,
  *                        where 16px reads as small against the
- *                        surrounding type.
+ *                        surrounding type. Also takes an explicit
+ *                        length — size="18px" — since the steps are
+ *                        only a couple of pixels apart.
  *
  * Links resolve to wherever the sections actually live — the detail page
  * when it exists, the index page when the plugin is in its single-page
@@ -475,7 +477,18 @@ function ssvc_shortcode_list( $atts ) {
 	$base    = ssvc_detail_page_exists() ? ssvc_detail_page_url() : ssvc_services_page_url();
 	$dark    = ( 'dark' === $atts['theme'] );
 	$columns = ( '2' === $atts['columns'] ) ? '2' : '1';
-	$size    = in_array( $atts['size'], array( 'normal', 'large', 'xlarge' ), true ) ? $atts['size'] : 'normal';
+	// Same deal as pad: a keyword step, or an exact length for when the
+	// steps are not the size wanted. Narrow pattern, since it ends up in
+	// a style attribute.
+	$size_raw   = trim( (string) $atts['size'] );
+	$size_class = 'normal';
+	$size_style = '';
+
+	if ( in_array( $size_raw, array( 'normal', 'large', 'xlarge' ), true ) ) {
+		$size_class = $size_raw;
+	} elseif ( preg_match( '/^\d{1,3}(\.\d{1,2})?(px|rem|em)$/', $size_raw ) ) {
+		$size_style = '--sc-list-size:' . $size_raw . ';';
+	}
 	// Either one of the keyword steps, or an explicit CSS length. The
 	// pattern is deliberately narrow — a number and a unit, nothing
 	// else — so the value can be dropped into a style attribute without
@@ -496,13 +509,14 @@ function ssvc_shortcode_list( $atts ) {
 	}
 	$classes .= $pad_class;
 
-	$out = '<div class="' . esc_attr( $classes ) . '"' . ( $pad_style ? ' style="' . esc_attr( $pad_style ) . '"' : '' ) . '>';
+	$inline = $pad_style . $size_style;
+	$out    = '<div class="' . esc_attr( $classes ) . '"' . ( $inline ? ' style="' . esc_attr( $inline ) . '"' : '' ) . '>';
 
 	if ( '' !== $atts['heading'] ) {
 		$out .= '<h3 class="sc-list__heading">' . esc_html( $atts['heading'] ) . '</h3>';
 	}
 
-	$out .= '<ul class="sc-list sc-list--cols-' . esc_attr( $columns ) . ' sc-list--size-' . esc_attr( $size ) . '">';
+	$out .= '<ul class="sc-list sc-list--cols-' . esc_attr( $columns ) . ' sc-list--size-' . esc_attr( $size_class ) . '">';
 
 	foreach ( $sections as $id => $title ) {
 		$out .= '<li class="sc-list__item">';
