@@ -214,6 +214,65 @@ function ssvc_sections_markup( $accordion = false, $back_url = '' ) {
 	return $out;
 }
 
+/**
+ * The ten services as a stack of collapsed bars — the arrangement the
+ * client asked for: every service visible as a title, nothing expanded
+ * until it is clicked.
+ *
+ * Built on native <details>/<summary> rather than divs and JS. With
+ * JavaScript off the bars still open and close, the browser's own
+ * find-in-page can reach inside a closed one, and keyboard and screen
+ * reader behaviour is the platform's rather than something re-invented
+ * here. frontend.js only adds what the element cannot do by itself:
+ * closing the others, and honouring a deep link.
+ *
+ * The section id stays on the <details> so every existing link — the
+ * nav dropdown, the home page, the jump box, [sinclairs_services_list]
+ * — keeps resolving to the same anchor it always did.
+ */
+function ssvc_collapse_markup() {
+	$out = '<div class="sc-collapses" data-sc-collapses>';
+
+	foreach ( ssvc_sections() as $i => $section ) {
+		$number = str_pad( (string) ( $i + 1 ), 2, '0', STR_PAD_LEFT );
+		$body   = ssvc_render_body( $section['body'] );
+		$icon   = ssvc_icon( $section['id'] );
+
+		$out .= '<details class="sc-collapse" id="' . esc_attr( $section['id'] ) . '" data-sc-collapse>';
+
+		$out .= '<summary class="sc-collapse__bar">';
+		if ( $icon ) {
+			// Plugin-authored markup from inc/icons.php, not user input.
+			$out .= '<span class="sc-collapse__icon">' . $icon . '</span>';
+		}
+		$out .= '<span class="sc-collapse__num">' . esc_html( $number ) . '</span>';
+		// A real heading, not a span: the rail layout used <h2> here, and
+		// dropping to a span would take all ten practice areas out of
+		// screen-reader heading navigation and orphan the <h3> subheads
+		// and "Information & FAQs" inside them. A summary's content model
+		// allows heading content, so this stays valid.
+		$out .= '<h2 class="sc-collapse__title">' . esc_html( $section['title'] ) . '</h2>';
+		$out .= '<span class="sc-collapse__chevron" aria-hidden="true"></span>';
+		$out .= '</summary>';
+
+		$out .= '<div class="sc-collapse__panel">';
+		// No 'brief' here: the bar's title already says which service
+		// this is, and the section's own opening line follows straight
+		// after, so the summary only repeated what sat either side of it.
+		$out .= '<div class="sc-section__prose">' . $body . '</div>';
+		$out .= ssvc_render_faqs( $section['faqs'], $section['id'] );
+		// No "All services" link here: the bars are the index. Every
+		// other service is one click away up the page already.
+		$out .= '</div>';
+
+		$out .= '</details>';
+	}
+
+	$out .= '</div>';
+
+	return $out;
+}
+
 function ssvc_open( $modifier = '' ) {
 	return '<div class="sc-services' . ( $modifier ? ' sc-services--' . esc_attr( $modifier ) : '' ) . '">';
 }
@@ -259,19 +318,29 @@ add_shortcode( 'sinclairs_services_index', 'ssvc_shortcode_index' );
  */
 function ssvc_shortcode_detail( $atts ) {
 	$atts = shortcode_atts( array(
-		'layout' => 'rail',
+		// 'collapse' (default) — every service a closed bar, one open at
+		// a time. 'rail' and 'accordion' are the earlier layouts, kept
+		// so an existing page can pin the arrangement it already has.
+		'layout' => 'collapse',
 		'jump'   => 'no',
 	), $atts, 'sinclairs_services_detail' );
 
 	ssvc_enqueue_assets();
 
-	$out = ssvc_open( 'accordion' === $atts['layout'] ? 'accordion' : 'rail' );
+	$layout = in_array( $atts['layout'], array( 'collapse', 'rail', 'accordion' ), true ) ? $atts['layout'] : 'collapse';
+
+	$out = ssvc_open( $layout );
 
 	if ( 'yes' === $atts['jump'] ) {
 		$out .= ssvc_menu_markup();
 	}
 
-	$out .= ssvc_sections_markup( 'accordion' === $atts['layout'], ssvc_services_page_url() );
+	if ( 'collapse' === $layout ) {
+		$out .= ssvc_collapse_markup();
+	} else {
+		$out .= ssvc_sections_markup( 'accordion' === $layout, ssvc_services_page_url() );
+	}
+
 	$out .= '</div>';
 
 	return $out;
@@ -287,7 +356,7 @@ add_shortcode( 'sinclairs_services_detail', 'ssvc_shortcode_detail' );
  */
 function ssvc_shortcode_services( $atts ) {
 	$atts = shortcode_atts( array(
-		'layout'   => 'rail',   // 'rail' (default) or 'accordion'
+		'layout'   => 'rail',   // 'rail' (default), 'collapse' or 'accordion'
 		// Off by default: the page already carries its own "OUR EXPERTISE"
 		// header above the shortcode, so rendering ours repeats it.
 		'intro'    => 'no',
@@ -297,10 +366,11 @@ function ssvc_shortcode_services( $atts ) {
 
 	ssvc_enqueue_assets();
 
+	$collapse  = ( 'collapse' === $atts['layout'] );
 	$accordion = ( 'accordion' === $atts['layout'] );
 	$nutshell  = ( 'yes' === $atts['nutshell'] );
 
-	$out = ssvc_open( $accordion ? 'accordion' : 'rail' );
+	$out = ssvc_open( $collapse ? 'collapse' : ( $accordion ? 'accordion' : 'rail' ) );
 
 	if ( 'yes' === $atts['intro'] ) {
 		$intro = ssvc_page_intro();
@@ -320,7 +390,11 @@ function ssvc_shortcode_services( $atts ) {
 	}
 
 	// Back link only where there is an index above to go back to.
-	$out .= ssvc_sections_markup( $accordion, $nutshell ? '#sc-nutshell' : '' );
+	if ( $collapse ) {
+		$out .= ssvc_collapse_markup();
+	} else {
+		$out .= ssvc_sections_markup( $accordion, $nutshell ? '#sc-nutshell' : '' );
+	}
 	$out .= '</div>';
 
 	return $out;
@@ -364,6 +438,20 @@ add_shortcode( 'sinclairs_services_summary', 'ssvc_shortcode_index' );
  *   theme="light|dark"   dark = white text, for use on a navy/photo panel
  *   columns="1|2"        1 (default) suits a half-width column
  *   heading="…"          optional heading above the list
+ *   pad="none|sm|md|lg|xl"
+ *                        left inset, for a panel that butts up against
+ *                        an image or the edge of its column. Also takes
+ *                        an explicit length — pad="120px", pad="8%",
+ *                        pad="6vw" — for when the keyword steps are not
+ *                        the gap the design wants.
+ *   size="normal|large|xlarge"
+ *                        title size. normal (default) is what the list
+ *                        was built at; the larger steps suit a full
+ *                        panel like the home page's services block,
+ *                        where 16px reads as small against the
+ *                        surrounding type. Also takes an explicit
+ *                        length — size="18px" — since the steps are
+ *                        only a couple of pixels apart.
  *
  * Links resolve to wherever the sections actually live — the detail page
  * when it exists, the index page when the plugin is in its single-page
@@ -374,6 +462,8 @@ function ssvc_shortcode_list( $atts ) {
 		'theme'   => 'light',
 		'columns' => '1',
 		'heading' => '',
+		'size'    => 'normal',
+		'pad'     => 'none',
 	), $atts, 'sinclairs_services_list' );
 
 	$sections = ssvc_section_index();
@@ -387,19 +477,50 @@ function ssvc_shortcode_list( $atts ) {
 	$base    = ssvc_detail_page_exists() ? ssvc_detail_page_url() : ssvc_services_page_url();
 	$dark    = ( 'dark' === $atts['theme'] );
 	$columns = ( '2' === $atts['columns'] ) ? '2' : '1';
+	// Same deal as pad: a keyword step, or an exact length for when the
+	// steps are not the size wanted. Narrow pattern, since it ends up in
+	// a style attribute.
+	$size_raw   = trim( (string) $atts['size'] );
+	$size_class = 'normal';
+	$size_style = '';
+
+	if ( in_array( $size_raw, array( 'normal', 'large', 'xlarge' ), true ) ) {
+		$size_class = $size_raw;
+	} elseif ( preg_match( '/^\d{1,3}(\.\d{1,2})?(px|rem|em)$/', $size_raw ) ) {
+		$size_style = '--sc-list-size:' . $size_raw . ';';
+	}
+	// Either one of the keyword steps, or an explicit CSS length. The
+	// pattern is deliberately narrow — a number and a unit, nothing
+	// else — so the value can be dropped into a style attribute without
+	// opening a hole for anything that is not a length.
+	$pad_raw   = trim( (string) $atts['pad'] );
+	$pad_class = '';
+	$pad_style = '';
+
+	if ( in_array( $pad_raw, array( 'sm', 'md', 'lg', 'xl' ), true ) ) {
+		$pad_class = ' sc-list-pad--' . $pad_raw;
+	} elseif ( preg_match( '/^\d{1,4}(\.\d{1,2})?(px|%|rem|em|vw)$/', $pad_raw ) ) {
+		// A custom property rather than padding-left directly: an inline
+		// declaration outranks every stylesheet rule, so a 140px inset
+		// meant for a desktop panel would still be eating 140px of a
+		// phone screen. As a property the CSS can scale it down.
+		$pad_style = '--sc-list-pad:' . $pad_raw . ';';
+	}
 
 	$classes = 'sc-services sc-services--list';
 	if ( $dark ) {
 		$classes .= ' sc-services--dark';
 	}
+	$classes .= $pad_class;
 
-	$out = '<div class="' . esc_attr( $classes ) . '">';
+	$inline = $pad_style . $size_style;
+	$out    = '<div class="' . esc_attr( $classes ) . '"' . ( $inline ? ' style="' . esc_attr( $inline ) . '"' : '' ) . '>';
 
 	if ( '' !== $atts['heading'] ) {
 		$out .= '<h3 class="sc-list__heading">' . esc_html( $atts['heading'] ) . '</h3>';
 	}
 
-	$out .= '<ul class="sc-list sc-list--cols-' . esc_attr( $columns ) . '">';
+	$out .= '<ul class="sc-list sc-list--cols-' . esc_attr( $columns ) . ' sc-list--size-' . esc_attr( $size_class ) . '">';
 
 	foreach ( $sections as $id => $title ) {
 		$out .= '<li class="sc-list__item">';

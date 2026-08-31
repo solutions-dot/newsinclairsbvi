@@ -19,6 +19,50 @@
 		return isNaN(parsed) ? 0 : parsed;
 	}
 
+	/**
+	 * Open a <details> and every <details> it sits inside, closing the
+	 * siblings of each as it goes. A deep link can point at a whole
+	 * service or at one FAQ within it, and a FAQ is no use revealed
+	 * inside a collapsed parent — so the whole ancestor chain opens.
+	 */
+	function revealTarget(el) {
+		var node = el;
+
+		while (node && node !== document.body) {
+			if (node.tagName === 'DETAILS') {
+				closeSiblingsOf(node);
+				node.open = true;
+			}
+			node = node.parentNode;
+		}
+	}
+
+	/**
+	 * One service open at a time. Scoped to the group the <details>
+	 * belongs to, so opening a service does not close an FAQ nested in
+	 * it, and vice versa.
+	 */
+	function closeSiblingsOf(details) {
+		var group = details.parentNode;
+
+		if (!group || !group.querySelectorAll) {
+			return;
+		}
+
+		if (!group.hasAttribute('data-sc-collapses')) {
+			return;
+		}
+
+		Array.prototype.forEach.call(
+			group.querySelectorAll(':scope > details[open]'),
+			function (other) {
+				if (other !== details) {
+					other.open = false;
+				}
+			}
+		);
+	}
+
 	function scrollToSection(hash) {
 		if (!hash || hash.charAt(0) !== '#') {
 			return;
@@ -29,6 +73,10 @@
 		if (!target) {
 			return;
 		}
+
+		// Expand before measuring: a closed bar has a different height
+		// and everything below it would be scrolled to the wrong place.
+		revealTarget(target);
 
 		var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 		var top = target.getBoundingClientRect().top + window.pageYOffset - anchorOffset(target);
@@ -206,9 +254,18 @@
 			return;
 		}
 
-		if (target.tagName === 'DETAILS') {
-			target.open = true;
+		// This script loads on every page so the nav submenu works, and
+		// hashchange fires for every fragment on the site. Without this
+		// guard an Elementor tab, a modal or another plugin's accordion
+		// sharing an id would get scrolled to and focused by us, on top
+		// of whatever it does itself.
+		if (!target.closest('.sc-services')) {
+			return;
 		}
+
+		// Covers both cases: a whole service arrived at from the nav
+		// dropdown or the home page, and a single FAQ deep link.
+		revealTarget(target);
 
 		// Re-run the offset scroll: the browser's own hash jump happens
 		// before our CSS scroll-margin is necessarily applied.
@@ -268,16 +325,41 @@
 		}, true);
 	}
 
+	/* ------------------------------------------------------------------
+	   Collapsed service bars — one open at a time
+	   ------------------------------------------------------------------ */
+
+	function initCollapses() {
+		Array.prototype.forEach.call(
+			document.querySelectorAll('[data-sc-collapse]'),
+			function (details) {
+				// 'toggle' fires however the element was opened: click,
+				// keyboard, or find-in-page auto-expanding it.
+				details.addEventListener('toggle', function () {
+					if (details.open) {
+						closeSiblingsOf(details);
+					}
+				});
+			}
+		);
+	}
+
 	function init() {
 		Array.prototype.forEach.call(
 			document.querySelectorAll('[data-sc-jump]'),
 			initJump
 		);
+		initCollapses();
 		initAnchors();
 		initNavDropdown();
 		keepParentClickable();
 		openTargetedFaq();
 	}
+
+	// Arriving at a new hash on a page already loaded — the back button,
+	// or a dropdown link to the page you are on — does not reload, so
+	// the deep-link handling has to run again.
+	window.addEventListener('hashchange', openTargetedFaq);
 
 	if (document.readyState === 'loading') {
 		document.addEventListener('DOMContentLoaded', init);

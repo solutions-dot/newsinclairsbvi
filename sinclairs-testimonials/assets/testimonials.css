@@ -1,0 +1,255 @@
+/* ==========================================================================
+   Sinclairs (BVI) — Testimonials
+   --------------------------------------------------------------------------
+   Colours are the site's existing palette, the same values the Our
+   Services plugin uses:
+
+     #0C4DA2  primary blue
+     #015797  navy
+     #65C8D0  teal      (the arrows and dots on the current carousel)
+     #ecdbc9  sand
+     #202020  body ink
+
+   No font is declared: the carousel inherits the theme's typeface.
+   Everything is namespaced under .sbvit so it cannot leak into the
+   theme or a neighbouring Elementor widget.
+   ========================================================================== */
+
+.sbvit {
+	--sbvit-blue:  #0C4DA2;
+	--sbvit-navy:  #015797;
+	--sbvit-teal:  #65C8D0;
+	--sbvit-sand:  #ecdbc9;
+	--sbvit-ink:   #202020;
+	--sbvit-muted: rgba(32, 32, 32, 0.66);
+	--sbvit-line:  rgba(1, 87, 151, 0.16);
+
+	position: relative;
+	color: var(--sbvit-ink);
+	font-family: inherit;
+	line-height: 1.65;
+	/* Breathing room under the card. Padding rather than margin so it
+	   cannot collapse into whatever section follows — on the home page
+	   the next thing along is a full-bleed photo panel the card would
+	   otherwise sit flush against. */
+	padding-bottom: clamp(28px, 3.5vw, 56px);
+}
+
+.sbvit *,
+.sbvit *::before,
+.sbvit *::after { box-sizing: border-box; }
+
+.sbvit__heading {
+	margin: 0 0 clamp(18px, 2vw, 28px);
+	font-size: clamp(21px, 1.75vw, 27px);
+	font-weight: 700;
+	color: var(--sbvit-navy);
+	text-align: center;
+}
+
+/* ---------- The card ---------- */
+
+.sbvit__stage {
+	display: flex;
+	align-items: center;
+	gap: clamp(6px, 1.4vw, 20px);
+}
+
+.sbvit__card {
+	position: relative;
+	flex: 1 1 auto;
+	/* Without this a long unbroken word in a quote can force the card
+	   wider than its share and push an arrow off the edge. */
+	min-width: 0;
+	padding: clamp(28px, 3.4vw, 52px) clamp(22px, 3.6vw, 60px) clamp(26px, 3vw, 44px);
+	background: #fff;
+	border: 1px solid var(--sbvit-line);
+	border-radius: 14px;
+	box-shadow: 0 2px 18px rgba(1, 87, 151, 0.06);
+	overflow: hidden;
+}
+
+/*
+ * The viewport's height is set by the script to whichever testimonial
+ * is showing, and transitions between the two — so a short quote gets a
+ * short card instead of everything sitting at the height of the longest
+ * one. With JavaScript off no height is ever set, the slides are all
+ * static, and they simply stack down the page.
+ */
+.sbvit__viewport {
+	position: relative;
+	transition: height 320ms ease;
+}
+
+.sbvit__item {
+	margin: 0;
+	position: relative;
+	z-index: 1;
+}
+
+/* Once the script has taken over, inactive testimonials are stacked
+   underneath rather than pushing the card taller. */
+.sbvit.is-live .sbvit__item {
+	position: absolute;
+	inset: 0 0 auto 0;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 300ms ease, visibility 0s linear 300ms;
+	pointer-events: none;
+}
+
+.sbvit.is-live .sbvit__item.is-active {
+	position: relative;
+	opacity: 1;
+	visibility: visible;
+	transition-delay: 0s;
+	pointer-events: auto;
+	z-index: 2;
+}
+
+/* ---------- Name and title, above the quote ---------- */
+
+.sbvit__who {
+	margin: 0 0 clamp(14px, 1.6vw, 22px);
+	padding-bottom: clamp(12px, 1.4vw, 18px);
+	border-bottom: 1px solid var(--sbvit-line);
+	text-align: center;
+}
+
+.sbvit .sbvit__name {
+	margin: 0;
+	font-size: clamp(17px, 1.4vw, 21px);
+	font-weight: 700;
+	line-height: 1.25;
+	color: var(--sbvit-navy);
+}
+
+.sbvit .sbvit__role {
+	margin: 4px 0 0;
+	font-size: clamp(12px, 1vw, 13.5px);
+	font-weight: 600;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: var(--sbvit-teal);
+}
+
+/* ---------- The quote ---------- */
+
+.sbvit__quote {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	quotes: "\201C" "\201D" "\2018" "\2019";
+	font-size: clamp(15.5px, 1.2vw, 18px);
+	color: var(--sbvit-muted);
+}
+
+.sbvit__quote p { margin: 0 0 1em; }
+.sbvit__quote p:last-child { margin-bottom: 0; }
+
+/* The quotation marks are generated rather than typed, so they wrap the
+   whole quote however many paragraphs it runs to, and are never read
+   aloud as stray characters. */
+.sbvit__quote p:first-child::before { content: open-quote; }
+.sbvit__quote p:last-child::after   { content: close-quote; }
+
+/* ---------- Navigation, under the card ---------- */
+
+/* Only rendered when dots="yes"; the arrows no longer live here. */
+.sbvit__nav {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: clamp(10px, 1.4vw, 18px);
+	margin-top: clamp(16px, 1.8vw, 24px);
+}
+
+.sbvit__arrow {
+	appearance: none;
+	flex: 0 0 auto;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	padding: 0;
+	background: transparent;
+	color: var(--sbvit-teal);
+	border: 2px solid currentColor;
+	border-radius: 999px;
+	cursor: pointer;
+	transition: color 160ms ease, background-color 160ms ease, transform 160ms ease;
+}
+
+.sbvit__arrow svg { width: 20px; height: 20px; }
+
+.sbvit__arrow:hover {
+	background: var(--sbvit-teal);
+	color: #fff;
+	transform: translateY(-1px);
+}
+
+.sbvit__arrow:focus-visible {
+	outline: 3px solid var(--sbvit-blue);
+	outline-offset: 2px;
+}
+
+.sbvit__dots {
+	display: flex;
+	align-items: center;
+	gap: 9px;
+}
+
+.sbvit__dot {
+	appearance: none;
+	width: 9px;
+	height: 9px;
+	padding: 0;
+	border: 0;
+	border-radius: 999px;
+	background: var(--sbvit-teal);
+	opacity: 0.32;
+	cursor: pointer;
+	transition: opacity 180ms ease, width 220ms ease, background-color 180ms ease;
+}
+
+.sbvit__dot:hover { opacity: 0.7; }
+
+.sbvit__dot.is-active {
+	opacity: 1;
+	width: 26px;
+	background: var(--sbvit-teal);
+}
+
+.sbvit__dot:focus-visible {
+	outline: 2px solid var(--sbvit-blue);
+	outline-offset: 3px;
+}
+
+/* ---------- Phones ---------- */
+
+@media (max-width: 640px) {
+	.sbvit__card {
+		padding: 26px 20px 24px;
+		border-radius: 12px;
+	}
+
+	/* A phone has little width to spare, so the arrows come in rather
+	   than eating into the card — swipe is the primary gesture here
+	   anyway. They stay at 44px, the touch target minimum, since a
+	   smaller circle is worse than no circle. */
+	.sbvit__stage { gap: 4px; }
+	.sbvit__arrow { width: 44px; height: 44px; border-width: 1px; }
+	.sbvit__dot { width: 10px; height: 10px; }
+	.sbvit__dot.is-active { width: 28px; }
+	.sbvit__nav { gap: 12px; }
+}
+
+/* ---------- Motion preference ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+	.sbvit__viewport,
+	.sbvit__item,
+	.sbvit__arrow,
+	.sbvit__dot { transition-duration: 1ms !important; }
+}

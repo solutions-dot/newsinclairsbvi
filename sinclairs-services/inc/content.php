@@ -120,17 +120,20 @@ function ssvc_sections() {
 			// Retitled from "Compliance & Regulatory Law" at the client's
 			// request — see the AML/CFT document's opening instruction.
 			'id'    => 'aml-cft-compliance',
-			'title' => __( 'AML/CFT and Regulatory Compliance', 'sinclairs-services' ),
+			'title' => __( 'AML/CFT/CPF and Regulatory Compliance', 'sinclairs-services' ),
 			'brief' => __( 'Advises regulated entities and other relevant persons on the BVI framework for anti-money laundering, countering the financing of terrorism and countering proliferation financing (“AML/CFT/CPF”).', 'sinclairs-services' ),
 			'body'  => array(
 				array( 'lede', __( 'Effective compliance is more than having a manual on file. It requires policies, procedures and controls that reflect how a business actually operates.', 'sinclairs-services' ) ),
 				array( 'p', __( 'Sinclairs (BVI) advises regulated entities and other relevant persons on the BVI framework for anti-money laundering, countering the financing of terrorism and countering proliferation financing (“AML/CFT/CPF”). We help clients understand regulatory changes and translate their obligations into clear, workable procedures.', 'sinclairs-services' ) ),
-				array( 'p', __( 'We prepare and update AML/CFT/CPF compliance manuals tailored to each client’s regulatory status, business model, customers, services, operating jurisdictions and risk profile. Our advice covers areas such as governance, institutional and customer risk assessments, customer due diligence, ongoing monitoring, internal reporting, sanctions controls, record-keeping and staff training.', 'sinclairs-services' ) ),
 			),
 			'faqs'  => array(
 				array(
-					'q' => __( 'Can you prepare or update our compliance manual?', 'sinclairs-services' ),
-					'a' => array( __( 'Yes. We prepare practical, risk-based manuals tailored to each client’s business, customers, services and operating jurisdictions.', 'sinclairs-services' ) ),
+					'q' => __( 'How can Sinclairs (BVI) help when regulatory requirements change?', 'sinclairs-services' ),
+					'a' => array( __( 'We help clients understand how regulatory changes affect their businesses and translate the applicable requirements into clear, workable policies, procedures and controls.', 'sinclairs-services' ) ),
+				),
+				array(
+					'q' => __( 'What does effective AML/CFT/CPF compliance involve?', 'sinclairs-services' ),
+					'a' => array( __( 'Effective compliance requires clear policies, procedures and controls that are appropriate for the business and reflect how it operates in practice and which align with the applicable AML/CFT/CPF legislation.', 'sinclairs-services' ) ),
 				),
 			),
 		),
@@ -360,7 +363,7 @@ function ssvc_nutshell_groups() {
 				array( 'label' => __( 'Economic Substance', 'sinclairs-services' ), 'target' => 'economic-substance', 'text' => __( 'Advising BVI entities on the economic substance law and dealing with the ITA, if required.', 'sinclairs-services' ) ),
 				array( 'label' => __( 'Commercial Property', 'sinclairs-services' ), 'target' => 'corporate-commercial', 'text' => __( 'Handling commercial leases, land acquisitions, development projects, and property management.', 'sinclairs-services' ) ),
 				array( 'label' => __( 'Digital or Virtual Assets and FinTech', 'sinclairs-services' ), 'target' => 'virtual-assets-fintech', 'text' => __( 'Advising on VASP and other digital and cryptocurrency issues.', 'sinclairs-services' ) ),
-				array( 'label' => __( 'AML/CFT & Regulatory Compliance', 'sinclairs-services' ), 'target' => 'aml-cft-compliance', 'text' => __( 'Advises regulated entities and other relevant persons on the BVI framework for anti-money laundering, countering the financing of terrorism and countering proliferation financing (“AML/CFT/CPF”).', 'sinclairs-services' ) ),
+				array( 'label' => __( 'AML/CFT/CPF & Regulatory Compliance', 'sinclairs-services' ), 'target' => 'aml-cft-compliance', 'text' => __( 'Advises regulated entities and other relevant persons on the BVI framework for anti-money laundering, countering the financing of terrorism and countering proliferation financing (“AML/CFT/CPF”).', 'sinclairs-services' ) ),
 				array( 'label' => __( 'Voluntary Liquidations', 'sinclairs-services' ), 'target' => 'voluntary-liquidations', 'text' => __( 'Handling regulated and unregulated entities.', 'sinclairs-services' ) ),
 				array( 'label' => __( 'Trade Marks', 'sinclairs-services' ), 'target' => 'trade-marks', 'text' => __( 'Providing trade mark agent services, registrations, renewals and assignments.', 'sinclairs-services' ) ),
 				array( 'label' => __( 'Notarial Services', 'sinclairs-services' ), 'target' => 'notarial-services', 'text' => __( 'Notarising corporate documents, affidavits, transfer deeds, certificates and other personal documents, attending to apostille and legalization in the UK and UAE.', 'sinclairs-services' ) ),

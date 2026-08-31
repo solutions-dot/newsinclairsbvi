@@ -1,0 +1,328 @@
+/* ==========================================================================
+   Sinclairs (BVI) — Footer
+   --------------------------------------------------------------------------
+   Paints no background: it takes the colour of the section it is dropped
+   into, which is the existing teal panel. Registers no font, and sets no
+   size on its body text — links, hours and contact details inherit the
+   page's own type so the footer reads at the same size as everything
+   else. Namespaced under .sbvif so nothing leaks into the theme.
+   ========================================================================== */
+
+.sbvif {
+	--sbvif-fg:      #ffffff;
+	--sbvif-muted:   rgba(255, 255, 255, 0.82);
+	--sbvif-icon:    #ecdbc9;              /* the sand of the current arrows */
+	--sbvif-rule:    rgba(255, 255, 255, 0.22);
+	--sbvif-hover:   #ecdbc9;
+
+	color: var(--sbvif-fg);
+	font-family: inherit;
+	font-size: inherit;
+	line-height: 1.6;
+}
+
+/* For a pale panel rather than the teal one. */
+.sbvif--dark {
+	--sbvif-fg:    #202020;
+	--sbvif-muted: rgba(32, 32, 32, 0.72);
+	--sbvif-icon:  #015797;
+	--sbvif-rule:  rgba(1, 87, 151, 0.20);
+	--sbvif-hover: #0C4DA2;
+}
+
+.sbvif *,
+.sbvif *::before,
+.sbvif *::after { box-sizing: border-box; }
+
+/*
+ * Equal thirds. Sizing the columns to their content was the wrong call:
+ * it gave each heading rule a different width and left an uneven gap
+ * between the first two columns, which reads as three unrelated blocks
+ * rather than one row. Equal columns line the rules up and put the same
+ * space between each pair, which is what makes it look deliberate — the
+ * slack in the hours column is the price, and a cheap one.
+ */
+.sbvif__grid {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: clamp(24px, 3vw, 48px);
+	align-items: start;
+	max-width: 1120px;
+	margin: 0 auto;
+	/* Vertical padding is kept modest: the section this sits in carries
+	   its own padding too, and the two stack into a large empty band.
+	   --sbvif-pad-y is set inline by padding="…" when an exact value is
+	   wanted. */
+	padding: var(--sbvif-pad-y, clamp(18px, 1.6vw, 28px)) clamp(18px, 3vw, 40px);
+}
+
+.sbvif--pad-none .sbvif__grid { padding-top: 0; padding-bottom: 0; }
+.sbvif--pad-sm .sbvif__grid   { padding-top: 10px; padding-bottom: 10px; }
+.sbvif--pad-lg .sbvif__grid   { padding-top: clamp(32px, 3.4vw, 56px); padding-bottom: clamp(32px, 3.4vw, 56px); }
+
+.sbvif__col { min-width: 0; }
+
+.sbvif .sbvif__heading {
+	margin: 0 0 clamp(12px, 1.4vw, 18px);
+	padding-bottom: 10px;
+	font-family: inherit;
+	font-size: 0.8em;
+	font-weight: 600;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var(--sbvif-fg);
+	border-bottom: 1px solid var(--sbvif-rule);
+}
+
+/* ---------- Links ---------- */
+
+.sbvif__links {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.sbvif__links li { margin: 0 0 2px; }
+
+.sbvif__link {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 7px 0;
+	color: var(--sbvif-fg);
+	/* Stated rather than inherited, so a theme that bolds every link
+	   inside a footer widget cannot thicken these. */
+	font-weight: 400;
+	text-decoration: none;
+	transition: color 160ms ease, gap 160ms ease;
+}
+
+.sbvif__link:hover,
+.sbvif__link:focus-visible {
+	color: var(--sbvif-hover);
+	gap: 16px;
+}
+
+.sbvif__link:focus-visible {
+	outline: 2px solid currentColor;
+	outline-offset: 3px;
+}
+
+/* ---------- Hours and contact rows ---------- */
+
+.sbvif__rows {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.sbvif__row {
+	display: flex;
+	align-items: flex-start;
+	gap: 12px;
+	margin: 0 0 14px;
+	color: var(--sbvif-fg);
+	/* Explicit, so the two hours lines cannot pick up an alignment from
+	   a theme rule on the footer widget and end up ragged-right against
+	   each other. */
+	text-align: left;
+}
+
+.sbvif__row:last-child { margin-bottom: 0; }
+
+/*
+ * Weight and colour are stated here rather than left to inherit. The
+ * contact rows are links and the hours are not, so the theme's own link
+ * styling was making one bold white and leaving the other lighter —
+ * the same information rendered two different ways within one column.
+ */
+.sbvif__rowtext {
+	color: var(--sbvif-fg);
+	font-weight: 400;
+	text-decoration: none;
+	transition: color 160ms ease;
+}
+
+/* Only the actionable rows are links, so only they respond. */
+a.sbvif__rowtext:hover,
+a.sbvif__rowtext:focus-visible {
+	color: var(--sbvif-hover);
+	text-decoration: underline;
+	text-underline-offset: 0.25em;
+}
+
+a.sbvif__rowtext:focus-visible {
+	outline: 2px solid currentColor;
+	outline-offset: 3px;
+}
+
+/* The days and the time are one entry on two lines, both flush left
+   under the icon — the same shape as the address, which also wraps. */
+.sbvif__days,
+.sbvif__time { display: block; }
+
+/* ---------- Icons ---------- */
+
+.sbvif__icon {
+	flex: 0 0 auto;
+	width: 1.15em;
+	height: 1.15em;
+	color: var(--sbvif-icon);
+}
+
+/* Nudged down to sit on the first line's baseline rather than its top,
+   which is where flex-start alone would put it. */
+.sbvif__row .sbvif__icon { margin-top: 0.22em; }
+
+/* ---------- Collapsible columns ----------
+   On desktop the <details> is not a control at all: the summary is
+   inert, its chevron is hidden, and the body is always visible. It only
+   becomes an accordion at the mobile breakpoint below. */
+
+.sbvif__fold > summary {
+	list-style: none;
+	cursor: default;
+}
+
+.sbvif__fold > summary::-webkit-details-marker { display: none; }
+.sbvif__fold > summary::marker { content: ""; }
+
+.sbvif__chevron { display: none; }
+
+/* Desktop: neutralise the disclosure entirely. Without this a click on
+   the heading would fold a column away on a wide screen, where the
+   script has no reason to re-open it. */
+@media (min-width: 601px) {
+	.sbvif__fold > summary { pointer-events: none; }
+	.sbvif__foldbody { display: block !important; }
+}
+
+/* ---------- Centred variant ----------
+   Centres each column's block within its cell, but leaves the text
+   inside it ranged left. Centring the text itself is what goes wrong in
+   footers: rows begin with an icon, and the address runs to two lines,
+   so centred text gives a ragged triangle and icons that no longer line
+   up under each other. */
+
+.sbvif--center .sbvif__col {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.sbvif--center .sbvif__heading {
+	align-self: stretch;
+	text-align: center;
+}
+
+.sbvif--center .sbvif__links,
+.sbvif--center .sbvif__rows { text-align: left; }
+
+/* ---------- Screen-reader-only text ----------
+   The theme provides this class, but the footer must not depend on the
+   theme for it: without a definition these labels would render as
+   visible stray words. */
+
+.sbvif .screen-reader-text {
+	position: absolute !important;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+
+/* ---------- Tablet: three columns is too tight ---------- */
+
+@media (max-width: 900px) {
+	/* Two columns, with the address spanning the full width beneath —
+	   it is the long one and would otherwise force an awkward wrap. */
+	.sbvif__grid {
+		grid-template-columns: 1fr 1fr;
+		gap: clamp(20px, 3vw, 36px);
+	}
+
+	.sbvif__col--contact { grid-column: 1 / -1; }
+}
+
+/* ---------- Phones ---------- */
+
+@media (max-width: 600px) {
+	.sbvif__grid {
+		grid-template-columns: 1fr;
+		gap: 30px;
+		padding: var(--sbvif-pad-y, 24px) 20px;
+		text-align: center;
+	}
+
+	/*
+	 * Each block is centred as a unit with its contents ranged left,
+	 * and all three share a width so their left edges line up down the
+	 * page. Centring each row individually is what looked wrong: the
+	 * five nav labels are different lengths, so their arrows ended up
+	 * at five different positions instead of in a column.
+	 */
+	.sbvif__links,
+	.sbvif__rows {
+		display: inline-block;
+		width: 100%;
+		max-width: 17em;
+		text-align: left;
+	}
+
+	.sbvif__link {
+		justify-content: flex-start;
+		padding: 9px 0;
+	}
+
+	/* Now the heading is a control: it needs to look tappable, fill the
+	   width so the whole strip is the target, and carry a chevron. */
+	.sbvif--collapsible .sbvif__fold > summary {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 10px;
+		cursor: pointer;
+		/* The rule under the heading is the border on .sbvif__heading,
+		   so the bottom padding is the gap between the words and the
+		   line. 12px sat too tight under uppercase tracked-out type,
+		   which has no descenders to fill the space. */
+		padding: 14px 0 18px;
+		margin-bottom: 0;
+		-webkit-tap-highlight-color: transparent;
+	}
+
+	.sbvif--collapsible .sbvif__fold > summary:focus-visible {
+		outline: 2px solid currentColor;
+		outline-offset: 2px;
+	}
+
+	.sbvif--collapsible .sbvif__chevron {
+		display: block;
+		width: 8px;
+		height: 8px;
+		border-right: 2px solid currentColor;
+		border-bottom: 2px solid currentColor;
+		transform: rotate(45deg) translate(-1px, -1px);
+		transition: transform 200ms ease;
+		opacity: 0.8;
+	}
+
+	.sbvif--collapsible .sbvif__fold[open] > summary .sbvif__chevron {
+		transform: rotate(225deg) translate(-1px, -1px);
+	}
+
+	/* And the matching gap on the other side of the line. */
+	.sbvif--collapsible .sbvif__foldbody { padding: 16px 0 14px; }
+
+	/* Tighter, since each closed column is now one row rather than a
+	   block — the old gap left the three headings floating apart. */
+	.sbvif--collapsible .sbvif__grid { gap: 4px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.sbvif__chevron { transition: none; }
+}
