@@ -611,17 +611,28 @@ a.sc-nutshell__row:focus-visible .sc-nutshell__arrow {
 
 .sc-nav-parent { position: relative; }
 
-/* Caret next to "Our Services". Hover opens the panel via CSS; this
-   button exists for touch and keyboard, where hover never fires. */
+/*
+ * Caret next to "Our Services". Hover opens the panel via CSS; this
+ * button exists for touch and keyboard, where hover never fires.
+ *
+ * Positioned absolutely against .sc-nav-parent rather than left inline
+ * next to the link: the theme's own "Our Services" <a> renders as a
+ * full-width block (matching every other row in its mobile drawer), so
+ * a button placed in normal flow right after it has no room left on
+ * that line and drops to one of its own below the row — a lone caret
+ * floating under the text instead of sitting beside it.
+ */
 .sc-nav-toggle {
+	position: absolute;
+	top: 50%;
+	right: 4px;
+	transform: translateY(-50%);
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
 	width: 22px;
 	height: 22px;
 	padding: 0;
-	margin-left: 2px;
-	vertical-align: middle;
 	background: none;
 	border: 0;
 	cursor: pointer;
@@ -652,7 +663,12 @@ a.sc-nutshell__row:focus-visible .sc-nutshell__arrow {
 	padding: 10px 0;
 	list-style: none;
 	background: var(--sc-white, #fff);
+	/* A full outline, not just the accent rule across the top: on its
+	   own the panel read as text floating over the page with no defined
+	   edge, especially against a photo background behind it. */
+	border: 1px solid var(--sc-line, rgba(1, 87, 151, 0.16));
 	border-top: 2px solid #65C8D0;
+	border-radius: 8px;
 	box-shadow: 0 14px 34px rgba(0, 0, 0, 0.14);
 
 	opacity: 0;
@@ -765,15 +781,25 @@ a.sc-nutshell__row:focus-visible .sc-nutshell__arrow {
 
 	.sc-jump__go { flex: 1 1 100%; padding: 12px 22px; }
 
-	/* Full-width dropdown reads better than a floating panel on phones. */
+	/* Full-width dropdown reads better than a floating panel on phones,
+	   so it no longer floats free of the page — but it should still read
+	   as a bounded card rather than dissolving into plain unbordered
+	   rows, hence keeping a visible outline here rather than dropping it
+	   to nothing along with the shadow and positioning. */
 	.sc-nav-dropdown {
 		position: static;
 		min-width: 0;
+		margin-top: 4px;
+		border: 1px solid var(--sc-line, rgba(1, 87, 151, 0.16));
+		border-radius: 8px;
 		box-shadow: none;
 		opacity: 1;
 		visibility: visible;
 		transform: none;
 	}
+
+	/* Room for the absolutely positioned toggle at the right of the row. */
+	.sc-nav-parent > a { padding-right: 44px; }
 }
 
 /* --------------------------------------------------------------------------
@@ -822,11 +848,12 @@ a.sc-nutshell__row:focus-visible .sc-nutshell__arrow {
 		font-size: 14.5px;
 	}
 
-	/* Comfortable tap target, kept clear of the parent link. */
+	/* Comfortable tap target. Still centred against the row via top/50%
+	   above; only the box itself grows here. */
 	.sc-nav-toggle {
-		display: inline-flex;
 		width: 40px;
 		height: 40px;
+		right: 0;
 	}
 }
 
