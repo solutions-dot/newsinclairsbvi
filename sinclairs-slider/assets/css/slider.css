@@ -329,7 +329,13 @@
 
 /* ---------- Phones ---------- */
 
-@media (max-width: 782px) {
+/*
+ * 1024px rather than a phone-only 782px: the desktop layout assumes a
+ * wide 16:9 frame, and it stops working well before an actual phone —
+ * a narrowed desktop window or a tablet in portrait already crops the
+ * frame enough that an off-centre anchor reads as misplaced.
+ */
+@media (max-width: 1024px) {
 	.sbvis--hm-ratio .sbvis__stage { aspect-ratio: 16 / 9; height: auto; }
 	.sbvis--hm-fixed .sbvis__stage { aspect-ratio: auto; height: var(--sbvis-h-mobile, 480px); }
 	.sbvis--hm-viewport .sbvis__stage { aspect-ratio: auto; height: 100svh; }
@@ -337,10 +343,14 @@
 	/* Slides opted into re-stacking pull their text and buttons back to
 	   a safe centred column, because a desktop position anchored to an
 	   edge of a 16:9 frame lands off-canvas on a phone. */
+	/* Dead centre of the frame, both axes, ignoring the desktop anchor
+	   and any nudge it carries. */
 	.sbvis__slide--restack .sbvis__layer--text {
 		left: 50%;
 		top: 50%;
+		transform: translate(-50%, -50%);
 		width: calc(100% - 2.5rem);
+		max-width: none;
 		text-align: center;
 		--align: center;
 	}
