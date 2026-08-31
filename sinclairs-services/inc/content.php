@@ -125,7 +125,6 @@ function ssvc_sections() {
 			'body'  => array(
 				array( 'lede', __( 'Effective compliance is more than having a manual on file. It requires policies, procedures and controls that reflect how a business actually operates.', 'sinclairs-services' ) ),
 				array( 'p', __( 'Sinclairs (BVI) advises regulated entities and other relevant persons on the BVI framework for anti-money laundering, countering the financing of terrorism and countering proliferation financing (“AML/CFT/CPF”). We help clients understand regulatory changes and translate their obligations into clear, workable procedures.', 'sinclairs-services' ) ),
-				array( 'p', __( 'We prepare and update AML/CFT/CPF compliance manuals tailored to each client’s regulatory status, business model, customers, services, operating jurisdictions and risk profile. Our advice covers areas such as governance, institutional and customer risk assessments, customer due diligence, ongoing monitoring, internal reporting, sanctions controls, record-keeping and staff training.', 'sinclairs-services' ) ),
 			),
 			'faqs'  => array(
 				array(
@@ -134,7 +133,7 @@ function ssvc_sections() {
 				),
 				array(
 					'q' => __( 'What does effective AML/CFT/CPF compliance involve?', 'sinclairs-services' ),
-					'a' => array( __( 'Effective compliance requires clear policies, procedures and controls that are appropriate for the business and reflect how it actually operates.', 'sinclairs-services' ) ),
+					'a' => array( __( 'Effective compliance requires clear policies, procedures and controls that are appropriate for the business and reflect how it operates in practice and which align with the applicable AML/CFT/CPF legislation.', 'sinclairs-services' ) ),
 				),
 			),
 		),
