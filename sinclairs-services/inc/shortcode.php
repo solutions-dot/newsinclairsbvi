@@ -230,7 +230,7 @@ function ssvc_sections_markup( $accordion = false, $back_url = '' ) {
  * nav dropdown, the home page, the jump box, [sinclairs_services_list]
  * — keeps resolving to the same anchor it always did.
  */
-function ssvc_collapse_markup( $back_url = '' ) {
+function ssvc_collapse_markup() {
 	$out = '<div class="sc-collapses" data-sc-collapses>';
 
 	foreach ( ssvc_sections() as $i => $section ) {
@@ -256,9 +256,8 @@ function ssvc_collapse_markup( $back_url = '' ) {
 		}
 		$out .= '<div class="sc-section__prose">' . $body . '</div>';
 		$out .= ssvc_render_faqs( $section['faqs'], $section['id'] );
-		if ( $back_url ) {
-			$out .= '<a class="sc-section__top" href="' . esc_url( $back_url ) . '">' . esc_html__( 'All services', 'sinclairs-services' ) . '</a>';
-		}
+		// No "All services" link here: the bars are the index. Every
+		// other service is one click away up the page already.
 		$out .= '</div>';
 
 		$out .= '</details>';
@@ -332,7 +331,7 @@ function ssvc_shortcode_detail( $atts ) {
 	}
 
 	if ( 'collapse' === $layout ) {
-		$out .= ssvc_collapse_markup( ssvc_services_page_url() );
+		$out .= ssvc_collapse_markup();
 	} else {
 		$out .= ssvc_sections_markup( 'accordion' === $layout, ssvc_services_page_url() );
 	}
@@ -387,7 +386,7 @@ function ssvc_shortcode_services( $atts ) {
 
 	// Back link only where there is an index above to go back to.
 	if ( $collapse ) {
-		$out .= ssvc_collapse_markup( $nutshell ? '#sc-nutshell' : '' );
+		$out .= ssvc_collapse_markup();
 	} else {
 		$out .= ssvc_sections_markup( $accordion, $nutshell ? '#sc-nutshell' : '' );
 	}

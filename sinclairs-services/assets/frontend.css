@@ -388,11 +388,6 @@ a.sc-nutshell__row:focus-visible .sc-nutshell__arrow {
 	color: var(--sc-navy);
 }
 
-.sc-collapse .sc-section__top {
-	display: inline-block;
-	margin-top: 24px;
-}
-
 @media (max-width: 600px) {
 	.sc-collapse__bar { gap: 12px; padding: 14px 16px; }
 	.sc-collapse__num { display: none; }
