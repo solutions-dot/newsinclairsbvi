@@ -90,6 +90,7 @@
 	gap: 12px;
 	padding: 7px 0;
 	color: var(--sbvif-fg);
+	font-weight: 600;
 	text-decoration: none;
 	transition: color 160ms ease, gap 160ms ease;
 }
@@ -118,7 +119,7 @@
 	align-items: flex-start;
 	gap: 12px;
 	margin: 0 0 14px;
-	color: var(--sbvif-muted);
+	color: var(--sbvif-fg);
 	/* Explicit, so the two hours lines cannot pick up an alignment from
 	   a theme rule on the footer widget and end up ragged-right against
 	   each other. */
@@ -127,8 +128,15 @@
 
 .sbvif__row:last-child { margin-bottom: 0; }
 
+/*
+ * Weight and colour are stated here rather than left to inherit. The
+ * contact rows are links and the hours are not, so the theme's own link
+ * styling was making one bold white and leaving the other lighter —
+ * the same information rendered two different ways within one column.
+ */
 .sbvif__rowtext {
-	color: inherit;
+	color: var(--sbvif-fg);
+	font-weight: 600;
 	text-decoration: none;
 	transition: color 160ms ease;
 }
@@ -146,10 +154,10 @@ a.sbvif__rowtext:focus-visible {
 	outline-offset: 3px;
 }
 
+/* The days and the time are one entry on two lines, both flush left
+   under the icon — the same shape as the address, which also wraps. */
 .sbvif__days,
 .sbvif__time { display: block; }
-
-.sbvif__time { color: var(--sbvif-muted); }
 
 /* ---------- Icons ---------- */
 
@@ -225,19 +233,25 @@ a.sbvif__rowtext:focus-visible {
 		text-align: center;
 	}
 
-	/* Centred, so the three stacked blocks read as one column rather
-	   than three ragged left edges of different widths. */
 	.sbvif__heading { border-bottom: 0; padding-bottom: 0; }
-	.sbvif__link { justify-content: center; }
 
-	/* The rows stay left-aligned within a centred block: an icon
-	   followed by two lines of text centres badly, and the address
-	   would wrap to a ragged triangle. */
+	/*
+	 * Each block is centred as a unit with its contents ranged left,
+	 * and all three share a width so their left edges line up down the
+	 * page. Centring each row individually is what looked wrong: the
+	 * five nav labels are different lengths, so their arrows ended up
+	 * at five different positions instead of in a column.
+	 */
+	.sbvif__links,
 	.sbvif__rows {
 		display: inline-block;
+		width: 100%;
+		max-width: 17em;
 		text-align: left;
-		max-width: 20em;
 	}
 
-	.sbvif__link { padding: 9px 0; }
+	.sbvif__link {
+		justify-content: flex-start;
+		padding: 9px 0;
+	}
 }
