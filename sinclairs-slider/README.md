@@ -43,14 +43,15 @@ Slides play in the order shown on the **Slider** screen. Change the order with t
 
 - **Transition** — fade, slide, zoom fade, Ken Burns, or an instant cut; transition speed; time on each slide; autoplay, loop and pause-on-hover.
 - **Navigation** — thumbnails, dots, progress bars, or none, with optional previous/next arrows. It always renders in its own band under the images.
-- **Size** — desktop and mobile height independently: full 16:9, a fixed pixel height cropped to the focal point, or full screen height.
+- **Size** — full width (edge to edge, breaking out of the page container) or contained; and desktop and mobile height independently: full 16:9, a fixed pixel height cropped to the focal point, or full screen height.
 - **Appearance** — the default button colour, and an optional font override for the rare case where the hero is meant to differ from the rest of the site. Leave the font blank to inherit the theme.
 
 ## Output
 
 ```
-[sinclairs_slider]              All published slides, in order
-[sinclairs_slider ids="12,8,3"] Only those slides, in that order
+[sinclairs_slider]                    All published slides, in order
+[sinclairs_slider ids="12,8,3"]       Only those slides, in that order
+[sinclairs_slider width="contained"]  Box it inside the page width on this page only
 ```
 
 In a theme template:

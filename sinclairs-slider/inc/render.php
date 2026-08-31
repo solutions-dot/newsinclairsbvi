@@ -18,19 +18,20 @@ function sbvis_shortcode( $atts ) {
 	$atts = shortcode_atts( array(
 		'ids'   => '',
 		'class' => '',
+		'width' => '',
 	), $atts, 'sinclairs_slider' );
 
 	$ids = array_filter( array_map( 'absint', array_map( 'trim', explode( ',', (string) $atts['ids'] ) ) ) );
 
-	return sbvis_slider_markup( $ids, $atts['class'] );
+	return sbvis_slider_markup( $ids, $atts['class'], $atts['width'] );
 }
 
 /**
  * Template tag, for dropping the slider straight into a theme file.
  */
 function sinclairs_slider( $args = array() ) {
-	$args = wp_parse_args( $args, array( 'ids' => array(), 'class' => '', 'echo' => true ) );
-	$html = sbvis_slider_markup( (array) $args['ids'], $args['class'] );
+	$args = wp_parse_args( $args, array( 'ids' => array(), 'class' => '', 'width' => '', 'echo' => true ) );
+	$html = sbvis_slider_markup( (array) $args['ids'], $args['class'], $args['width'] );
 
 	if ( $args['echo'] ) {
 		echo $html; // phpcs:ignore WordPress.Security.EscapingOutput -- built and escaped in sbvis_slider_markup().
@@ -70,7 +71,7 @@ function sbvis_style_string( $props ) {
 	return implode( ';', $out );
 }
 
-function sbvis_slider_markup( $ids = array(), $extra_class = '' ) {
+function sbvis_slider_markup( $ids = array(), $extra_class = '', $width = '' ) {
 	$slides = sbvis_get_slides( $ids );
 
 	if ( ! $slides ) {
@@ -89,8 +90,13 @@ function sbvis_slider_markup( $ids = array(), $extra_class = '' ) {
 		'--sbvis-font'      => $settings['font_override'] ? $settings['font_override'] : 'inherit',
 	) );
 
+	// A width given on the shortcode wins over the global setting, so a
+	// single page can box the slider without changing it everywhere.
+	$width = in_array( $width, array( 'full', 'contained' ), true ) ? $width : $settings['width'];
+
 	$classes = array(
 		'sbvis',
+		'sbvis--' . $width,
 		'sbvis--effect-' . $settings['effect'],
 		'sbvis--nav-' . $settings['nav'],
 		'sbvis--hd-' . $settings['height_desktop'],

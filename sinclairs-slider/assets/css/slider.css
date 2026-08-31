@@ -20,6 +20,19 @@
 
 /* ---------- Stage ---------- */
 
+/*
+ * Full-bleed: the slider is nearly always dropped inside a theme or
+ * page-builder content container, so breaking out of it is what makes
+ * it span the window like the hero it replaces. calc(50% - 50vw) is the
+ * standard escape and stays correct whatever the container's width.
+ */
+.sbvis--full {
+	width: 100vw;
+	max-width: 100vw;
+	margin-left: calc(50% - 50vw);
+	margin-right: calc(50% - 50vw);
+}
+
 .sbvis__stage {
 	position: relative;
 	width: 100%;
@@ -55,12 +68,24 @@
 
 .sbvis__media { position: absolute; inset: 0; }
 
-.sbvis__img {
-	width: 100%;
-	height: 100%;
+/*
+ * !important is deliberate. Nearly every theme ships a global
+ * `img { height: auto }` (and often `max-width: 100%`), which outranks
+ * a plain height:100% here on specificity and leaves the photo at its
+ * natural height with the stage floor showing below it. The image has
+ * to fill the stage for object-fit to crop to the focal point at all.
+ */
+.sbvis .sbvis__img {
+	width: 100% !important;
+	height: 100% !important;
+	max-width: none !important;
+	min-height: 0 !important;
 	object-fit: cover;
 	/* object-position is written inline from the slide's focal point. */
 	display: block;
+	margin: 0;
+	padding: 0;
+	border-radius: 0;
 }
 
 .sbvis__scrim {

@@ -20,6 +20,7 @@ function sbvis_default_settings() {
 		'loop'           => 1,
 		'pause_on_hover' => 1,
 		'nav'            => 'thumbs',
+		'width'          => 'full',
 		'arrows'         => 1,
 		'height_desktop' => 'ratio',
 		'height_mobile'  => 'ratio',
@@ -77,6 +78,8 @@ function sbvis_sanitize_settings( $input ) {
 	foreach ( array( 'autoplay', 'loop', 'pause_on_hover', 'arrows' ) as $flag ) {
 		$out[ $flag ] = empty( $input[ $flag ] ) ? 0 : 1;
 	}
+
+	$out['width'] = in_array( $input['width'] ?? '', array( 'full', 'contained' ), true ) ? $input['width'] : $defaults['width'];
 
 	$navs = array( 'thumbs', 'dots', 'bars', 'none' );
 	$out['nav'] = in_array( $input['nav'] ?? '', $navs, true ) ? $input['nav'] : $defaults['nav'];
@@ -188,6 +191,14 @@ function sbvis_render_settings_page() {
 
 			<h2 class="title"><?php esc_html_e( 'Size', 'sinclairs-slider' ); ?></h2>
 			<table class="form-table" role="presentation">
+				<tr>
+					<th scope="row"><?php esc_html_e( 'Width', 'sinclairs-slider' ); ?></th>
+					<td>
+						<label style="margin-right:18px;"><input type="radio" name="<?php echo esc_attr( SBVIS_OPTION ); ?>[width]" value="full" <?php checked( $s['width'], 'full' ); ?> /> <?php esc_html_e( 'Full width — edge to edge, ignoring the page container', 'sinclairs-slider' ); ?></label>
+						<label><input type="radio" name="<?php echo esc_attr( SBVIS_OPTION ); ?>[width]" value="contained" <?php checked( $s['width'], 'contained' ); ?> /> <?php esc_html_e( 'Contained — stay inside the page content width', 'sinclairs-slider' ); ?></label>
+						<p class="description"><?php esc_html_e( 'A hero normally wants full width. Override per shortcode with width="contained" if one page needs it boxed.', 'sinclairs-slider' ); ?></p>
+					</td>
+				</tr>
 				<tr>
 					<th scope="row"><label for="sbvis-hd"><?php esc_html_e( 'Desktop height', 'sinclairs-slider' ); ?></label></th>
 					<td>
