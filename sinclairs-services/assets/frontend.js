@@ -254,6 +254,15 @@
 			return;
 		}
 
+		// This script loads on every page so the nav submenu works, and
+		// hashchange fires for every fragment on the site. Without this
+		// guard an Elementor tab, a modal or another plugin's accordion
+		// sharing an id would get scrolled to and focused by us, on top
+		// of whatever it does itself.
+		if (!target.closest('.sc-services')) {
+			return;
+		}
+
 		// Covers both cases: a whole service arrived at from the nav
 		// dropdown or the home page, and a single FAQ deep link.
 		revealTarget(target);

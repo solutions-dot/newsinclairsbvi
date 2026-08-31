@@ -246,7 +246,12 @@ function ssvc_collapse_markup() {
 			$out .= '<span class="sc-collapse__icon">' . $icon . '</span>';
 		}
 		$out .= '<span class="sc-collapse__num">' . esc_html( $number ) . '</span>';
-		$out .= '<span class="sc-collapse__title">' . esc_html( $section['title'] ) . '</span>';
+		// A real heading, not a span: the rail layout used <h2> here, and
+		// dropping to a span would take all ten practice areas out of
+		// screen-reader heading navigation and orphan the <h3> subheads
+		// and "Information & FAQs" inside them. A summary's content model
+		// allows heading content, so this stays valid.
+		$out .= '<h2 class="sc-collapse__title">' . esc_html( $section['title'] ) . '</h2>';
 		$out .= '<span class="sc-collapse__chevron" aria-hidden="true"></span>';
 		$out .= '</summary>';
 
