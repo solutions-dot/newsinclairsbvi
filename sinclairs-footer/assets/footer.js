@@ -16,7 +16,7 @@
 	function apply(query) {
 		var folds = document.querySelectorAll('.sbvif--collapsible .sbvif__fold');
 
-		Array.prototype.forEach.call(folds, function (fold, i) {
+		Array.prototype.forEach.call(folds, function (fold) {
 			if (!query.matches) {
 				fold.open = true;
 				return;
@@ -30,9 +30,7 @@
 				return;
 			}
 
-			// The first column stays open so the footer does not
-			// collapse to three bare words with nothing under them.
-			fold.open = ( i === 0 );
+			fold.open = false;
 		});
 	}
 
