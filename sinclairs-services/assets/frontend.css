@@ -914,10 +914,17 @@ a.sc-nutshell__row:focus-visible .sc-nutshell__arrow {
 
 .sc-list--cols-1 .sc-list__item:last-child .sc-list__link { border-bottom: 0; }
 
-.sc-list__text {
+/*
+ * Specificity and !important are both deliberate here. A bare
+ * .sc-list__text is a single class, and the theme overrides it — it
+ * already uses ID selectors and !important on its own nav rules, so a
+ * polite selector loses and the size attribute appears to do nothing.
+ * Scoped tightly enough that it can only ever hit this shortcode.
+ */
+.sc-services .sc-list .sc-list__link .sc-list__text {
 	/* --sc-list-size is set inline only when size="…" names an exact
 	   length; otherwise the keyword steps below decide. */
-	font-size: var(--sc-list-size, 16px);
+	font-size: var(--sc-list-size, 16px) !important;
 	font-weight: 600;
 	line-height: 1.35;
 }
@@ -925,8 +932,22 @@ a.sc-nutshell__row:focus-visible .sc-nutshell__arrow {
 /* size="large" / "xlarge". 16px was chosen for a half-width column and
    reads as small in a full-width panel, so the larger steps scale the
    row padding with the type rather than leaving the rows tight. */
-.sc-list--size-large .sc-list__text  { font-size: var(--sc-list-size, clamp(17px, 1.35vw, 19px)); }
-.sc-list--size-xlarge .sc-list__text { font-size: var(--sc-list-size, clamp(19px, 1.7vw, 23px)); }
+.sc-services .sc-list--size-large .sc-list__link .sc-list__text {
+	font-size: var(--sc-list-size, clamp(17px, 1.35vw, 19px)) !important;
+}
+
+.sc-services .sc-list--size-xlarge .sc-list__link .sc-list__text {
+	font-size: var(--sc-list-size, clamp(19px, 1.7vw, 23px)) !important;
+}
+
+/* An exact size="…" is a fixed length, so unlike the keyword steps it
+   would not come down on a phone. Scale it there instead of leaving a
+   desktop size to crowd a narrow screen. */
+@media (max-width: 640px) {
+	.sc-services .sc-list .sc-list__link .sc-list__text {
+		font-size: calc(var(--sc-list-size, 16px) * 0.9) !important;
+	}
+}
 
 .sc-list--size-large .sc-list__link  { padding: 17px 4px; }
 .sc-list--size-xlarge .sc-list__link { padding: 20px 4px; }
@@ -975,6 +996,8 @@ a.sc-nutshell__row:focus-visible .sc-nutshell__arrow {
 .sc-services--dark .sc-list__arrow { color: var(--sc-teal); }
 
 @media (max-width: 480px) {
-	.sc-list__text { font-size: 15px; }
+	/* The size rule that used to sit here is gone: the 640px block above
+	   now scales the title, and this one could never have won against it
+	   anyway. The padding is still this breakpoint's own. */
 	.sc-list__link { padding: 12px 2px; }
 }
