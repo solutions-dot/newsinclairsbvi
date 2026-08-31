@@ -16,6 +16,10 @@
  *   headings="yes|no"    the column headings
  *   align="left|center"  desktop alignment. Columns centre on mobile
  *                        either way.
+ *   padding="none|sm|md|lg"
+ *                        space above and below. Also takes an exact
+ *                        length — padding="12px" — for trimming the gap
+ *                        against a section that carries its own padding.
  *
  * The middle column is the short one, so it carries the hours and lets
  * the two long columns sit either side of it — that is what stops the
@@ -33,6 +37,7 @@ function sbvif_shortcode( $atts ) {
 		'theme'    => 'light',
 		'headings' => 'yes',
 		'align'    => 'left',
+		'padding'  => 'md',
 	), $atts, 'sinclairs_footer' );
 
 	sbvif_enqueue_assets();
@@ -46,9 +51,21 @@ function sbvif_shortcode( $atts ) {
 	$classes[] = 'dark' === $atts['theme'] ? 'sbvif--dark' : 'sbvif--light';
 	$classes[] = 'center' === $atts['align'] ? 'sbvif--center' : 'sbvif--left';
 
+	// A keyword step, or an exact length. The pattern is deliberately
+	// narrow — a number and a unit, nothing else — because the value
+	// goes into a style attribute.
+	$pad   = trim( (string) $atts['padding'] );
+	$style = '';
+
+	if ( in_array( $pad, array( 'none', 'sm', 'lg' ), true ) ) {
+		$classes[] = 'sbvif--pad-' . $pad;
+	} elseif ( preg_match( '/^\d{1,4}(\.\d{1,2})?(px|rem|em|vw|%)$/', $pad ) ) {
+		$style = '--sbvif-pad-y:' . $pad . ';';
+	}
+
 	ob_start();
 	?>
-	<div class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>">
+	<div class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>"<?php echo $style ? ' style="' . esc_attr( $style ) . '"' : ''; ?>>
 		<div class="sbvif__grid">
 
 			<?php if ( $links ) : ?>

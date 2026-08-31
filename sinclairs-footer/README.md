@@ -34,7 +34,11 @@ that stays as it is.
 ```
 [sinclairs_footer theme="dark"]      ink text, for a pale panel
 [sinclairs_footer headings="no"]     drop the column headings
-[sinclairs_footer align="center"]    centre the columns on desktop too
+[sinclairs_footer align="center"]    centre each column's block in its
+                                     cell (text stays ranged left)
+[sinclairs_footer padding="sm"]      less space above and below; also
+                                     "none", "lg", or an exact length
+                                     such as padding="12px"
 ```
 
 Also available as a template tag:

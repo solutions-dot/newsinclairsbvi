@@ -35,20 +35,30 @@
 .sbvif *::after { box-sizing: border-box; }
 
 /*
- * Three columns that share the width by content rather than in equal
- * thirds: the hours column holds two short lines and would leave a hole
- * in the middle at 1fr, while the address needs the room. auto for the
- * short one, and the two text columns take what is left.
+ * Equal thirds. Sizing the columns to their content was the wrong call:
+ * it gave each heading rule a different width and left an uneven gap
+ * between the first two columns, which reads as three unrelated blocks
+ * rather than one row. Equal columns line the rules up and put the same
+ * space between each pair, which is what makes it look deliberate — the
+ * slack in the hours column is the price, and a cheap one.
  */
 .sbvif__grid {
 	display: grid;
-	grid-template-columns: minmax(160px, 0.85fr) minmax(150px, auto) minmax(240px, 1.25fr);
-	gap: clamp(24px, 4vw, 64px);
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: clamp(24px, 3vw, 48px);
 	align-items: start;
-	max-width: 1180px;
+	max-width: 1120px;
 	margin: 0 auto;
-	padding: clamp(28px, 3.5vw, 56px) clamp(18px, 3vw, 40px);
+	/* Vertical padding is kept modest: the section this sits in carries
+	   its own padding too, and the two stack into a large empty band.
+	   --sbvif-pad-y is set inline by padding="…" when an exact value is
+	   wanted. */
+	padding: var(--sbvif-pad-y, clamp(18px, 1.6vw, 28px)) clamp(18px, 3vw, 40px);
 }
+
+.sbvif--pad-none .sbvif__grid { padding-top: 0; padding-bottom: 0; }
+.sbvif--pad-sm .sbvif__grid   { padding-top: 10px; padding-bottom: 10px; }
+.sbvif--pad-lg .sbvif__grid   { padding-top: clamp(32px, 3.4vw, 56px); padding-bottom: clamp(32px, 3.4vw, 56px); }
 
 .sbvif__col { min-width: 0; }
 
@@ -109,6 +119,10 @@
 	gap: 12px;
 	margin: 0 0 14px;
 	color: var(--sbvif-muted);
+	/* Explicit, so the two hours lines cannot pick up an alignment from
+	   a theme rule on the footer widget and end up ragged-right against
+	   each other. */
+	text-align: left;
 }
 
 .sbvif__row:last-child { margin-bottom: 0; }
@@ -150,12 +164,26 @@ a.sbvif__rowtext:focus-visible {
    which is where flex-start alone would put it. */
 .sbvif__row .sbvif__icon { margin-top: 0.22em; }
 
-/* ---------- Centred variant ---------- */
+/* ---------- Centred variant ----------
+   Centres each column's block within its cell, but leaves the text
+   inside it ranged left. Centring the text itself is what goes wrong in
+   footers: rows begin with an icon, and the address runs to two lines,
+   so centred text gives a ragged triangle and icons that no longer line
+   up under each other. */
 
-.sbvif--center .sbvif__grid { text-align: center; }
-.sbvif--center .sbvif__link,
-.sbvif--center .sbvif__row { justify-content: center; }
-.sbvif--center .sbvif__heading { border-bottom: 0; padding-bottom: 0; }
+.sbvif--center .sbvif__col {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.sbvif--center .sbvif__heading {
+	align-self: stretch;
+	text-align: center;
+}
+
+.sbvif--center .sbvif__links,
+.sbvif--center .sbvif__rows { text-align: left; }
 
 /* ---------- Screen-reader-only text ----------
    The theme provides this class, but the footer must not depend on the
@@ -193,7 +221,7 @@ a.sbvif__rowtext:focus-visible {
 	.sbvif__grid {
 		grid-template-columns: 1fr;
 		gap: 30px;
-		padding: 32px 20px;
+		padding: var(--sbvif-pad-y, 24px) 20px;
 		text-align: center;
 	}
 
