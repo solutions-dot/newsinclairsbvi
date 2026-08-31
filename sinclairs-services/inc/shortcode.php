@@ -438,8 +438,12 @@ add_shortcode( 'sinclairs_services_summary', 'ssvc_shortcode_index' );
  *   theme="light|dark"   dark = white text, for use on a navy/photo panel
  *   columns="1|2"        1 (default) suits a half-width column
  *   heading="…"          optional heading above the list
- *   pad="none|sm|md|lg"  left inset, for a panel that butts up against
- *                        an image or the edge of its column
+ *   pad="none|sm|md|lg|xl"
+ *                        left inset, for a panel that butts up against
+ *                        an image or the edge of its column. Also takes
+ *                        an explicit length — pad="120px", pad="8%",
+ *                        pad="6vw" — for when the keyword steps are not
+ *                        the gap the design wants.
  *   size="normal|large|xlarge"
  *                        title size. normal (default) is what the list
  *                        was built at; the larger steps suit a full
@@ -472,17 +476,27 @@ function ssvc_shortcode_list( $atts ) {
 	$dark    = ( 'dark' === $atts['theme'] );
 	$columns = ( '2' === $atts['columns'] ) ? '2' : '1';
 	$size    = in_array( $atts['size'], array( 'normal', 'large', 'xlarge' ), true ) ? $atts['size'] : 'normal';
-	$pad     = in_array( $atts['pad'], array( 'none', 'sm', 'md', 'lg' ), true ) ? $atts['pad'] : 'none';
+	// Either one of the keyword steps, or an explicit CSS length. The
+	// pattern is deliberately narrow — a number and a unit, nothing
+	// else — so the value can be dropped into a style attribute without
+	// opening a hole for anything that is not a length.
+	$pad_raw   = trim( (string) $atts['pad'] );
+	$pad_class = '';
+	$pad_style = '';
+
+	if ( in_array( $pad_raw, array( 'sm', 'md', 'lg', 'xl' ), true ) ) {
+		$pad_class = ' sc-list-pad--' . $pad_raw;
+	} elseif ( preg_match( '/^\d{1,4}(\.\d{1,2})?(px|%|rem|em|vw)$/', $pad_raw ) ) {
+		$pad_style = 'padding-left:' . $pad_raw . ';';
+	}
 
 	$classes = 'sc-services sc-services--list';
 	if ( $dark ) {
 		$classes .= ' sc-services--dark';
 	}
-	if ( 'none' !== $pad ) {
-		$classes .= ' sc-list-pad--' . $pad;
-	}
+	$classes .= $pad_class;
 
-	$out = '<div class="' . esc_attr( $classes ) . '">';
+	$out = '<div class="' . esc_attr( $classes ) . '"' . ( $pad_style ? ' style="' . esc_attr( $pad_style ) . '"' : '' ) . '>';
 
 	if ( '' !== $atts['heading'] ) {
 		$out .= '<h3 class="sc-list__heading">' . esc_html( $atts['heading'] ) . '</h3>';

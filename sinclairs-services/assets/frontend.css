@@ -861,7 +861,7 @@ a.sc-nutshell__row:focus-visible .sc-nutshell__arrow {
    full-width panel; it now reads as a heading at a heading's size. */
 .sc-list__heading {
 	margin: 0 0 var(--sc-space-3, 16px);
-	font-size: clamp(20px, 1.7vw, 26px);
+	font-size: clamp(21px, 1.75vw, 27px);
 	font-weight: 700;
 	letter-spacing: 0.01em;
 	color: var(--sc-teal);
@@ -873,7 +873,8 @@ a.sc-nutshell__row:focus-visible .sc-nutshell__arrow {
    constrains it. */
 .sc-list-pad--sm { padding-left: clamp(12px, 1.5vw, 20px); }
 .sc-list-pad--md { padding-left: clamp(20px, 3vw, 44px); }
-.sc-list-pad--lg { padding-left: clamp(32px, 5vw, 72px); }
+.sc-list-pad--lg { padding-left: clamp(32px, 5vw, 80px); }
+.sc-list-pad--xl { padding-left: clamp(44px, 8vw, 140px); }
 
 .sc-list {
 	display: grid;

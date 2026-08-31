@@ -139,9 +139,11 @@ nav dropdown use, so this never points at a missing page either.
                                                      column and reads small
                                                      in a full-width panel
 [sinclairs_services_list pad="md"]                  left inset ("sm", "md",
-                                                     "lg") for a panel that
-                                                     butts up against an
-                                                     image or its column edge
+                                                     "lg", "xl"), or an
+                                                     explicit length such as
+                                                     pad="120px" / pad="8%"
+                                                     when the steps are not
+                                                     the gap you want
 ```
 
 The list's **width** is whatever the containing column gives it — nothing
