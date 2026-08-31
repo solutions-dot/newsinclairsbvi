@@ -138,7 +138,15 @@ nav dropdown use, so this never points at a missing page either.
                                                      chosen for a half-width
                                                      column and reads small
                                                      in a full-width panel
+[sinclairs_services_list pad="md"]                  left inset ("sm", "md",
+                                                     "lg") for a panel that
+                                                     butts up against an
+                                                     image or its column edge
 ```
+
+The list's **width** is whatever the containing column gives it — nothing
+in this plugin constrains it. If it stops short of the panel it sits in,
+that is the column's own padding, set in the page builder.
 
 `theme="dark"` is what the About page's navy half-panel uses — white
 titles, teal on hover/focus, matching the accent already used everywhere

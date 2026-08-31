@@ -438,6 +438,8 @@ add_shortcode( 'sinclairs_services_summary', 'ssvc_shortcode_index' );
  *   theme="light|dark"   dark = white text, for use on a navy/photo panel
  *   columns="1|2"        1 (default) suits a half-width column
  *   heading="…"          optional heading above the list
+ *   pad="none|sm|md|lg"  left inset, for a panel that butts up against
+ *                        an image or the edge of its column
  *   size="normal|large|xlarge"
  *                        title size. normal (default) is what the list
  *                        was built at; the larger steps suit a full
@@ -455,6 +457,7 @@ function ssvc_shortcode_list( $atts ) {
 		'columns' => '1',
 		'heading' => '',
 		'size'    => 'normal',
+		'pad'     => 'none',
 	), $atts, 'sinclairs_services_list' );
 
 	$sections = ssvc_section_index();
@@ -469,10 +472,14 @@ function ssvc_shortcode_list( $atts ) {
 	$dark    = ( 'dark' === $atts['theme'] );
 	$columns = ( '2' === $atts['columns'] ) ? '2' : '1';
 	$size    = in_array( $atts['size'], array( 'normal', 'large', 'xlarge' ), true ) ? $atts['size'] : 'normal';
+	$pad     = in_array( $atts['pad'], array( 'none', 'sm', 'md', 'lg' ), true ) ? $atts['pad'] : 'none';
 
 	$classes = 'sc-services sc-services--list';
 	if ( $dark ) {
 		$classes .= ' sc-services--dark';
+	}
+	if ( 'none' !== $pad ) {
+		$classes .= ' sc-list-pad--' . $pad;
 	}
 
 	$out = '<div class="' . esc_attr( $classes ) . '">';
