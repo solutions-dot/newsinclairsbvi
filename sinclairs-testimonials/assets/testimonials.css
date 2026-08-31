@@ -28,6 +28,11 @@
 	color: var(--sbvit-ink);
 	font-family: inherit;
 	line-height: 1.65;
+	/* Breathing room under the card. Padding rather than margin so it
+	   cannot collapse into whatever section follows — on the home page
+	   the next thing along is a full-bleed photo panel the card would
+	   otherwise sit flush against. */
+	padding-bottom: clamp(28px, 3.5vw, 56px);
 }
 
 .sbvit *,

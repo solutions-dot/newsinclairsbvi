@@ -3,7 +3,7 @@
  * Plugin Name:       Sinclairs (BVI) — Testimonials
  * Plugin URI:        https://sinclairsbvi.com/
  * Description:       A testimonials carousel: the client's name and title above, their words below in quotes. One shortcode, <code>[sinclairs_testimonials]</code>. The box takes the height of whichever testimonial is showing rather than sitting at the height of the longest, and the arrows and dots sit under the card so they never overlap the text.
- * Version:           1.1.0
+ * Version:           1.1.1
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            Sinclairs (BVI)
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SBVIT_VERSION', '1.1.0' );
+define( 'SBVIT_VERSION', '1.1.1' );
 define( 'SBVIT_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SBVIT_URI', plugin_dir_url( __FILE__ ) );
 
