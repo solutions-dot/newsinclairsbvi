@@ -34,7 +34,7 @@ stay in the database.
 | **Alignment, colour, max width** | Per slide. |
 | **Buttons** | Up to two per slide, each with a label, link, new-tab option and style (solid pill / outline / text link), plus size and colour. Any slide can have none. |
 | **Button position** | By default the buttons sit directly under the text. Untick that and they get their own 9-point grid and nudge, so they can go anywhere on the frame independently of the heading. |
-| **On phones** | Re-centres text and buttons on narrow screens so an edge-anchored desktop layout does not fall off the side. Can be turned off per slide. |
+Text position on phones is not set per slide — see **Text on phones** below. Buttons that follow the text (the default) move with it; a free-positioned button keeps its own desktop coordinates on phones regardless of that setting.
 
 Slides play in the order shown on the **Slider** screen. Change the order with the
 **Order** field under Page Attributes on each slide.
@@ -44,6 +44,10 @@ Slides play in the order shown on the **Slider** screen. Change the order with t
 - **Transition** — fade, slide, zoom fade, Ken Burns, or an instant cut; transition speed; time on each slide; autoplay, loop and pause-on-hover.
 - **Navigation** — thumbnails, dots, progress bars, or none, with optional previous/next arrows. It always renders in its own band under the images.
 - **Size** — full width (edge to edge, breaking out of the page container) or contained; and desktop and mobile height independently: full 16:9, a fixed pixel height cropped to the focal point, or full screen height.
+- **Text on phones** — one setting for every slide's text position on narrow screens, since a desktop position anchored to an edge almost always needs somewhere different to go on a phone:
+  - **Re-centre automatically** (default) — dead centre of the frame, ignoring each slide's desktop position and nudge.
+  - **Keep the exact desktop position** — no change at all below the phone breakpoint.
+  - **Use a different position on phones** — its own 9-point anchor and X/Y nudge, applied to every slide.
 - **Appearance** — the default button colour, and an optional font override for the rare case where the hero is meant to differ from the rest of the site. Leave the font blank to inherit the theme.
 
 ## Output

@@ -152,7 +152,22 @@ function sbvis_render_slide( $post, $index, $total, $settings ) {
 	if ( 0 === $index ) {
 		$slide_class[] = 'is-active';
 	}
-	if ( $slide['mobile_stack'] ) {
+
+	// One setting for the whole slider rather than a per-slide toggle:
+	// a desktop position anchored to an edge almost always needs
+	// somewhere different to go on a narrow screen, and repeating that
+	// choice on every slide just for consistency was busywork.
+	$mobile_position = $settings['mobile_position'];
+	$mobile_x         = 0.0;
+	$mobile_y         = 0.0;
+
+	if ( 'custom' === $mobile_position ) {
+		$slide_class[] = 'sbvis__slide--mobile-pos';
+		list( $mobile_x, $mobile_y ) = sbvis_anchor_position( $settings['mobile_anchor'] );
+		$mobile_x += (float) $settings['mobile_nudge_x'];
+		$mobile_y += (float) $settings['mobile_nudge_y'];
+	} elseif ( 'same' !== $mobile_position ) {
+		// 'auto' (default), and anything unrecognised degrades to it.
 		$slide_class[] = 'sbvis__slide--restack';
 	}
 
@@ -190,6 +205,11 @@ function sbvis_render_slide( $post, $index, $total, $settings ) {
 			<div class="sbvis__layer sbvis__layer--text" style="<?php echo esc_attr( sbvis_style_string( array(
 				'--x'          => $text_x . '%',
 				'--y'          => $text_y . '%',
+				// Only meaningful with .sbvis__slide--mobile-pos on the
+				// slide (mobile_position = 'custom'); harmless custom
+				// properties otherwise, since nothing reads them.
+				'--x-m'        => $mobile_x . '%',
+				'--y-m'        => $mobile_y . '%',
 				// Unitless on purpose — slider.css multiplies these by
 				// 1rem so the fluid-size calc() stays dimensionally valid.
 				'--size'       => (float) $slide['text_size'],

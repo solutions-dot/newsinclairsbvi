@@ -3,7 +3,7 @@
  * Plugin Name:       Sinclairs (BVI) — Hero Slider
  * Plugin URI:        https://sinclairsbvi.com/
  * Description:       A lightweight replacement for Slider Revolution. Upload 1920&times;1080 images, set a focal point per slide so the crop never cuts off the subject, position heading and button independently, pick a transition, and show the slide navigation in a band <em>below</em> the images rather than on top of them. Output with the <code>[sinclairs_slider]</code> shortcode or the Sinclairs Slider block.
- * Version:           1.1.1
+ * Version:           1.2.0
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            Sinclairs (BVI)
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SBVIS_VERSION', '1.1.1' );
+define( 'SBVIS_VERSION', '1.2.0' );
 define( 'SBVIS_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SBVIS_URI', plugin_dir_url( __FILE__ ) );
 

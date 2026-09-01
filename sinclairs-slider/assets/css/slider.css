@@ -369,6 +369,21 @@
 		transform: translate(-50%, 0);
 	}
 
+	/*
+	 * mobile_position = "custom" in Slider → Settings: every slide's
+	 * text moves to the one mobile position chosen there (--x-m/--y-m,
+	 * set from that setting), rather than being force-centred. The
+	 * width/max-width match --restack, for the same reason — an anchor
+	 * near an edge still needs room rather than overflowing it.
+	 */
+	.sbvis__slide--mobile-pos .sbvis__layer--text {
+		left: var(--x-m, 50%);
+		top: var(--y-m, 50%);
+		transform: translate(-50%, -50%);
+		width: calc(100% - 2.5rem);
+		max-width: none;
+	}
+
 	.sbvis__buttons { justify-content: center; }
 	.sbvis__btn { padding: 0.9rem 1.75rem; }
 	.sbvis__nav { padding: 1rem 0.75rem; gap: 0.5rem; }

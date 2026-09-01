@@ -51,7 +51,6 @@ function sbvis_slide_defaults() {
 		'text_align'    => 'center',
 		'text_color'    => '#ffffff',
 		'text_width'    => 70,
-		'mobile_stack'  => 1,
 		'btn_on'        => 0,
 		'btn_label'     => '',
 		'btn_url'       => '',
@@ -96,20 +95,30 @@ function sbvis_field_name( $key ) {
 	return 'sbvis[' . $key . ']';
 }
 
-function sbvis_anchor_grid( $key, $current ) {
+/**
+ * $field_name is the full HTML name attribute already — sbvis_field_name()
+ * for a per-slide meta box field, or SBVIS_OPTION . '[key]' for a field
+ * on the Settings page. Kept as one renderer so both contexts get the
+ * same click grid rather than two markups drifting apart.
+ */
+function sbvis_anchor_grid_field( $field_name, $current ) {
 	echo '<div class="sbvis-anchor-grid">';
 	foreach ( sbvis_anchors() as $value => $label ) {
 		printf(
 			'<label class="sbvis-anchor%s" title="%s"><input type="radio" name="%s" value="%s"%s /><span aria-hidden="true"></span><span class="screen-reader-text">%s</span></label>',
 			$current === $value ? ' is-active' : '',
 			esc_attr( $label ),
-			esc_attr( sbvis_field_name( $key ) ),
+			esc_attr( $field_name ),
 			esc_attr( $value ),
 			checked( $current, $value, false ),
 			esc_html( $label )
 		);
 	}
 	echo '</div>';
+}
+
+function sbvis_anchor_grid( $key, $current ) {
+	sbvis_anchor_grid_field( sbvis_field_name( $key ), $current );
 }
 
 function sbvis_box_image( $post ) {
@@ -230,14 +239,16 @@ function sbvis_box_text( $post ) {
 						<input type="number" name="<?php echo esc_attr( sbvis_field_name( 'text_width' ) ); ?>" value="<?php echo esc_attr( $slide['text_width'] ); ?>" min="20" max="100" step="5" class="small-text" />%</label>
 				</td>
 			</tr>
-			<tr>
-				<th scope="row"><?php esc_html_e( 'On phones', 'sinclairs-slider' ); ?></th>
-				<td>
-					<label><input type="checkbox" name="<?php echo esc_attr( sbvis_field_name( 'mobile_stack' ) ); ?>" value="1" <?php checked( $slide['mobile_stack'], 1 ); ?> /> <?php esc_html_e( 'Re-centre the text and buttons on narrow screens', 'sinclairs-slider' ); ?></label>
-					<p class="description"><?php esc_html_e( 'Recommended. A position that works on a wide desktop image often falls off the edge of a phone. Untick to keep the desktop position exactly.', 'sinclairs-slider' ); ?></p>
-				</td>
-			</tr>
 		</table>
+		<p class="description">
+			<?php
+			printf(
+				/* translators: %s: link to the slider-wide settings screen */
+				esc_html__( 'How this text is positioned on phones is set once for every slide, under %s.', 'sinclairs-slider' ),
+				'<a href="' . esc_url( admin_url( 'edit.php?post_type=sbvi_slide&page=sbvis-settings' ) ) . '">' . esc_html__( 'Slider → Settings → Text on phones', 'sinclairs-slider' ) . '</a>'
+			);
+			?>
+		</p>
 	</div>
 	<?php
 }
@@ -347,7 +358,7 @@ function sbvis_save_slide( $post_id, $post ) {
 
 	// Checkboxes are absent when unticked, so they are handled outside
 	// the main loop rather than falling back to their default.
-	$checkboxes = array( 'mobile_stack', 'btn_on', 'btn_new', 'btn_follow', 'btn2_on', 'btn2_new', 'btn_custom' );
+	$checkboxes = array( 'btn_on', 'btn_new', 'btn_follow', 'btn2_on', 'btn2_new', 'btn_custom' );
 
 	foreach ( sbvis_slide_defaults() as $key => $default ) {
 		if ( in_array( $key, $checkboxes, true ) ) {
