@@ -168,10 +168,35 @@
 		});
 	}
 
+	/*
+	 * The "Text on phones" radios on Slider → Settings: only reveal the
+	 * custom anchor grid and nudge fields when "Use a different
+	 * position on phones" is the selected option.
+	 */
+	function initMobileModeToggle() {
+		var radios = document.querySelectorAll('[data-sbvis-mobile-mode]');
+		var target = document.getElementById('sbvis-mobile-custom');
+
+		if (!radios.length || !target) {
+			return;
+		}
+
+		var update = function () {
+			var checked = document.querySelector('[data-sbvis-mobile-mode]:checked');
+			target.hidden = !checked || 'custom' !== checked.value;
+		};
+
+		Array.prototype.forEach.call(radios, function (radio) {
+			radio.addEventListener('change', update);
+		});
+		update();
+	}
+
 	document.addEventListener('DOMContentLoaded', function () {
 		Array.prototype.forEach.call(document.querySelectorAll('[data-sbvis-image]'), initImageField);
 		initRanges();
 		initToggles();
 		initAnchors();
+		initMobileModeToggle();
 	});
 })();

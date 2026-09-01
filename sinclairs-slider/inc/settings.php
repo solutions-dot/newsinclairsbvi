@@ -28,6 +28,15 @@ function sbvis_default_settings() {
 		'height_px_m'    => 480,
 		'font_override'  => '',
 		'accent'         => '#0b5cab',
+		// How every slide's text is positioned on phones. Per-slide
+		// desktop positions are set individually, but a desktop layout
+		// anchored to an edge usually falls off a narrow screen, so this
+		// is one setting for the whole slider rather than something to
+		// repeat on every slide.
+		'mobile_position'   => 'auto',
+		'mobile_anchor'     => 'middle-center',
+		'mobile_nudge_x'    => 0,
+		'mobile_nudge_y'    => 0,
 	);
 }
 
@@ -95,6 +104,17 @@ function sbvis_sanitize_settings( $input ) {
 
 	$accent = sanitize_hex_color( $input['accent'] ?? '' );
 	$out['accent'] = $accent ? $accent : $defaults['accent'];
+
+	$out['mobile_position'] = in_array( $input['mobile_position'] ?? '', array( 'auto', 'same', 'custom' ), true )
+		? $input['mobile_position']
+		: $defaults['mobile_position'];
+
+	$out['mobile_anchor'] = array_key_exists( $input['mobile_anchor'] ?? '', sbvis_anchors() )
+		? $input['mobile_anchor']
+		: $defaults['mobile_anchor'];
+
+	$out['mobile_nudge_x'] = min( 50, max( -50, (float) ( $input['mobile_nudge_x'] ?? $defaults['mobile_nudge_x'] ) ) );
+	$out['mobile_nudge_y'] = min( 50, max( -50, (float) ( $input['mobile_nudge_y'] ?? $defaults['mobile_nudge_y'] ) ) );
 
 	return $out;
 }
@@ -220,6 +240,42 @@ function sbvis_render_settings_page() {
 						</select>
 						<input type="number" name="<?php echo esc_attr( SBVIS_OPTION ); ?>[height_px_m]" value="<?php echo esc_attr( $s['height_px_m'] ); ?>" min="200" max="1000" step="10" class="small-text" /> px
 						<p class="description"><?php esc_html_e( 'A 16:9 image is very short on a phone. "Fixed height" plus a focal point usually reads far better.', 'sinclairs-slider' ); ?></p>
+					</td>
+				</tr>
+			</table>
+
+			<h2 class="title"><?php esc_html_e( 'Text on phones', 'sinclairs-slider' ); ?></h2>
+			<table class="form-table" role="presentation">
+				<tr>
+					<th scope="row"><?php esc_html_e( 'Position', 'sinclairs-slider' ); ?></th>
+					<td>
+						<?php
+						$modes = array(
+							'auto'   => __( 'Re-centre automatically (recommended)', 'sinclairs-slider' ),
+							'same'   => __( 'Keep the exact desktop position', 'sinclairs-slider' ),
+							'custom' => __( 'Use a different position on phones', 'sinclairs-slider' ),
+						);
+						foreach ( $modes as $value => $label ) {
+							printf(
+								'<label style="display:block;margin-bottom:6px;"><input type="radio" name="%s[mobile_position]" value="%s"%s data-sbvis-mobile-mode /> %s</label>',
+								esc_attr( SBVIS_OPTION ),
+								esc_attr( $value ),
+								checked( $s['mobile_position'], $value, false ),
+								esc_html( $label )
+							);
+						}
+						?>
+						<p class="description"><?php esc_html_e( 'Applies to every slide. A desktop position anchored to an edge often falls off a narrow screen, so text re-centres there by default.', 'sinclairs-slider' ); ?></p>
+
+						<div id="sbvis-mobile-custom" class="sbvis-conditional"<?php echo 'custom' !== $s['mobile_position'] ? ' hidden' : ''; ?>>
+							<?php sbvis_anchor_grid_field( SBVIS_OPTION . '[mobile_anchor]', $s['mobile_anchor'] ); ?>
+							<p class="sbvis-nudge">
+								<label><?php esc_html_e( 'Nudge across', 'sinclairs-slider' ); ?>
+									<input type="number" name="<?php echo esc_attr( SBVIS_OPTION ); ?>[mobile_nudge_x]" value="<?php echo esc_attr( $s['mobile_nudge_x'] ); ?>" min="-50" max="50" step="1" class="small-text" />%</label>
+								<label><?php esc_html_e( 'Nudge down', 'sinclairs-slider' ); ?>
+									<input type="number" name="<?php echo esc_attr( SBVIS_OPTION ); ?>[mobile_nudge_y]" value="<?php echo esc_attr( $s['mobile_nudge_y'] ); ?>" min="-50" max="50" step="1" class="small-text" />%</label>
+							</p>
+						</div>
 					</td>
 				</tr>
 			</table>
