@@ -84,6 +84,17 @@
 
 .sbvif__links li { margin: 0 0 2px; }
 
+/*
+ * .sbvif__link carries top/bottom padding for a comfortable tap target,
+ * but .sbvif__row (the hours and contact rows) has none — only a bottom
+ * margin between rows. Left alone, the first link sits visibly lower
+ * than the first hours/contact row beside it wherever a column has no
+ * heading above to absorb the difference, which is the default now.
+ * Zeroing just the leading edge keeps the tap target's overall height
+ * — and the gap to the second link — the same as everywhere else.
+ */
+.sbvif__links li:first-child .sbvif__link { padding-top: 0; }
+
 .sbvif__link {
 	display: flex;
 	align-items: center;
