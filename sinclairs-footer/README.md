@@ -29,14 +29,23 @@ that stays as it is.
 - **Same type size as the rest of the page**: the footer sets no font
   size on its body text, so it inherits whatever the page uses.
 
+No column headings ("Explore", "Opening Hours", "Get in Touch") or the rule
+under them by default — the three lists just start at the top of their
+column. Add `headings="yes"` to bring them back.
+
 ## Attributes
 
 ```
 [sinclairs_footer theme="dark"]      ink text, for a pale panel
-[sinclairs_footer headings="no"]     drop the column headings
+[sinclairs_footer headings="yes"]    show the column headings and the
+                                     rule under them (off by default)
 [sinclairs_footer align="center"]    centre each column's block in its
                                      cell (text stays ranged left)
 [sinclairs_footer collapse="no"]     stop the columns folding on mobile
+                                     (only relevant with headings="yes" —
+                                     without a heading there is nothing
+                                     to tap, so the columns are always
+                                     open either way)
 [sinclairs_footer padding="sm"]      less space above and below; also
                                      "none", "lg", or an exact length
                                      such as padding="12px"
@@ -54,7 +63,7 @@ Also available as a template tag:
 |---|---|
 | Desktop | Three columns, sized to their content rather than equal thirds — the hours column is short and would leave a hole in the middle at `1fr`, while the address needs the room |
 | ≤ 900px | Two columns, with the contact block spanning the full width beneath, since the address is the long one and would otherwise wrap awkwardly |
-| ≤ 600px | One column, and each section folds under its heading — all three start closed, tap to open. Each block is centred as a unit with its contents ranged left, and the three share a width so the arrows and icons line up down the page |
+| ≤ 600px | Two columns — Explore and Get in Touch side by side — with Opening Hours spanning the full width underneath, since it is the shortest of the three and pairs awkwardly with either column. With `headings="yes"` each section also folds under its heading, all three starting closed, tap to open; without a heading (the default) there is nothing to tap, so all three stay expanded. Either way each block is centred as a unit with its contents ranged left |
 
 ## Changing the content
 
@@ -73,15 +82,17 @@ Or edit `inc/content.php` directly.
 - No background colour of its own: it takes the colour of the section it
   sits in, so the existing teal panel keeps working.
 - No font registered — it inherits the theme's typeface.
-- The mobile accordion is native `details` / `summary`. The columns
-  carry `open` in the markup and the script only ever *closes* them once
-  it has confirmed the viewport is narrow — so with JavaScript off every
-  column stays open, rather than a visitor being left with a footer they
-  cannot open. On desktop the summary is inert, so a click on a heading
-  cannot fold a column away where nothing would re-open it. All three
-  start closed on a phone. A section
-  someone has opened on their phone is not shut again by a resize, an
-  on-screen keyboard, or the address bar collapsing.
+- The mobile accordion only exists with `headings="yes"` — without a
+  heading there is no tap target, so the default is every column simply
+  expanded on a phone, same as desktop. With `headings="yes"` it is
+  native `details` / `summary`: the columns carry `open` in the markup
+  and the script only ever *closes* them once it has confirmed the
+  viewport is narrow, so with JavaScript off every column stays open
+  rather than a visitor being left with a footer they cannot open. On
+  desktop the summary is inert, so a click on a heading cannot fold a
+  column away where nothing would re-open it. All three start closed on
+  a phone, and a section someone has opened there is not shut again by a
+  resize, an on-screen keyboard, or the address bar collapsing.
 - The `screen-reader-text` class is defined in the plugin's own CSS
   rather than relied on from the theme: without a definition the
   "Telephone:" / "Address:" labels would render as visible stray words.
