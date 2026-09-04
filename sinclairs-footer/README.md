@@ -63,7 +63,7 @@ Also available as a template tag:
 |---|---|
 | Desktop | Three columns, sized to their content rather than equal thirds — the hours column is short and would leave a hole in the middle at `1fr`, while the address needs the room |
 | ≤ 900px | Two columns, with the contact block spanning the full width beneath, since the address is the long one and would otherwise wrap awkwardly |
-| ≤ 600px | One column. With `headings="yes"` each section folds under its heading, all three starting closed, tap to open; without a heading (the default) there is nothing to tap, so all three stay expanded. Either way each block is centred as a unit with its contents ranged left, and the three share a width so the arrows and icons line up down the page |
+| ≤ 600px | Two columns — Explore and Get in Touch side by side — with Opening Hours spanning the full width underneath, since it is the shortest of the three and pairs awkwardly with either column. With `headings="yes"` each section also folds under its heading, all three starting closed, tap to open; without a heading (the default) there is nothing to tap, so all three stay expanded. Either way each block is centred as a unit with its contents ranged left |
 
 ## Changing the content
 

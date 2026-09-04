@@ -251,25 +251,40 @@ a.sbvif__rowtext:focus-visible {
 /* ---------- Phones ---------- */
 
 @media (max-width: 600px) {
+	/*
+	 * Explore and Get in Touch side by side, with Opening Hours
+	 * spanning the full width underneath — three equal-width stacked
+	 * blocks left more empty side space than the content needed, and
+	 * Hours is the shortest of the three, so it is the one better
+	 * placed on its own row than paired awkwardly with either column.
+	 */
 	.sbvif__grid {
-		grid-template-columns: 1fr;
-		gap: 30px;
+		grid-template-columns: 1fr 1fr;
+		grid-template-areas:
+			"links   contact"
+			"hours   hours";
+		gap: 26px 20px;
 		padding: var(--sbvif-pad-y, 24px) 20px;
 		text-align: center;
 	}
 
+	.sbvif__col--links   { grid-area: links; }
+	.sbvif__col--contact { grid-area: contact; }
+	.sbvif__col--hours   { grid-area: hours; }
+
 	/*
-	 * Each block is centred as a unit with its contents ranged left,
-	 * and all three share a width so their left edges line up down the
-	 * page. Centring each row individually is what looked wrong: the
-	 * five nav labels are different lengths, so their arrows ended up
-	 * at five different positions instead of in a column.
+	 * Each block is centred as a unit with its contents ranged left, so
+	 * a short row's arrow or icon does not end up indented relative to
+	 * a longer one beside it. Centring each row individually is what
+	 * looked wrong before this: the five nav labels are different
+	 * lengths, so their arrows ended up at five different positions
+	 * instead of in a column.
 	 */
 	.sbvif__links,
 	.sbvif__rows {
 		display: inline-block;
 		width: 100%;
-		max-width: 17em;
+		max-width: 15em;
 		text-align: left;
 	}
 
