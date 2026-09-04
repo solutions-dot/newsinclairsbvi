@@ -29,14 +29,23 @@ that stays as it is.
 - **Same type size as the rest of the page**: the footer sets no font
   size on its body text, so it inherits whatever the page uses.
 
+No column headings ("Explore", "Opening Hours", "Get in Touch") or the rule
+under them by default — the three lists just start at the top of their
+column. Add `headings="yes"` to bring them back.
+
 ## Attributes
 
 ```
 [sinclairs_footer theme="dark"]      ink text, for a pale panel
-[sinclairs_footer headings="no"]     drop the column headings
+[sinclairs_footer headings="yes"]    show the column headings and the
+                                     rule under them (off by default)
 [sinclairs_footer align="center"]    centre each column's block in its
                                      cell (text stays ranged left)
 [sinclairs_footer collapse="no"]     stop the columns folding on mobile
+                                     (only relevant with headings="yes" —
+                                     without a heading there is nothing
+                                     to tap, so the columns are always
+                                     open either way)
 [sinclairs_footer padding="sm"]      less space above and below; also
                                      "none", "lg", or an exact length
                                      such as padding="12px"

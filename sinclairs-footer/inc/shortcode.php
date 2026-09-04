@@ -13,11 +13,14 @@
  * ----------
  *   theme="light|dark"   light (default) = white text for the teal
  *                        panel; dark = ink text for a pale background
- *   headings="yes|no"    the column headings
+ *   headings="yes|no"    the column headings (and the rule under them).
+ *                        Default no.
  *   align="left|center"  desktop alignment. Columns centre on mobile
  *                        either way.
  *   collapse="mobile|no"  fold each column under its heading on
- *                        narrow screens. Default mobile; the columns
+ *                        narrow screens. Only possible with a heading
+ *                        to tap, so this has no effect while
+ *                        headings="no". Default mobile; the columns
  *                        are always open on desktop.
  *   padding="none|sm|md|lg"
  *                        space above and below. Also takes an exact
@@ -82,7 +85,7 @@ add_shortcode( 'sinclairs_footer', 'sbvif_shortcode' );
 function sbvif_shortcode( $atts ) {
 	$atts = shortcode_atts( array(
 		'theme'    => 'light',
-		'headings' => 'yes',
+		'headings' => 'no',
 		'align'    => 'left',
 		'padding'  => 'md',
 		'collapse' => 'mobile',
